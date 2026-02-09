@@ -454,7 +454,6 @@ dependencies = [
     { name = "langsmith" },
     { name = "pydantic" },
     { name = "rich" },
-    { name = "rprint" },
     { name = "uvicorn" },
 ]
 
@@ -473,7 +472,6 @@ requires-dist = [
     { name = "langsmith", specifier = ">=0.6.9" },
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "rich", specifier = ">=14.3.2" },
-    { name = "rprint", specifier = ">=0.0.8" },
     { name = "uvicorn", specifier = ">=0.40.0" },
 ]
 
@@ -688,14 +686,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/74/99/a4cab2acbb884f80e558b0771e97e21e939c5dfb460f488d19df485e8298/rich-14.3.2.tar.gz", hash = "sha256:e712f11c1a562a11843306f5ed999475f09ac31ffb64281f73ab29ffdda8b3b8", size = 230143, upload-time = "2026-02-01T16:20:47.908Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ef/45/615f5babd880b4bd7d405cc0dc348234c5ffb6ed1ea33e152ede08b2072d/rich-14.3.2-py3-none-any.whl", hash = "sha256:08e67c3e90884651da3239ea668222d19bea7b589149d8014a21c633420dbb69", size = 309963, upload-time = "2026-02-01T16:20:46.078Z" },
-]
-
-[[package]]
-name = "rprint"
-version = "0.0.8"
-source = { registry = "https://pypi.org/simple" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/50/74/99c93ef0987e01b29ea9ee565f0849ea645bf1f8d83acc50ee59d7a6b0dd/rprint-0.0.8-py2.py3-none-any.whl", hash = "sha256:e444de03ef32f0cd093ea160e1999ec72207b08046a5695db6477051a816e912", size = 2695, upload-time = "2017-07-30T18:00:28.35Z" },
 ]
 
 [[package]]
