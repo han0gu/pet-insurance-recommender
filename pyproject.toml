@@ -9,6 +9,7 @@ dependencies = [
     "langchain>=1.2.9",
     "langgraph>=1.0.8",
     "langsmith>=0.6.9",
+    "pydantic>=2.12.5",
     "rprint>=0.0.8",
     "uvicorn>=0.40.0",
 ]

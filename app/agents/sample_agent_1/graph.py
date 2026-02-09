@@ -1,16 +1,15 @@
-from typing import TypedDict
-
 from langgraph.graph import END, START, StateGraph
+from pydantic import BaseModel
 
 from app.agents.sample_agent_1.nodes.sample_node import generate_korean_sentence
 from app.agents.sample_agent_1.state.sample_state import SampleAgent1State
 
 
-class Agent1GraphState(TypedDict, total=False):
-    korean_sentence: str
+class Agent1GraphState(BaseModel):
+    korean_sentence: str | None = None
 
 
-def _generate_sentence_node(_: Agent1GraphState) -> Agent1GraphState:
+def _generate_sentence_node(state: Agent1GraphState) -> dict[str, str]:
     return {"korean_sentence": generate_korean_sentence()}
 
 
@@ -26,5 +25,5 @@ sample_agent_1_sub_graph = build_agent_1_sub_graph()
 
 
 def run_agent_1() -> SampleAgent1State:
-    result = sample_agent_1_sub_graph.invoke({})
+    result = sample_agent_1_sub_graph.invoke(Agent1GraphState())
     return SampleAgent1State(korean_sentence=result["korean_sentence"])
