@@ -1,11 +1,32 @@
-from app.agents.sample_agent_1.graph import run_agent_1
-from app.agents.sample_agent_2.graph import run_agent_2
+from typing import TypedDict
+
+from langgraph.graph import END, START, StateGraph
+
+from app.agents.sample_agent_1.graph import sample_agent_1_sub_graph
+from app.agents.sample_agent_2.graph import sample_agent_2_sub_graph
+
+
+class OrchestratorState(TypedDict, total=False):
+    korean_sentence: str
+    english_sentence: str
+
+
+def build_orchestrator_graph():
+    graph_builder = StateGraph(OrchestratorState)
+    graph_builder.add_node("sample_agent_1_sub_graph", sample_agent_1_sub_graph)
+    graph_builder.add_node("sample_agent_2_sub_graph", sample_agent_2_sub_graph)
+    graph_builder.add_edge(START, "sample_agent_1_sub_graph")
+    graph_builder.add_edge("sample_agent_1_sub_graph", "sample_agent_2_sub_graph")
+    graph_builder.add_edge("sample_agent_2_sub_graph", END)
+    return graph_builder.compile()
+
+
+orchestrator_graph = build_orchestrator_graph()
 
 
 def run_test_orchestration() -> str:
-    agent_1_state = run_agent_1()
-    agent_2_state = run_agent_2(agent_1_state)
+    result = orchestrator_graph.invoke({})
     return (
-        f"최초 생성된 한글 문장은 {agent_1_state.korean_sentence}였으며, "
-        f"번역된 결과는 {agent_2_state.english_sentence}입니다"
+        f"최초 생성된 한글 문장은 {result['korean_sentence']}였으며, "
+        f"번역된 결과는 {result['english_sentence']}입니다"
     )
