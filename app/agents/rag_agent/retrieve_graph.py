@@ -12,8 +12,8 @@ from langgraph.graph import StateGraph, START, END
 
 from rich import print as rprint
 
-from app.agents.rag_agent.nodes.embeddings import load_underlying_embeddings
-from app.agents.rag_agent.nodes.vector_store import setup_vector_store
+from app.agents.document_parser.nodes.embeddings import load_underlying_embeddings
+from app.agents.document_parser.nodes.vector_store import setup_vector_store
 
 from app.agents.vet_agent.state import VetAgentState
 

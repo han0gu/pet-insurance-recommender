@@ -31,15 +31,5 @@ def parse_document(file_name: str) -> List[Document]:
     return dp_result
 
 
-# def get_document_page_content() -> str:
-#     dp_result = parse_document()
-
-#     text = dp_result[0].page_content
-#     rprint("text", text)
-
-#     return text
-
-
 # if __name__ == "__main__":
 #     parse_document("meritz_terms_normal_1_5.pdf")
-#     # get_document_page_content()
