@@ -1,7 +1,7 @@
 import json
 
-from vet_agent.model.model import llm
-from vet_agent.state import VetAgentOutputState, VetAgentState
+from app.agents.vet_agent.model.model import llm
+from app.agents.vet_agent.state import VetAgentOutputState, VetAgentState
 
 
 def vet_diagnosis_node(state: VetAgentState) -> dict:
@@ -25,7 +25,7 @@ def vet_diagnosis_node(state: VetAgentState) -> dict:
 
 if __name__ == "__main__":
     from rich import print as rprint
-    from vet_agent.utils.cli import create_arg_parser, load_state_from_yaml
+    from app.agents.vet_agent.utils.cli import create_arg_parser, load_state_from_yaml
 
     args = create_arg_parser().parse_args()
     state = load_state_from_yaml(args.input, VetAgentState)

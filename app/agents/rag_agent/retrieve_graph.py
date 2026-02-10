@@ -1,7 +1,7 @@
 import io
 from pathlib import Path
 
-from typing import TypedDict, List, Required, Literal
+from typing import List, Optional
 from PIL import Image as PILImage
 from pydantic import BaseModel, Field
 
@@ -14,21 +14,18 @@ from rich import print as rprint
 
 from app.agents.rag_agent.nodes.embeddings import load_underlying_embeddings
 from app.agents.rag_agent.nodes.vector_store import setup_vector_store
-from app.agents.vet_agent.mocks.vet_agent_mock import (
-    VetAgentMockState,
-    create_mock_vet_agent_state,
-)
+
+from app.agents.vet_agent.state import VetAgentState
 
 
 BASE_DIR = Path(__file__).resolve().parent  # app/agents/rag_agent/
 FILE_NAME = "meritz_terms_normal_1_5.pdf"
 
 
-class RagState(TypedDict, total=False):
-    vet_agent_mock: VetAgentMockState
-    user_query: str
-    user_query_embedding: List[float]
-    retrieved_documents: List[Document]
+class RagState(BaseModel):
+    user_query: Optional[str] | None = None
+    user_query_embedding: Optional[List[float]] = Field(default_factory=list)
+    retrieved_documents: Optional[List[Document]] = Field(default_factory=list)
 
 
 class Output(BaseModel):
@@ -39,10 +36,8 @@ class Output(BaseModel):
     )
 
 
-def generate_user_query(state: RagState) -> RagState:
+def generate_user_query(state: VetAgentState) -> RagState:
     rprint(">>> generate_user_query input state", state)
-
-    # state["vet_agent_mock"] = create_mock_vet_agent_state()
 
     MODEL = "solar-pro2"
     llm = init_chat_model(model=MODEL, temperature=0.0)
@@ -50,11 +45,11 @@ def generate_user_query(state: RagState) -> RagState:
     prompt = f"""
 펫 보험에 대해 문의를 남긴 사용자의 정보를 알려줄게. 
 
-종: {state["vet_agent_mock"].species}
-품종: {state["vet_agent_mock"].breed}
-나이: {state["vet_agent_mock"].age}
-성별: {state["vet_agent_mock"].gender.name}
-체중: {state["vet_agent_mock"].weight}
+종: {state.species}
+품종: {state.breed}
+나이: {state.age}
+성별: {state.gender.name}
+체중: {state.weight}
 
 종,품종,나이,성별,체중과 같은 사용자의 정보를 모두 포함해서, 마치 사용자가 직접 질문한 것처럼 자연스러운 질문 문장으로 만들어줘. 생성된 문장에는 사용자의 정보가 하나도 누락되지 않고 포함되어야 해.
 """
@@ -72,16 +67,16 @@ def generate_user_query(state: RagState) -> RagState:
 def embed_query(state: RagState) -> RagState | None:
     # rprint("embed_query input state", state)
 
-    if not state["user_query"]:
+    if not state.user_query:
         print("user_query error !")
         return
 
     underlying_embeddings = load_underlying_embeddings()
-    user_query_embedding = underlying_embeddings.embed_query(state["user_query"])
+    user_query_embedding = underlying_embeddings.embed_query(state.user_query)
     return {"user_query_embedding": user_query_embedding}
 
 
-def retrieve(state) -> RagState:
+def retrieve(state: RagState) -> RagState:
     # rprint("retrieve input state", state)
 
     underlying_embeddings = load_underlying_embeddings()
@@ -91,19 +86,23 @@ def retrieve(state) -> RagState:
     )
 
     search_result = vector_store.similarity_search_by_vector(
-        state["user_query_embedding"], k=3
+        state.user_query_embedding, k=3
     )
 
     return {"retrieved_documents": search_result}
 
 
-def print_result(state: RagState) -> RagState:
-    rprint(">>> print_result", state["retrieved_documents"])
+def print_result(state: RagState) -> dict[str, List[Document]]:
+    rprint(">>> print_result", state.retrieved_documents)
     return state
 
 
 def build_graph():
-    workflow = StateGraph(RagState)
+    workflow = StateGraph(
+        RagState,
+        input_schema=VetAgentState,
+        output_schema=RagState,
+    )
 
     workflow.add_node("generate_user_query", generate_user_query)
     workflow.add_node("embed_query", embed_query)
@@ -135,4 +134,12 @@ if __name__ == "__main__":
     # img.show()
 
     #
-    result = app.invoke({"vet_agent_mock": create_mock_vet_agent_state()})
+    result = app.invoke(
+        RagState(
+            species="강아지",
+            breed="치와와",
+            age=10,
+            gender="male",
+            weight=10,
+        )
+    )

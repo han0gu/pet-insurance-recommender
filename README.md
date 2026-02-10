@@ -13,8 +13,8 @@ Multi-agent project structure for a FastAPI-served insurance recommendation syst
 
 ### 특정 .py 파일의 main 함수 실행
 ```bash
-# e.g. app/agents/hellow_world.py
-uv run python -m app.agents.hellow_world
+# e.g. app/agents/orchestrator/graph.py
+uv run python -m app.agents.orchestrator.graph
 ```
 
 ### Qdrant
