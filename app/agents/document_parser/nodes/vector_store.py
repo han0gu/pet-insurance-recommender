@@ -10,7 +10,7 @@ from langchain_qdrant import QdrantVectorStore
 
 from rich import print as rprint
 
-from app.agents.rag_agent.nodes.embeddings import load_underlying_embeddings
+from app.agents.document_parser.nodes.embeddings import load_underlying_embeddings
 
 _global_vector_db_client = None
 
