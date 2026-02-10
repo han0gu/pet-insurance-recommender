@@ -1,5 +1,7 @@
 from langchain_core.tools import tool
 
+from rich import print as rprint
+
 from app.agents.rag_agent.state.rag_state import RagState, RetrieveToolInput
 
 from app.agents.document_parser.dp_graph import FILE_NAME
@@ -30,5 +32,6 @@ def retrieve(state: RagState) -> RagState:
     search_result = vector_store.similarity_search_by_vector(
         state.user_query_embedding, k=3
     )
+    rprint(">>> search_result", [document.page_content for document in search_result])
 
     return {"retrieved_documents": search_result}

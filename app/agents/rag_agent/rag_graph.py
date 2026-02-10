@@ -50,6 +50,6 @@ if __name__ == "__main__":
             weight=10,
         )
     )
-    rprint(">>> retrieve result", result["retrieved_documents"][0])
+
 
 # uv run python -m app.agents.rag_agent.retrieve_graph
