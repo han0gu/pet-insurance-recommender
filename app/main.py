@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
-from app.agents.orchestrator.graph import run_test_orchestration
+from app.agents.orchestrator.orchestrator_graph import run_test_orchestration
+
 
 def create_app() -> FastAPI:
     app = FastAPI(title="Pet Insurance Recommender")
