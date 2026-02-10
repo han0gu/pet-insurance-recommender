@@ -11,6 +11,20 @@ Multi-agent project structure for a FastAPI-served insurance recommendation syst
 
 ## Run
 
+### 특정 .py 파일의 main 함수 실행
+```bash
+# e.g. app/agents/hellow_world.py
+uv run python -m app.agents.hellow_world
+```
+
+### Qdrant
+
+```bash
+docker compose -f docker-compose.qdrant.yml up -d
+```
+
+### FastAPI
+
 ```bash
 uv run uvicorn app.main:app --reload
 ```

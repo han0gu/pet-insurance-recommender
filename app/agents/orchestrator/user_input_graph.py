@@ -21,7 +21,10 @@ graph = builder.compile()
 
 if __name__ == "__main__":
     from rich import print as rprint
-    from user_input_template_agent.utils.cli import create_arg_parser, load_state_from_yaml
+    from user_input_template_agent.utils.cli import (
+        create_arg_parser,
+        load_state_from_yaml,
+    )
 
     args = create_arg_parser().parse_args()
     state = load_state_from_yaml(args.input, UserInputTemplateState)
