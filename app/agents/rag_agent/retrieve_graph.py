@@ -1,11 +1,11 @@
-import io
 from pathlib import Path
 
-from PIL import Image as PILImage
-
+from langgraph.graph.state import CompiledStateGraph
 from langgraph.graph import StateGraph, START, END
 
 from rich import print as rprint
+
+from app.agents.utils import create_graph_image
 
 from app.agents.rag_agent.nodes.embed_query import embed_query
 from app.agents.rag_agent.nodes.generate_user_query import generate_user_query
@@ -15,7 +15,7 @@ from app.agents.rag_agent.tools.retrieve import retrieve
 from app.agents.vet_agent.state import VetAgentState
 
 
-def build_graph():
+def build_graph() -> CompiledStateGraph:
     workflow = StateGraph(
         RagState,
         input_schema=VetAgentState,
@@ -35,23 +35,13 @@ def build_graph():
 
 
 if __name__ == "__main__":
-    app = build_graph()
+    retrieve_graph = build_graph()
 
-    png_data = app.get_graph().draw_mermaid_png()
+    create_graph_image(
+        retrieve_graph, "retrieve_graph", Path(__file__).resolve().parent
+    )
 
-    # PIL을 사용하여 콘솔/로컬 환경에서 이미지 띄우기
-    # 바이너리 데이터를 메모리 상의 이미지로 변환합니다.
-    img = PILImage.open(io.BytesIO(png_data))
-
-    # 파일로 저장
-    BASE_DIR = Path(__file__).resolve().parent  # app/agents/rag_agent/
-    img.save(f"{BASE_DIR}/retrieve_graph.png")
-
-    # 시스템 기본 이미지 뷰어로 이미지를 엽니다.
-    # img.show()
-
-    #
-    result = app.invoke(
+    result = retrieve_graph.invoke(
         VetAgentState(
             species="강아지",
             breed="치와와",
@@ -60,6 +50,6 @@ if __name__ == "__main__":
             weight=10,
         )
     )
-    # rprint(">>> retrieve result", result["retrieved_documents"])
+    rprint(">>> retrieve result", result["retrieved_documents"][0])
 
 # uv run python -m app.agents.rag_agent.retrieve_graph
