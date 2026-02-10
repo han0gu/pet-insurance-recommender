@@ -49,3 +49,6 @@ class AgentState(TypedDict):
     
     # 검증 결과
     validation_result: Dict[str, Any]
+
+    # [Composer Output]
+    final_message: str
