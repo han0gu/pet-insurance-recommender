@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 
-from user_input_template_agent.state import UserInputTemplateState
+from app.agents.user_input_template_agent.state import UserInputTemplateState
 
 
 # 질병 정보
@@ -22,7 +22,7 @@ class VetAgentState(UserInputTemplateState):
 
 if __name__ == "__main__":
     from rich import print as rprint
-    from vet_agent.utils.cli import create_arg_parser, load_state_from_yaml
+    from app.agents.vet_agent.utils.cli import create_arg_parser, load_state_from_yaml
 
     args = create_arg_parser().parse_args()
     state = load_state_from_yaml(args.input, VetAgentState)

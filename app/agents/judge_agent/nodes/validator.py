@@ -14,8 +14,8 @@ def validator_node(state: AgentState):
     print("\n🚀 [Validator] Document 리스트 분석 및 검증 시작...")
 
     # 1. 데이터 꺼내기 
-    vet_data = state['vet_result'] 
-    docs = state['retrieved_documents']
+    vet_data = state.vet_result
+    docs = state.retrieved_documents
 
     # 2. Documents 객체들을 LLM이 읽을 수 있는 문자열로 변환 
     # (실제 RAG에서는 page_content에 약관 텍스트가 있음)

@@ -1,21 +1,27 @@
 from langgraph.graph import END, START, StateGraph
 
-from user_input_template_agent.state import UserInputTemplateState
-from vet_agent.state import VetAgentOutputState
-from user_input_template_agent.graph import graph as user_input_graph
-from vet_agent.graph import graph as vet_graph
+from app.agents.user_input_template_agent.graph import graph as user_input_graph
+from app.agents.vet_agent.state import VetAgentState
+from app.agents.vet_agent.graph import graph as vet_graph
+from app.agents.rag_agent.retrieve_graph import build_graph, RagState
 
 
-class OrchestratorState(UserInputTemplateState, VetAgentOutputState): ...
+class OrchestratorState(VetAgentState, RagState): ...
 
 
 def build_orchestrator_graph():
     graph_builder = StateGraph(OrchestratorState)
+    retrieve_graph = build_graph()
+
     graph_builder.add_node("user_input_template", user_input_graph)
     graph_builder.add_node("vet_diagnosis", vet_graph)
+    graph_builder.add_node("retrieve_graph", retrieve_graph)
+
     graph_builder.add_edge(START, "user_input_template")
     graph_builder.add_edge("user_input_template", "vet_diagnosis")
-    graph_builder.add_edge("vet_diagnosis", END)
+    graph_builder.add_edge("vet_diagnosis", "retrieve_graph")
+    graph_builder.add_edge("retrieve_graph", END)
+
     return graph_builder.compile()
 
 

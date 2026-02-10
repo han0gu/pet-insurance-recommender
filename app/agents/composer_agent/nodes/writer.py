@@ -13,8 +13,8 @@ def writer_node(state: AgentState):
     print("\n✍️ [Composer] 최종 답변 작성 중...")
 
     # 1. 데이터 꺼내기
-    vet_data = state['vet_result']          # 유저/강아지 정보 (이름, 견종 등)
-    val_result = state['validation_result'] # 검증 결과 (점수, 이유)
+    vet_data = state.vet_result          # 유저/강아지 정보 (이름, 견종 등)
+    val_result = state.validation_result # 검증 결과 (점수, 이유)
     
     # 2. LLM 설정 (창의적인 글쓰기를 위해 temperature를 약간 높임)
     llm = ChatUpstage(model="solar-pro2", temperature=0.7)
