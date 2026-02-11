@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import List
 
@@ -12,12 +13,13 @@ load_dotenv()
 
 
 def parse_document(file_name: str) -> List[Document]:
-    BASE_DIR = Path(__file__).resolve().parent.parent  # app/agents/rag_agent/
-    DEFAULT_FILE_PATH = BASE_DIR.joinpath("data", "terms", file_name)
-    print("DEFAULT_FILE_PATH", DEFAULT_FILE_PATH)
+    PROJECT_ROOT_DIR = Path(os.getenv("PROJECT_ROOT", ".")).resolve()
+    TERMS_BASE_DIR = PROJECT_ROOT_DIR / "data" / "terms"
+    FILE_PATH = TERMS_BASE_DIR / file_name
+    print(">>> parse_document FILE_PATH\n", FILE_PATH)
 
     dp_loader = UpstageDocumentParseLoader(
-        file_path=str(DEFAULT_FILE_PATH),
+        file_path=str(FILE_PATH),
         output_format="text",
         # output_format="markdown",
         # coordinates=False

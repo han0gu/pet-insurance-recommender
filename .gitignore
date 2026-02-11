@@ -33,3 +33,7 @@ Thumbs.db
 
 # SpecStory artifacts
 .specstory
+
+# insurance terms and conditions
+data/terms
+data/samples
