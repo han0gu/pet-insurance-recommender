@@ -1,12 +1,12 @@
 from langgraph.graph import END, START, StateGraph
 
-from .state import AgentState
+from .state import JudgeAgentState
 from .nodes.validator import validator_node
 
 # ==========================================
 #  그래프 정의 (변하지 않음)
 # ==========================================
-builder = StateGraph(AgentState)
+builder = StateGraph(JudgeAgentState)
 builder.add_node("validator", validator_node)
 builder.add_edge(START, "validator")
 builder.add_edge("validator", END)

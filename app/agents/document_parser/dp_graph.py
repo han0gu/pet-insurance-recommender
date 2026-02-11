@@ -5,7 +5,7 @@ from app.agents.document_parser.nodes.vector_store import ingest_chunks
 COLLECTION_NAME = "pet-insurance-recommender-v1.0"
 
 if __name__ == "__main__":
-    FILE_NAME = "meritz_non_dividend_petpermint_cat_family_46_170.pdf"
+    FILE_NAME = "meritz_maum_pet_12_61.pdf"
     dp_result = parse_document(FILE_NAME)
 
     chunks = split_dp_result(dp_result)
