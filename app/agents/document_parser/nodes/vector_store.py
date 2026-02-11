@@ -31,7 +31,7 @@ def setup_vector_store(
             # api_key=qdrant_api_key,
             timeout=30,
         )  # Docker Compose로 실행한 Qdrant 서버
-        rprint("initialize vector store client", _global_vector_db_client)
+        # rprint(">>> initialize vector store client", _global_vector_db_client)
 
     if not _global_vector_db_client.collection_exists(collection_name):
         print(f"새로운 컬렉션 생성: {collection_name}")

@@ -47,10 +47,16 @@ def run_test_orchestration() -> str:
         )
     )
     rprint(f"질병 목록: {result['diseases']}")
-    rprint(f"RAG 결과: {result['retrieved_documents']}")
+    rprint(
+        "RAG 결과: ",
+        [doc.page_content for doc in result["retrieved_documents"]],
+    )
 
     return result
 
 
 if __name__ == "__main__":
     run_test_orchestration()
+
+
+# uv run python -m app.agents.orchestrator.orchestrator_graph
