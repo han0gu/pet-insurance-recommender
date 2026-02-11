@@ -1,6 +1,6 @@
 services:
   qdrant:
-    image: qdrant/qdrant:v1.13.4
+    image: qdrant/qdrant:v1.16.2
     container_name: pet-insurance-qdrant
     restart: unless-stopped
     ports:

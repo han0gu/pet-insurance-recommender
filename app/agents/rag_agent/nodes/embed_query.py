@@ -6,7 +6,7 @@ from app.agents.rag_agent.state.rag_state import RagState
 
 
 def embed_query(state: RagState) -> RagState:
-    rprint("embed_query input state", state)
+    # rprint(">>> embed_query input state", state)
 
     if not state.user_query:
         raise ValueError("invalid user_query !")
