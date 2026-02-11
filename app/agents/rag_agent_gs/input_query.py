@@ -18,4 +18,5 @@ def build_insurance_query(state: VetAgentMockState) -> str:
         f"{disease_text} 등의 질환 위험이 있는 경우 "
         f"적절한 반려동물 보험 상담을 받고 싶습니다."
     )
+    # query=input("반려동물에 관한 질문을 입력하세요: ")
     return query

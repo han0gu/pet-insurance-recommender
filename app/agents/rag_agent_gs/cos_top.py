@@ -10,7 +10,7 @@ def cosine_topk(query_vec: np.ndarray, doc_vecs: np.ndarray, top_k: int = 3):
     top_idx = np.argsort(-scores)[:top_k]
     return [(int(i), float(scores[i])) for i in top_idx]
 
-def retrieve_manual(query: str, top_k: int = 3) -> List[Dict[str, Any]]:
+def retrieve_manual(query: str, top_k: int) -> List[Dict[str, Any]]:
     #qvec = np.array(embed_texts([query])[0], dtype=np.float32) # 사용자 질문에 대한 임베딩 벡터 생성    
     # 위의 cosine_topk를 활용하여 top 결과를 받으세요.
     top = cosine_topk(qvec, embeddings, top_k=top_k)
