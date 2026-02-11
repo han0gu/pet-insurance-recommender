@@ -2,20 +2,19 @@ from pathlib import Path
 
 from langgraph.graph import END, START, StateGraph
 
+from rich import print as rprint
+
 from app.agents.utils import create_graph_image
 
+from app.agents.orchestrator.state.orchestrator_state import OrchestratorState
+
+from app.agents.rag_agent.rag_graph import graph as retrieve_graph
 from app.agents.user_input_template_agent.graph import graph as user_input_graph
-from app.agents.vet_agent.state import VetAgentState
 from app.agents.vet_agent.graph import graph as vet_graph
-from app.agents.rag_agent.rag_graph import build_graph, RagState
-
-
-class OrchestratorState(VetAgentState, RagState): ...
 
 
 def build_orchestrator_graph():
     graph_builder = StateGraph(OrchestratorState)
-    retrieve_graph = build_graph()
 
     graph_builder.add_node("user_input_template", user_input_graph)
     graph_builder.add_node("vet_diagnosis", vet_graph)
@@ -29,16 +28,16 @@ def build_orchestrator_graph():
     return graph_builder.compile()
 
 
-orchestrator_graph = build_orchestrator_graph()
+graph = build_orchestrator_graph()
 create_graph_image(
-    orchestrator_graph,
+    graph,
     file_name="orchestrator_graph",
     base_dir=Path(__file__).resolve().parent,
 )
 
 
 def run_test_orchestration() -> str:
-    result = orchestrator_graph.invoke(
+    result = graph.invoke(
         OrchestratorState(
             species="개",
             breed="골든 리트리버",
@@ -47,11 +46,11 @@ def run_test_orchestration() -> str:
             weight=30,
         )
     )
-    return f"질병 목록: {result['diseases']}"
+    rprint(f"질병 목록: {result['diseases']}")
+    rprint(f"RAG 결과: {result['retrieved_documents']}")
+
+    return result
 
 
 if __name__ == "__main__":
-    from rich import print as rprint
-
-    result = run_test_orchestration()
-    rprint(result)
+    run_test_orchestration()
