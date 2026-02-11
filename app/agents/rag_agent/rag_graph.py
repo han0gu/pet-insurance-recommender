@@ -9,17 +9,21 @@ from app.agents.utils import create_graph_image
 
 from app.agents.rag_agent.nodes.embed_query import embed_query
 from app.agents.rag_agent.nodes.generate_user_query import generate_user_query
+
 from app.agents.rag_agent.state.rag_state import RagState
 from app.agents.rag_agent.tools.retrieve import retrieve
 
 from app.agents.vet_agent.state import VetAgentState
 
 
+class RagGraphState(VetAgentState, RagState): ...
+
+
 def build_graph() -> CompiledStateGraph:
     workflow = StateGraph(
-        RagState,
-        input_schema=VetAgentState,
-        output_schema=RagState,
+        RagGraphState,
+        # input_schema=VetAgentState,
+        # output_schema=RagState,
     )
 
     workflow.add_node("generate_user_query", generate_user_query)
@@ -33,6 +37,8 @@ def build_graph() -> CompiledStateGraph:
 
     return workflow.compile()
 
+
+graph = build_graph()
 
 if __name__ == "__main__":
     retrieve_graph = build_graph()
