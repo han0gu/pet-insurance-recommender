@@ -11,6 +11,9 @@ from app.agents.orchestrator.state.orchestrator_state import OrchestratorState
 from app.agents.rag_agent.rag_graph import graph as retrieve_graph
 from app.agents.user_input_template_agent.graph import graph as user_input_graph
 from app.agents.vet_agent.graph import graph as vet_graph
+from app.agents.judge_agent.graph import graph as judge_graph
+from app.agents.composer_agent.graph import graph as composer_graph
+
 
 
 def build_orchestrator_graph():
@@ -19,11 +22,15 @@ def build_orchestrator_graph():
     graph_builder.add_node("user_input_template", user_input_graph)
     graph_builder.add_node("vet_diagnosis", vet_graph)
     graph_builder.add_node("RAG", retrieve_graph)
+    graph_builder.add_node("judge", judge_graph)
+    graph_builder.add_node("composer", composer_graph)
 
     graph_builder.add_edge(START, "user_input_template")
     graph_builder.add_edge("user_input_template", "vet_diagnosis")
     graph_builder.add_edge("vet_diagnosis", "RAG")
-    graph_builder.add_edge("RAG", END)
+    graph_builder.add_edge("RAG", "judge")
+    graph_builder.add_edge("judge", "composer")
+    graph_builder.add_edge("composer", END)
 
     return graph_builder.compile()
 
@@ -51,6 +58,8 @@ def run_test_orchestration() -> str:
         "RAG 결과: ",
         [doc.page_content for doc in result["retrieved_documents"]],
     )
+    rprint("Judge 검증 결과:", result.get("validation_result"))
+    rprint("최종 유저 답변:", result.get("final_message"))
 
     return result
 

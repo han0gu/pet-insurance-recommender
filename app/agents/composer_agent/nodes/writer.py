@@ -2,18 +2,18 @@ from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_upstage import ChatUpstage
+from app.agents.judge_agent.state import JudgeAgentState
+from app.agents.vet_agent.state import VetAgentState
 
-# [중요] State는 Judge Agent와 같은 것을 씁니다 (공유)
-from app.agents.judge_agent.state import AgentState
 
 # .env 파일 로드 (API Key 때문에 필수)
 load_dotenv()
 
-def writer_node(state: AgentState):
-    print("\n✍️ [Composer] 최종 답변 작성 중...")
+def writer_node(state: JudgeAgentState):
 
     # 1. 데이터 꺼내기
-    vet_data = state.vet_result          # 유저/강아지 정보 (이름, 견종 등)
+    vet_field_keys = VetAgentState.model_fields.keys()
+    vet_data = state.model_dump(include=vet_field_keys)    # 유저/강아지 정보 (이름, 견종 등)
     val_result = state.validation_result # 검증 결과 (점수, 이유)
     
     # 2. LLM 설정 (창의적인 글쓰기를 위해 temperature를 약간 높임)
@@ -49,7 +49,6 @@ def writer_node(state: AgentState):
         "val_result": str(val_result)
     })
     
-    print(f"✅ 답변 작성 완료 (길이: {len(final_msg)}자)")
     
     # 5. State 업데이트
     return {"final_message": final_msg}

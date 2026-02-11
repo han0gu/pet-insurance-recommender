@@ -1,13 +1,13 @@
 from langgraph.graph import END, START, StateGraph
 
 # [중요] Judge Agent에 있는 State를 가져와서 씁니다
-from app.agents.judge_agent.state import AgentState
+from app.agents.judge_agent.state import JudgeAgentState
 from .nodes.writer import writer_node
 
 # ==========================================
 #  그래프 빌드
 # ==========================================
-builder = StateGraph(AgentState)
+builder = StateGraph(JudgeAgentState)
 builder.add_node("writer", writer_node)
 builder.add_edge(START, "writer")
 builder.add_edge("writer", END)
