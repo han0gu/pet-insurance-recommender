@@ -14,7 +14,6 @@ load_dotenv()
 # 검증 노드 핵심 로직
 # ==========================================
 def validator_node(state: JudgeAgentState):
-    rprint("\n🚀 [Validator] Document 리스트 분석 및 검증 시작...")
 
     # 1. 데이터 꺼내기 
     vet_field_keys = VetAgentState.model_fields.keys()
@@ -59,6 +58,5 @@ def validator_node(state: JudgeAgentState):
         "rag_context": rag_context
     })
     
-    print(f"✅ 검증 완료: {len(result.selected_policies)}개 상품 선정")
     
     return {"validation_result": result.model_dump()}
