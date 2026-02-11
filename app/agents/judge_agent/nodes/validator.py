@@ -1,8 +1,11 @@
 import os
+from app.agents.vet_agent.state.vet_state import VetAgentState
 from dotenv import load_dotenv
 from langchain_upstage import ChatUpstage 
 from langchain_core.prompts import ChatPromptTemplate
-from ..state import AgentState, ValidationResult
+from ..state import JudgeAgentState, ValidationResult
+
+from rich import print as rprint
 
 # .env 파일 로드 (API Key 때문에 필수)
 load_dotenv()
@@ -10,11 +13,12 @@ load_dotenv()
 # ==========================================
 # 검증 노드 핵심 로직
 # ==========================================
-def validator_node(state: AgentState):
-    print("\n🚀 [Validator] Document 리스트 분석 및 검증 시작...")
+def validator_node(state: JudgeAgentState):
+    rprint("\n🚀 [Validator] Document 리스트 분석 및 검증 시작...")
 
     # 1. 데이터 꺼내기 
-    vet_data = state.vet_result
+    vet_field_keys = VetAgentState.model_fields.keys()
+    vet_data = state.model_dump(include=vet_field_keys)
     docs = state.retrieved_documents
 
     # 2. Documents 객체들을 LLM이 읽을 수 있는 문자열로 변환 

@@ -1,5 +1,8 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from enum import Enum
+from app.agents.rag_agent.rag_graph import RagGraphState
+from app.agents.rag_agent.state.rag_state import RagState
+from app.agents.vet_agent.state.vet_state import VetAgentState
 from langchain_core.documents import Document
 from pydantic import BaseModel, Field
 
@@ -46,10 +49,8 @@ class ValidationResult(BaseModel):
 # ==========================================
 # 3. [Graph State] 통합 상태 정의
 # ==========================================
-class AgentState(BaseModel):
-    # 기존: user_input, vet_response 따로 존재
-    # 변경: vet_result 하나에 다 들어있음! (Dict로 변환되어 들어올 가능성이 높음)
-    vet_result: Dict[str, Any] = Field(default_factory=dict)
+class JudgeAgentState(VetAgentState):
+    # vet_result: Dict[str, Any] = Field(default_factory=dict)
 
     # RAG 결과
     retrieved_documents: List[Document] = Field(default_factory=list)

@@ -4,12 +4,12 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_upstage import ChatUpstage
 
 # [중요] State는 Judge Agent와 같은 것을 씁니다 (공유)
-from app.agents.judge_agent.state import AgentState
+from app.agents.judge_agent.state import JudgeAgentState
 
 # .env 파일 로드 (API Key 때문에 필수)
 load_dotenv()
 
-def writer_node(state: AgentState):
+def writer_node(state: JudgeAgentState):
     print("\n✍️ [Composer] 최종 답변 작성 중...")
 
     # 1. 데이터 꺼내기
