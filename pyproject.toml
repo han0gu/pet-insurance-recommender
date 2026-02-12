@@ -5,19 +5,21 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "chromadb>=1.5.0",
+    "chromadb>=1.4.1",
     "fastapi>=0.128.5",
     "langchain>=0.2",
     "langchain-chroma>=0.1",
+    "langchain-classic>=1.0.1",
     "langchain-community>=0.2",
     "langchain-core>=0.2",
+    "langchain-qdrant>=1.1.0",
     "langchain-text-splitters>=0.2",
     "langchain-upstage>=0.7.6",
     "langgraph>=1.0.8",
     "langsmith>=0.6.9",
     "pydantic>=2.12.5",
-    "pypdf>=6.7.0",
     "python-dotenv>=1.2.1",
+    "qdrant-client>=1.16.2",
     "rich>=14.3.2",
     "term-image>=0.7.2",
     "uvicorn>=0.40.0",
@@ -26,6 +28,8 @@ dependencies = [
 [dependency-groups]
 dev = [
     "httpx>=0.28.1",
+    "ipython>=9.10.0",
+    "pillow>=12.1.0",
     "pytest>=9.0.2",
     "ruff>=0.15.0",
 ]
