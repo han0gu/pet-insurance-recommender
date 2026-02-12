@@ -5,7 +5,6 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "chromadb>=1.4.1",
     "fastapi>=0.128.5",
     "langchain>=0.2",
     "langchain-chroma>=0.1",
@@ -21,6 +20,7 @@ dependencies = [
     "python-dotenv>=1.2.1",
     "qdrant-client>=1.16.2",
     "rich>=14.3.2",
+    "term-image>=0.7.2",
     "uvicorn>=0.40.0",
 ]
 
