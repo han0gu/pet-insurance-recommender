@@ -22,7 +22,7 @@ def setup_vector_store(
     global _global_vector_db_client
 
     qdrant_url = os.getenv("QDRANT_URL", "http://localhost:6333")
-    # qdrant_api_key = os.getenv("QDRANT_API_KEY")
+    # qdrant_api_key = os.getenv("QDRANT_API_KEY") # 현재 불필요, 추후에 필요할 수 있음
     vector_size = int(os.getenv("QDRANT_VECTOR_SIZE", "4096"))
 
     if _global_vector_db_client is None:
@@ -31,14 +31,14 @@ def setup_vector_store(
             # api_key=qdrant_api_key,
             timeout=30,
         )  # Docker Compose로 실행한 Qdrant 서버
-        # rprint(">>> initialize vector store client", _global_vector_db_client)
+        rprint("✅initialize vector store client", _global_vector_db_client)
 
     if not _global_vector_db_client.collection_exists(collection_name):
-        print(f"새로운 컬렉션 생성: {collection_name}")
         _global_vector_db_client.create_collection(
             collection_name=collection_name,
             vectors_config=VectorParams(size=vector_size, distance=Distance.COSINE),
         )
+        rprint("✅create vector store collection:", collection_name)
 
     """
     QdrantClient:
@@ -68,9 +68,10 @@ def ingest_chunks(collection_name: str, chunks: List[Document]) -> VectorStore:
     vector_store = setup_vector_store(underlying_embeddings, collection_name)
 
     if chunks:
+        rprint("🚀ingest_chunks start")
         vector_store.add_documents(chunks)  # embedding + saving
-        print(f"{len(chunks)}개의 문서가 추가되었습니다.")
+        rprint("✅ingest_chunks complete")
     else:
-        print("기존 벡터스토어를 로드했습니다 (추가 문서 없음).")
+        rprint("⚠️no documents")
 
     return vector_store

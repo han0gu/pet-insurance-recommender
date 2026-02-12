@@ -18,7 +18,7 @@ def load_splitter():
         separators=CHUNK_SEPARATOR,
         strip_whitespace=True,
     )
-    rprint("splitter", splitter)
+    # rprint(">>> splitter", splitter)
 
     return splitter
 
@@ -38,12 +38,9 @@ def split_dp_result(dp_result: List[Document]) -> List[Document]:
     """
     splitter = load_splitter()
 
+    rprint("🚀split documents start")
     chunks = splitter.split_documents(dp_result)
-    print("chunks len", len(chunks))
+    rprint("✅split documents done. chunks length:", len(chunks))
     # rprint(">>> sample chunk", chunks[0])
-
-    # 실습에서도 그렇고, 'page' 속성이 없으므로 무의미한 코드
-    # page_counts: dict = Counter(chunk.metadata.get("page", 1) for chunk in chunks)
-    # print("page_counts", page_counts)
 
     return chunks
