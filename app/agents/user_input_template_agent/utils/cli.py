@@ -28,6 +28,11 @@ def create_arg_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def make_config(thread_id: str) -> dict:
+    """LangGraph 실행용 config dict를 생성합니다."""
+    return {"configurable": {"thread_id": thread_id}}
+
+
 def load_state_from_yaml(path: str | Path, state_type: type[T]) -> T:
     """YAML 파일을 읽어 지정된 state 타입으로 변환합니다."""
     data = yaml.safe_load(Path(path).read_text())

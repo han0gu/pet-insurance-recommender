@@ -12,6 +12,7 @@ from app.agents.orchestrator.nodes import route_after_user_input
 from app.agents.user_input_template_agent.utils.cli import (
     create_arg_parser,
     load_state_from_yaml,
+    make_config,
 )
 
 from app.agents.rag_agent.rag_graph import graph as retrieve_graph
@@ -63,7 +64,11 @@ def run_orchestration(yaml_path: str | Path, config: dict) -> dict:
         dict: 전체 그래프 실행 후 OrchestratorState 결과를 반환합니다.
     """
     state = load_state_from_yaml(yaml_path, OrchestratorState)
-    return graph.invoke(state, config=config)
+    # YAML에 명시된 필드만 전달하여 체크포인터 상태를 덮어쓰지 않도록 함
+    return graph.invoke(
+        state.model_dump(exclude_unset=True),
+        config=config,
+    )
 
 
 def print_orchestration_result(result: dict) -> None:
@@ -79,11 +84,7 @@ def print_orchestration_result(result: dict) -> None:
 
 def main():
     args = create_arg_parser().parse_args()
-    config = {
-        "configurable": {
-            "thread_id": args.thread_id,
-        },
-    }
+    config = make_config(args.thread_id)
     result = run_orchestration(args.input, config=config)
     print_orchestration_result(result)
 
