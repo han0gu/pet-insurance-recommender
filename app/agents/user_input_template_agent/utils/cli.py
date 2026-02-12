@@ -19,6 +19,12 @@ def create_arg_parser() -> argparse.ArgumentParser:
         default="app/agents/user_input_template_agent/samples/user_input_simple.yaml",
         help="입력 YAML 파일 경로 (기본값: app/agents/user_input_template_agent/samples/user_input_simple.yaml)",
     )
+    parser.add_argument(
+        "--thread-id",
+        type=str,
+        default="test_user",
+        help="LangGraph thread ID (기본값: test_user)",
+    )
     return parser
 
 
