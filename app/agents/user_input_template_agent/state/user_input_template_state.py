@@ -15,6 +15,21 @@ class CoverageStyle(str, Enum):
     comprehensive = "comprehensive"
 
 
+# 보험사 Enum
+class Insurer(str, Enum):
+    samsung = "삼성화재해상보험"
+    kb = "KB손해보험"
+    hyundai = "현대해상화재보험"
+    db = "DB손해보험"
+    meritz = "메리츠화재해상보험"
+    hanwha = "한화손해보험"
+    lotte = "롯데손해보험"
+    nonghyup = "농협손해보험"
+    lina = "라이나손해보험"
+    carrot = "캐롯손해보험"
+    mybrown = "마이브라운 반려동물전문보험"
+
+
 # 건강 상태
 class HealthCondition(BaseModel):
     frequent_illness_area: Optional[str] = Field(
@@ -38,6 +53,9 @@ class UserInputTemplateState(BaseModel):
     )
     coverage_style: Optional[CoverageStyle] = Field(
         default=None, description="보장 스타일"
+    )
+    preferred_insurers: Optional[list[Insurer]] = Field(
+        default=None, description="선호 보험사 목록"
     )
 
 
