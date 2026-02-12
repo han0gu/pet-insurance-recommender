@@ -29,17 +29,19 @@ def parse_document(
     BASE_DIR = Path(__file__).resolve().parent.parent  # app/agents/document_parser
     TERMS_DIR = BASE_DIR / "data" / "terms"
     TERM_FILE_PATH = TERMS_DIR / file_name
-    print(">>> parse_document TERM_FILE_PATH", TERM_FILE_PATH)
+    rprint("🔗parse_document TERM_FILE_PATH:", TERM_FILE_PATH)
 
     dp_loader = UpstageDocumentParseLoader(
         file_path=str(TERM_FILE_PATH),
         output_format=output_format,
         coordinates=False,
     )
-    # rprint("dp_loader", dp_loader)
+    # rprint(">>> dp_loader", dp_loader)
 
+    rprint("🚀document parsing start. output format:", output_format)
     dp_result = dp_loader.load()
-    print("dp_result len", len(dp_result))  # 1
+    rprint("✅document parsing done. result length:", len(dp_result))  # 1
+
     create_local_file(dp_result, TERMS_DIR, file_name, output_format)
 
     return dp_result
@@ -65,22 +67,24 @@ def create_local_file(
 
     OUTPUT_FILE_NAME = f"{Path(original_file_name).stem}_dp_content.{OUTPUT_EXTENSION}"
     OUTPUT_FILE_PATH = target_dir / OUTPUT_FILE_NAME
+    rprint("🔗create_local_file OUTPUT_FILE_PATH:", OUTPUT_FILE_PATH)
+
     if OUTPUT_FILE_PATH.exists():
-        print(">>> create_local_file skipped (already exists)", OUTPUT_FILE_PATH)
+        rprint("⚠️ create_local_file skipped (already exists)")
         return
 
     dp_content = dp_result[0].page_content
-    # rprint(">>> dp_content\n", dp_content)
+    # rprint(">>> dp_content", dp_content)
+
+    rprint("🚀create_local_file start")
     OUTPUT_FILE_PATH.write_text(dp_content, encoding="utf-8")
-    print(">>> create_local_file OUTPUT_FILE_PATH", OUTPUT_FILE_PATH)
+    rprint("✅create_local_file done")
 
 
 if __name__ == "__main__":
     args = create_arg_parser().parse_args()
     file_name = args.file_name
-
-    parse_document(file_name)
-    # parse_document(file_name, "markdown")
+    parse_document(file_name, "text")
 
 
 # uv run python -m app.agents.document_parser.nodes.document_parse --file-name meritz_maum_pet_12_61.pdf
