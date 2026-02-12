@@ -1,18 +1,39 @@
 from __future__ import annotations
 
-import json
 import os
 import re
+from contextlib import nullcontext
 from typing import Any, Dict, List, Tuple
 
 from dotenv import load_dotenv
-from openai import OpenAI
+from pydantic import BaseModel, Field
+from langchain.chat_models import init_chat_model
 
 from langchain_core.documents import Document
+
+try:
+    from langsmith.run_helpers import tracing_context
+except Exception:  # pragma: no cover - optional dependency fallback
+    tracing_context = None
 
 # `.env` 파일의 환경변수를 현재 프로세스에 로드합니다.
 # - 로컬 개발 시 `UPSTAGE_API_KEY`를 코드에 하드코딩하지 않고 사용하기 위함입니다.
 load_dotenv()
+
+# 같은 프로세스에서 반복되는 초기화/태깅 요청을 줄이기 위한 캐시
+_STRUCTURED_LLM_CACHE: Dict[Tuple[str], Any] = {}
+_TAG_RESULT_CACHE: Dict[Tuple[str, str, float], Dict[str, Any]] = {}
+_TAG_RESULT_CACHE_MAX = int(os.getenv("TAGGING_RESULT_CACHE_MAX", "5000"))
+
+
+def _get_tagging_langsmith_project_name() -> str | None:
+    # tagging 전용 프로젝트명을 별도로 지정할 때 사용:
+    # 1) LANGSMITH_TAGGING_PROJECT
+    # 2) LANGSMITH_PROJECT_TAGGING (fallback)
+    project_name = os.getenv("LANGSMITH_TAGGING_PROJECT")
+    if project_name:
+        return project_name
+    return None
 
 
 # =========================
@@ -71,6 +92,13 @@ RISK_DOMAIN_RULES: List[Tuple[str, str]] = [
     (r"(눈|각막|백내장|망막)", "eye"),
     (r"(위|장|소화|구토|설사)", "digestive"),
 ]
+
+
+class ChunkTagOutput(BaseModel):
+    clause_type: str = Field(...)
+    risk_domains: List[str] = Field(min_length=1)
+    confidence: float = Field(ge=0, le=1)
+    notes: str | None = Field(default=None, max_length=200)
 
 
 def rule_tag(text: str) -> Dict[str, Any]:
@@ -141,30 +169,12 @@ def llm_tag_solar_pro2(
     Returns:
         rule_tag와 동일 형태 + method="llm"
     """
-    client = OpenAI(api_key=api_key, base_url=base_url, timeout=timeout_s)
-
-    # 모델 출력 JSON 스키마 정의:
-    # - enum으로 허용 라벨을 제한해 예상치 못한 값이 들어오지 않도록 합니다.
-    # - strict=True로 스키마를 강하게 준수하도록 요청합니다.
-    schema = {
-        "name": "ChunkTag",
-        "schema": {
-            "type": "object",
-            "additionalProperties": False,
-            "properties": {
-                "clause_type": {"type": "string", "enum": CLAUSE_TYPES},
-                "risk_domains": {
-                    "type": "array",
-                    "items": {"type": "string", "enum": RISK_DOMAINS},
-                    "minItems": 1,
-                },
-                "confidence": {"type": "number", "minimum": 0, "maximum": 1},
-                "notes": {"type": ["string", "null"], "maxLength": 200},
-            },
-            "required": ["clause_type", "risk_domains", "confidence", "notes"],
-        },
-        "strict": True,
-    }
+    # init_chat_model은 LangChain 표준 경로를 사용하므로
+    # 프로젝트 전체에서 모델 호출 방식과 tracing 구성이 일관됩니다.
+    # 기존 시그니처 호환을 위해 api_key/base_url/timeout_s 인자는 유지하고,
+    # 현재 코드베이스 관례대로 env 기반 설정을 우선 사용합니다.
+    os.environ["UPSTAGE_API_KEY"] = api_key
+    os.environ.setdefault("UPSTAGE_BASE_URL", base_url)
 
     system = (
         "너는 보험 약관 문서 청크를 분류(tagging)하는 분류기야.\n"
@@ -189,20 +199,27 @@ def llm_tag_solar_pro2(
         f"TEXT:\n{text}"
     )
 
-    resp = client.chat.completions.create(
-        model=model,
-        temperature=0,  # 분류 작업은 창의성보다 재현성이 중요합니다.
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": user},
-        ],
-        # Structured Output을 사용해 JSON 형태를 강제합니다.
-        response_format={"type": "json_schema", "json_schema": schema},
-    )
+    # 모델/스키마 래퍼는 생성 비용이 있으므로 재사용합니다.
+    cache_key = (model,)
+    structured_llm = _STRUCTURED_LLM_CACHE.get(cache_key)
+    if structured_llm is None:
+        llm = init_chat_model(model=model, temperature=0.0)
+        structured_llm = llm.with_structured_output(ChunkTagOutput)
+        _STRUCTURED_LLM_CACHE[cache_key] = structured_llm
 
-    # 모델 응답(JSON 문자열)을 dict로 변환합니다.
-    content = resp.choices[0].message.content
-    data = json.loads(content)
+    messages = [
+        {"role": "system", "content": system},
+        {"role": "user", "content": user},
+    ]
+    tagging_project = _get_tagging_langsmith_project_name()
+    tracing_cm = (
+        tracing_context(project_name=tagging_project)
+        if tracing_context and tagging_project
+        else nullcontext()
+    )
+    with tracing_cm:
+        llm_response: ChunkTagOutput = structured_llm.invoke(messages)
+    data = llm_response.model_dump()
 
     # 다운스트림에서 태깅 출처를 알 수 있도록 method를 명시합니다.
     data["method"] = "llm"
@@ -266,7 +283,7 @@ def tag_chunk(
     *,
     upstage_api_key: str,
     use_llm_when: str = "unknown_or_low_conf",  # "always" | "unknown_or_low_conf" | "never"
-    llm_conf_threshold: float = 0.70,
+    llm_conf_threshold: float = 0.55,
 ) -> Dict[str, Any]:
     """
     chunk 1개에 대한 최종 태깅 진입점입니다.
@@ -279,6 +296,12 @@ def tag_chunk(
     실패 처리:
     - LLM 호출에 실패하면 규칙 기반 결과로 fallback합니다.
     """
+    cache_key = (text, use_llm_when, llm_conf_threshold)
+    cached = _TAG_RESULT_CACHE.get(cache_key)
+    if cached is not None:
+        # 캐시된 dict의 외부 변형 영향 방지를 위해 복사본 반환
+        return dict(cached)
+
     base = rule_tag(text)
 
     should_llm = False
@@ -303,6 +326,12 @@ def tag_chunk(
         merged = base
 
     merged = validate_and_override(text, merged)
+
+    # 단순 bounded cache (FIFO 유사): 최대 크기 초과 시 가장 오래된 항목 1개 제거
+    if len(_TAG_RESULT_CACHE) >= _TAG_RESULT_CACHE_MAX:
+        _TAG_RESULT_CACHE.pop(next(iter(_TAG_RESULT_CACHE)))
+    _TAG_RESULT_CACHE[cache_key] = dict(merged)
+
     return merged
 
 
@@ -315,7 +344,7 @@ def tag_chunks(
     doc_type: str = "terms",
     embedding_model: str = "solar-embedding-1-large",
     use_llm_when: str = "unknown_or_low_conf",
-    llm_conf_threshold: float = 0.70,
+    llm_conf_threshold: float = 0.55,
 ) -> List[Document]:
     """
     chunk(Document) 리스트를 입력받아 태깅 메타데이터를 확장한 Document 리스트를 반환합니다.
@@ -336,6 +365,7 @@ def tag_chunks(
         raise ValueError("UPSTAGE_API_KEY is not set. Please check your .env file.")
 
     docs: List[Document] = []
+    llm_used_count = 0
     for idx, chunk in enumerate(chunks):
         # tag_chunk는 str 입력을 기대하므로 page_content만 전달합니다.
         chunk_text = chunk.page_content
@@ -382,5 +412,14 @@ def tag_chunks(
 
         # page_content는 원문 텍스트를 유지하고 metadata만 확장합니다.
         docs.append(Document(page_content=chunk_text, metadata=metadata))
+        if tag["method"] == "llm":
+            llm_used_count += 1
+
+        # 긴 배치에서 멈춘 것처럼 보이지 않도록 진행률을 출력합니다.
+        if (idx + 1) % 25 == 0 or idx == len(chunks) - 1:
+            print(
+                f"🚀[tagging] processed {idx + 1}/{len(chunks)} chunks "
+                f"(llm_used={llm_used_count})"
+            )
 
     return docs
