@@ -16,8 +16,8 @@ def create_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--input",
         type=str,
-        default="user_input_template_agent/samples/user_input_simple.yaml",
-        help="입력 YAML 파일 경로 (기본값: user_input_template_agent/samples/user_input_simple.yaml)",
+        default="app/agents/user_input_template_agent/samples/user_input_simple.yaml",
+        help="입력 YAML 파일 경로 (기본값: app/agents/user_input_template_agent/samples/user_input_simple.yaml)",
     )
     return parser
 
