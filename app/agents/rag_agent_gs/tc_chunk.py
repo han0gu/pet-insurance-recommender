@@ -61,12 +61,9 @@ print("chunks:", len(chunks)) # 총 청크 수 확인
 # print("sample page 149 text (first 500 chars):\n") # pdf에서 가져온 149 페이지 내용 확인
 # print(pages[148]["text"][:500])
 
-# p4_c3 청크 내용 확인
-print("\n=== p4_c3 청크 내용 ===")
-target_chunk = next((c for c in chunks if c["id"] == "p4_c3"), None)
-if target_chunk:
-    print(f"ID: {target_chunk['id']}")
-    print(f"Page: {target_chunk['page']}")
-    print(f"Text:\n{target_chunk['text']}")
-else:
-    print("p4_c3 청크를 찾을 수 없습니다.")
+# 특정 페이지 특정 청크 내용 확인
+# target_chunk = next((c for c in chunks if c["id"] == "p55_c3"), None)
+# if target_chunk:
+#     print(f"ID: {target_chunk['id']}")
+#     print(f"Page: {target_chunk['page']}")
+#     print(f"Text:\n{target_chunk['text']}")
