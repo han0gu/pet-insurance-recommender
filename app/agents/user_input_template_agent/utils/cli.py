@@ -16,8 +16,8 @@ def create_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--input",
         type=str,
-        default="user_input_template_agent/samples/user_input_simple.yaml",
-        help="입력 YAML 파일 경로 (기본값: user_input_template_agent/samples/user_input_simple.yaml)",
+        default="app/agents/user_input_template_agent/samples/user_input_simple.yaml",
+        help="입력 YAML 파일 경로 (기본값: app/agents/user_input_template_agent/samples/user_input_simple.yaml)",
     )
     return parser
 
@@ -25,4 +25,5 @@ def create_arg_parser() -> argparse.ArgumentParser:
 def load_state_from_yaml(path: str | Path, state_type: type[T]) -> T:
     """YAML 파일을 읽어 지정된 state 타입으로 변환합니다."""
     data = yaml.safe_load(Path(path).read_text())
-    return state_type.model_validate(data)
+    state_data = data.get("state", data)
+    return state_type.model_validate(state_data)
