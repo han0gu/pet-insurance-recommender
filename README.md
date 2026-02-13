@@ -5,9 +5,13 @@ Multi-agent project structure for a FastAPI-served insurance recommendation syst
 ## Structure
 
 - `app/main.py`: FastAPI application entrypoint
-- `app/agents/orchestrator/graph.py`: top-level routing/orchestration graph
-- `app/agents/sample_agent_1/`: agent 1 implementation (`graph.py`, `nodes/`, `state/`, `tools/`)
-- `app/agents/sample_agent_2/`: agent 2 implementation (`graph.py`, `nodes/`, `state/`, `tools/`)
+- `app/agents/orchestrator/`: 최상위 오케스트레이션 그래프 (`orchestrator_graph.py`, `nodes/`, `state/`)
+- `app/agents/user_input_template_agent/`: 사용자 입력 처리 (`graph.py`, `nodes/`, `state/`, `samples/`)
+- `app/agents/vet_agent/`: 수의사 진단 에이전트 (`graph.py`, `nodes/`, `state/`)
+- `app/agents/rag_agent/`: 보험 약관 검색 에이전트 (`rag_graph.py`, `nodes/`, `state/`, `tools/`)
+- `app/agents/judge_agent/`: 보험 상품 검증 에이전트 (`graph.py`, `nodes/`, `state/`)
+- `app/agents/composer_agent/`: 최종 답변 생성 에이전트 (`graph.py`, `nodes/`)
+- `app/agents/document_parser/`: 약관 PDF 파싱/임베딩/적재 파이프라인
 
 ## Run
 
