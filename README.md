@@ -41,6 +41,12 @@ bash script/run_test_single.sh
 docker compose -f docker-compose.qdrant.yml up -d
 ```
 
+### Streamlit Demo
+
+```bash
+bash script/run_streamlit.sh
+```
+
 ### FastAPI
 
 ```bash
