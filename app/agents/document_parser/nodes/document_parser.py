@@ -84,7 +84,7 @@ def create_local_file(
 if __name__ == "__main__":
     args = create_arg_parser().parse_args()
     file_name = args.file_name
-    parse_document(file_name, "text")
+    parse_document(file_name)
 
 
 # uv run python -m app.agents.document_parser.nodes.document_parse --file-name meritz_maum_pet_12_61.pdf

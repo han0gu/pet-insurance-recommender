@@ -23,7 +23,7 @@ def load_splitter():
     return splitter
 
 
-def split_dp_result(dp_result: List[Document]) -> List[Document]:
+def split(dp_result: List[Document]) -> List[Document]:
     """
     split dp_result
 
