@@ -5,7 +5,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 
 from rich import print as rprint
 
-from app.agents.utils import create_graph_image
+from app.agents.utils import create_graph_image, get_parent_path
 
 from app.agents.orchestrator.state.orchestrator_state import OrchestratorState
 from app.agents.orchestrator.nodes import route_after_user_input
@@ -53,7 +53,7 @@ graph = build_orchestrator_graph(checkpointer=in_memory_saver)
 create_graph_image(
     graph,
     file_name="orchestrator_graph",
-    base_dir=Path(__file__).resolve().parent,
+    base_dir=get_parent_path(__file__),
 )
 
 
