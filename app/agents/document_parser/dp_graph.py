@@ -1,13 +1,39 @@
 import argparse
 
+from langgraph.graph.state import StateGraph, CompiledStateGraph, START, END
+
 from rich import print as rprint
 
 from app.agents.document_parser.constants import COLLECTION_NAME
-
 from app.agents.document_parser.nodes import document_parser
 from app.agents.document_parser.nodes.splitter import text_splitter
 from app.agents.document_parser.nodes.tagger import tagger
 from app.agents.document_parser.nodes import vector_store
+
+from app.agents import utils
+
+
+class DocumentParserState:
+    file_name: str
+
+
+def build_graph() -> CompiledStateGraph:
+    workflow = StateGraph(DocumentParserState)
+
+    workflow.add_node("document_parser", document_parser.document_parser_node)
+
+    workflow.add_edge(START, "document_parser")
+    workflow.add_edge("document_parser", END)
+
+    graph = workflow.compile()
+
+    utils.create_graph_image(
+        graph,
+        utils.get_current_file_name(__file__, True),
+        utils.get_parent_path(__file__),
+    )
+
+    return graph
 
 
 def create_arg_parser() -> argparse.ArgumentParser:

@@ -13,6 +13,7 @@ from langchain_upstage import UpstageDocumentParseLoader
 from rich import print as rprint
 
 from app.agents.document_parser.constants import TERMS_DIR
+from app.agents.document_parser.dp_graph import DocumentParserState
 from app.agents.document_parser.nodes.splitter import page_splitter
 
 output_extension_by_format = {
@@ -22,6 +23,10 @@ output_extension_by_format = {
 }
 
 load_dotenv()
+
+
+def document_parser_node(state: DocumentParserState):
+    parse_document(state.file_name)
 
 
 def parse_document(

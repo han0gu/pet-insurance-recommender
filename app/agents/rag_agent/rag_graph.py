@@ -1,15 +1,12 @@
-from pathlib import Path
-
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.graph import StateGraph, START, END
 
 from rich import print as rprint
 
-from app.agents.utils import create_graph_image
+from app.agents import utils
 
 from app.agents.rag_agent.nodes.embed_query import embed_query
 from app.agents.rag_agent.nodes.generate_user_query import generate_user_query
-
 from app.agents.rag_agent.state.rag_state import RagState
 from app.agents.rag_agent.tools.retrieve import retrieve
 
@@ -43,8 +40,10 @@ graph = build_graph()
 if __name__ == "__main__":
     retrieve_graph = build_graph()
 
-    create_graph_image(
-        retrieve_graph, "retrieve_graph", Path(__file__).resolve().parent
+    utils.create_graph_image(
+        retrieve_graph,
+        utils.get_current_file_name(__file__, True),
+        utils.get_parent_path(__file__),
     )
 
     result = retrieve_graph.invoke(
@@ -58,4 +57,4 @@ if __name__ == "__main__":
     )
 
 
-# uv run python -m app.agents.rag_agent.retrieve_graph
+# uv run python -m app.agents.rag_agent.rag_graph
