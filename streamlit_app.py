@@ -21,6 +21,7 @@ if "pet_locked" not in st.session_state:
     st.session_state.pet_locked = False
     st.session_state.pet_info = {}
     st.session_state.last_result = None
+if "thread_id" not in st.session_state:
     st.session_state.thread_id = str(uuid.uuid4())
 
 locked = st.session_state.pet_locked
