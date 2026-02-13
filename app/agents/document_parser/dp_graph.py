@@ -1,9 +1,9 @@
 import argparse
 
-from app.agents.document_parser.nodes.document_parse import parse_document
-from app.agents.document_parser.nodes.splitter import split_dp_result
-from app.agents.document_parser.nodes.tagging import tag_chunks
-from app.agents.document_parser.nodes.vector_store import ingest_chunks
+from app.agents.document_parser.nodes import document_parser
+from app.agents.document_parser.nodes import splitter
+from app.agents.document_parser.nodes import tagger
+from app.agents.document_parser.nodes import vector_store
 
 COLLECTION_NAME = "pet-insurance-recommender-v1.0"
 
@@ -26,17 +26,17 @@ if __name__ == "__main__":
     args = create_arg_parser().parse_args()
     file_name = args.file_name
 
-    dp_result = parse_document(file_name, "text")
+    dp_result = document_parser.parse_document(file_name)
 
-    chunks = split_dp_result(dp_result)
+    chunks = splitter.split(dp_result)
 
     if args.ingest:
-        tagged_chunks = tag_chunks(
+        tagged_chunks = tagger.tag_chunks(
             chunks,
             pdf_name=file_name,
         )
 
-        ingest_chunks(COLLECTION_NAME, tagged_chunks)
+        vector_store.ingest_chunks(COLLECTION_NAME, tagged_chunks)
 
 
 # uv run python -m app.agents.document_parser.dp_graph --file-name meritz_maum_pet_12_16.pdf
