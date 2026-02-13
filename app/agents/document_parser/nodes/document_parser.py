@@ -1,4 +1,5 @@
 import argparse
+import time
 
 from pathlib import Path
 from typing import List
@@ -36,10 +37,14 @@ def parse_document(
     )
 
     rprint("🚀document parsing start. output format:", output_format)
+    start_time = time.perf_counter()
     dp_result = (
         dp_loader.load()
     )  # UpstageDocumentParse는 전체 문서를 하나의 Document로 추출함
-    rprint("✅document parsing done. result length:", len(dp_result))  # 1
+    elapsed = time.perf_counter() - start_time
+    rprint(
+        f"✅document parsing done. result length: {len(dp_result)} (elapsed: {elapsed:.2f}s)"
+    )
 
     dp_split_result: List[Document] = []
     if len(dp_result) == 1 and "page" not in dp_result[0].metadata:

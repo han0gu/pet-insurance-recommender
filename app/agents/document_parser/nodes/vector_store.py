@@ -1,4 +1,5 @@
 import os
+import time
 from typing import List
 
 from qdrant_client import QdrantClient
@@ -69,8 +70,10 @@ def ingest_chunks(collection_name: str, chunks: List[Document]) -> VectorStore:
 
     if chunks:
         rprint("🚀ingest_chunks start")
+        start_time = time.perf_counter()
         vector_store.add_documents(chunks)  # embedding + saving
-        rprint("✅ingest_chunks complete")
+        elapsed = time.perf_counter() - start_time
+        rprint(f"✅ingest_chunks complete (elapsed: {elapsed:.2f}s)")
     else:
         rprint("⚠️no documents")
 
