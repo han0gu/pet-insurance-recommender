@@ -3,6 +3,8 @@ from __future__ import annotations
 import os
 import re
 from contextlib import nullcontext
+from pathlib import Path
+from pprint import pformat
 from typing import Any, Dict, List, Tuple
 
 from dotenv import load_dotenv
@@ -15,6 +17,9 @@ try:
     from langsmith.run_helpers import tracing_context
 except Exception:  # pragma: no cover - optional dependency fallback
     tracing_context = None
+
+from app.agents.document_parser.constants import TERMS_DIR
+
 
 # `.env` 파일의 환경변수를 현재 프로세스에 로드합니다.
 # - 로컬 개발 시 `UPSTAGE_API_KEY`를 코드에 하드코딩하지 않고 사용하기 위함입니다.
@@ -44,15 +49,15 @@ def _get_tagging_langsmith_project_name() -> str | None:
 # 2) risk_domains: 어떤 신체/질환 영역인지
 # 마지막 "other"는 규칙/LLM으로 분류가 애매할 때의 안전한 기본값입니다.
 CLAUSE_TYPES = [
-    "coverage",
-    "exclusion",
-    "waiting",
-    "deductible",
-    "limit",
-    "claim",
-    "definition",
-    "renewal",
-    "other",
+    "coverage",  # 보장/담보: 보험사가 사고 시 책임지고 보상해 주는 구체적인 범위
+    "exclusion",  # 면책 사항: 보상하지 않는 손해 (예: 고의 사고, 전쟁 등)
+    "waiting",  # 면책 기간(대기 기간): 가입 후 일정 기간(예: 90일) 동안 보장이 제한되는 기간
+    "deductible",  # 자기부담금(공제액): 전체 손해액 중 보험 계약자가 직접 부담해야 하는 금액
+    "limit",  # 보상 한도: 보험사가 지급하는 최대 금액 (보장 금액의 마지노선)
+    "claim",  # 보험금 청구: 사고 발생 시 보험금 지급을 요청하는 절차 및 규정
+    "definition",  # 용어의 정의: 약관에서 사용하는 단어들의 명확한 뜻 풀이
+    "renewal",  # 갱신: 계약 기간 만료 후 계약을 연장하는 조건 및 방법
+    "other",  # 기타
 ]
 RISK_DOMAINS = [
     "head",
@@ -338,10 +343,6 @@ def tag_chunk(
 def tag_chunks(
     chunks: List[Document],
     *,
-    insurer_code: str = "unknown",
-    product_code: str = "unknown",
-    pdf_name: str = "unknown.pdf",
-    doc_type: str = "terms",
     embedding_model: str = "solar-embedding-1-large",
     use_llm_when: str = "unknown_or_low_conf",
     llm_conf_threshold: float = 0.55,
@@ -364,7 +365,7 @@ def tag_chunks(
     if use_llm_when != "never" and not upstage_api_key:
         raise ValueError("UPSTAGE_API_KEY is not set. Please check your .env file.")
 
-    docs: List[Document] = []
+    tagged_chunks: List[Document] = []
     llm_used_count = 0
     for idx, chunk in enumerate(chunks):
         # tag_chunk는 str 입력을 기대하므로 page_content만 전달합니다.
@@ -376,26 +377,11 @@ def tag_chunks(
             llm_conf_threshold=llm_conf_threshold,
         )
 
-        # 페이지 메타는 upstream 로더/스플리터에 따라 없을 수 있으므로
-        # 없는 경우 None으로 남기고 downstream에서 처리하도록 둡니다.
-        page = chunk.metadata.get("page")
-        page_start = chunk.metadata.get("page_start", page)
-        page_end = chunk.metadata.get("page_end", page)
-
         # 최종 metadata 스키마:
-        # - doc: 문서 식별 정보
         # - clause: 태깅 결과
         # - indexing: 검색/추적용 운영 메타
-        # - source_metadata: 원본 chunk의 metadata 보존본
         metadata = {
-            "doc": {
-                "insurer_code": insurer_code,
-                "product_code": product_code,
-                "doc_type": doc_type,
-                "pdf_name": pdf_name,
-                "page_start": page_start,
-                "page_end": page_end,
-            },
+            **chunk.metadata,
             "clause": {
                 "clause_type": tag["clause_type"],
                 "risk_domains": tag["risk_domains"],
@@ -407,11 +393,13 @@ def tag_chunks(
                 "tag_method": tag["method"],
                 "tag_confidence": tag["confidence"],
             },
-            "source_metadata": chunk.metadata,
         }
 
+        DP_RESULTS_DIR = TERMS_DIR / chunk.metadata["doc"]["file_name"].split(".")[0]
+        create_metadata_file(metadata, DP_RESULTS_DIR)
+
         # page_content는 원문 텍스트를 유지하고 metadata만 확장합니다.
-        docs.append(Document(page_content=chunk_text, metadata=metadata))
+        tagged_chunks.append(Document(page_content=chunk_text, metadata=metadata))
         if tag["method"] == "llm":
             llm_used_count += 1
 
@@ -422,4 +410,22 @@ def tag_chunks(
                 f"(llm_used={llm_used_count})"
             )
 
-    return docs
+    return tagged_chunks
+
+
+def create_metadata_file(metadata: dict, target_dir: Path):
+    target_dir.mkdir(parents=True, exist_ok=True)
+
+    file_name_without_extension = metadata["doc"]["file_name"].split(".")[0]
+    page_number = metadata["doc"]["page"]
+    OUTPUT_FILE_NAME = f"{file_name_without_extension}_{page_number}.py"
+    OUTPUT_FILE_PATH = target_dir / OUTPUT_FILE_NAME
+    # rprint("🔗create_local_file OUTPUT_FILE_PATH:", OUTPUT_FILE_PATH)
+    # if OUTPUT_FILE_PATH.exists():
+    #     rprint("⚠️ create_metadata_file skipped (already exists)")
+    #     return
+
+    # rprint("🚀create_local_file start")
+    metadata_literal = pformat(metadata, sort_dicts=False)
+    OUTPUT_FILE_PATH.write_text(f"metadata = {metadata_literal}\n", encoding="utf-8")
+    # rprint("✅create_local_file done")
