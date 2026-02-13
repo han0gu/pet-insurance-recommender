@@ -22,19 +22,26 @@ from app.agents.judge_agent.graph import graph as judge_graph
 from app.agents.composer_agent.graph import graph as composer_graph
 
 
+def save_recommendation(state: OrchestratorState) -> dict:
+    """현재 사이클의 retrieved_documents를 recommendation_history에 누적합니다."""
+    return {"recommendation_history": [state.retrieved_documents]}
+
+
 def build_orchestrator_graph(checkpointer=None):
     graph_builder = StateGraph(OrchestratorState)
 
     graph_builder.add_node("user_input_template", user_input_graph)
     graph_builder.add_node("vet_diagnosis", vet_graph)
     graph_builder.add_node("RAG", retrieve_graph)
+    graph_builder.add_node("save_recommendation", save_recommendation)
     graph_builder.add_node("judge", judge_graph)
     graph_builder.add_node("composer", composer_graph)
 
     graph_builder.add_edge(START, "user_input_template")
     graph_builder.add_conditional_edges("user_input_template", route_after_user_input)
     graph_builder.add_edge("vet_diagnosis", "RAG")
-    graph_builder.add_edge("RAG", "judge")
+    graph_builder.add_edge("RAG", "save_recommendation")
+    graph_builder.add_edge("save_recommendation", "judge")
     graph_builder.add_edge("judge", "composer")
     graph_builder.add_edge("composer", END)
 
