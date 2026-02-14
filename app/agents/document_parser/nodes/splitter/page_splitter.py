@@ -240,12 +240,10 @@ def split_pages_and_add_metadata(
         new_doc = Document(page_content=page_doc.text, metadata=new_metadata)
         result.append(new_doc)
 
-        file_name_without_extension = file_name.split(".")[0]
-        target_dir = TERMS_DIR / file_name_without_extension / output_format
+        target_dir = TERMS_DIR / file_name.split(".")[0] / output_format
         create_page_html_and_text_files(
             page_doc=page_doc,
             target_dir=target_dir,
-            file_name_without_extension=file_name_without_extension,
             output_format=output_format,
             overwrite=True,
         )
@@ -257,7 +255,6 @@ def create_page_html_and_text_files(
     *,
     page_doc: PageDoc,
     target_dir: Path,
-    file_name_without_extension: str,
     output_format: OutputFormat = "html",
     overwrite: bool = True,
 ):
@@ -267,7 +264,7 @@ def create_page_html_and_text_files(
     if output_extension is None:
         raise ValueError(f"Unsupported output_format: {output_format}")
 
-    file_name = f"{file_name_without_extension}_page_{page_doc.page_number}"
+    file_name = f"{target_dir.parent.name}_page_{page_doc.page_number}"
 
     page_file_name = f"{file_name}.{output_extension}"
     page_file_path = target_dir / page_file_name
