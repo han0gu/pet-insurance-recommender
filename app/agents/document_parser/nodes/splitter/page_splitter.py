@@ -2,17 +2,27 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from pathlib import Path
 from typing import List
 
 from bs4 import BeautifulSoup, Tag
 
 from langchain_core.documents import Document
+from langchain_upstage.document_parse import OutputFormat
+
+from app.agents.document_parser.constants import TERMS_DIR
 
 
 product_name_by_code = {
     ("meritz", "1"): "메리츠 마음든든 반려동물보험",
     ("meritz", "2"): "무배당 펫퍼민트 Puppy&Family보험 다이렉트2601",
     ("meritz", "3"): "무배당 펫퍼민트 Cat&Family보험 다이렉트2601",
+}
+
+output_extension_by_format = {
+    "html": "html",
+    "text": "txt",
+    "markdown": "md",
 }
 
 
@@ -66,12 +76,13 @@ def _dedup_keep_order(items: List[str]) -> List[str]:
 
 
 def split_pages_and_add_metadata(
-    full_document: Document,
-    file_name: str,
+    full_document: Document, file_name: str, output_format: OutputFormat = "html"
 ) -> List[Document]:
     """
     Upstage Document Parse 결과(단일 HTML Document)를 페이지 footer 기준으로 분리한다.
     """
+    result: List[Document] = []
+
     html = full_document.page_content
     soup = BeautifulSoup(html, "html.parser")
 
@@ -161,8 +172,9 @@ def split_pages_and_add_metadata(
     product_name = product_name_by_code[
         (file_name.split("_")[0], file_name.split("_")[1])
     ]
-    return [
-        Document(
+
+    for page_doc in page_docs:
+        new_doc = Document(
             page_content=page_doc.text,
             metadata={
                 **full_document.metadata,
@@ -178,5 +190,31 @@ def split_pages_and_add_metadata(
                 },
             },
         )
-        for page_doc in page_docs
-    ]
+        result.append(new_doc)
+
+        DP_RESULTS_DIR = TERMS_DIR / file_name.split(".")[0]
+        create_page_content_file(new_doc, DP_RESULTS_DIR, output_format)
+
+    return result
+
+
+def create_page_content_file(
+    doc: Document,
+    target_dir: Path,
+    output_format: OutputFormat = "html",
+):
+    # rprint("create_page_content_file target_dir:", target_dir)
+    target_dir.mkdir(parents=True, exist_ok=True)
+
+    file_name_without_extension = doc.metadata["doc"]["file_name"].split(".")[0]
+    OUTPUT_EXTENSION = output_extension_by_format.get(output_format)
+    OUTPUT_FILE_NAME = f"{file_name_without_extension}_{doc.metadata['doc']['page']}.{OUTPUT_EXTENSION}"
+    OUTPUT_FILE_PATH = target_dir / OUTPUT_FILE_NAME
+    # rprint("🔗create_local_file OUTPUT_FILE_PATH:", OUTPUT_FILE_PATH)
+    if OUTPUT_FILE_PATH.exists():
+        # rprint("⚠️ create_local_file skipped (already exists)")
+        return
+
+    # rprint("🚀create_local_file start")
+    OUTPUT_FILE_PATH.write_text(doc.page_content, encoding="utf-8")
+    # rprint("✅create_local_file done")
