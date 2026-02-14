@@ -1,9 +1,9 @@
 from enum import Enum
 
 
-class InsuranceCompany(Enum):
+class Insurer(Enum):
     SAMSUNG = ("samsung", "삼성화재")
-    KB = ("KB", "KB손해보험")
+    KB = ("kb", "KB손해보험")
     MERITZ = ("meritz", "메리츠화재")
     ETC = ("etc", "기타")
 
