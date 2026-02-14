@@ -344,7 +344,7 @@ def tag_chunks(
     chunks: List[Document],
     *,
     embedding_model: str = "solar-embedding-1-large",
-    use_llm_when: str = "unknown_or_low_conf",
+    use_llm_when: str = "never",
     llm_conf_threshold: float = 0.55,
 ) -> List[Document]:
     """
