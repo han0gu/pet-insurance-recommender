@@ -5,7 +5,7 @@ from langgraph.graph.state import StateGraph, CompiledStateGraph, START, END
 from app.agents.document_parser.constants import COLLECTION_NAME
 from app.agents.document_parser.nodes import document_parser
 from app.agents.document_parser.nodes.splitter import page_splitter, text_splitter
-from app.agents.document_parser.nodes.tagger import tagger
+from app.agents.document_parser.nodes.tagger import tagger, tagger_simple
 from app.agents.document_parser.nodes import vector_store
 from app.agents.document_parser.state.document_parser_state import DocumentParserState
 
@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
     chunks = text_splitter.split(pages)
 
-    tagged_chunks = tagger.tag_chunks(chunks)
+    tagged_chunks = tagger_simple.tag_chunks(chunks)
 
     if args.ingest:
         vector_store.ingest_chunks(COLLECTION_NAME, tagged_chunks)

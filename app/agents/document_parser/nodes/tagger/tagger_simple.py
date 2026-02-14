@@ -53,12 +53,6 @@ def _get_tagging_langsmith_project_name() -> str | None:
 CLAUSE_TYPES = [
     "coverage",  # 보장/담보: 보험사가 사고 시 책임지고 보상해 주는 구체적인 범위
     "exclusion",  # 면책 사항: 보상하지 않는 손해 (예: 고의 사고, 전쟁 등)
-    "waiting",  # 면책 기간(대기 기간): 가입 후 일정 기간(예: 90일) 동안 보장이 제한되는 기간
-    "deductible",  # 자기부담금(공제액): 전체 손해액 중 보험 계약자가 직접 부담해야 하는 금액
-    "limit",  # 보상 한도: 보험사가 지급하는 최대 금액 (보장 금액의 마지노선)
-    "claim",  # 보험금 청구: 사고 발생 시 보험금 지급을 요청하는 절차 및 규정
-    "definition",  # 용어의 정의: 약관에서 사용하는 단어들의 명확한 뜻 풀이
-    "renewal",  # 갱신: 계약 기간 만료 후 계약을 연장하는 조건 및 방법
     "other",  # 기타
 ]
 RISK_DOMAINS = [
@@ -81,14 +75,8 @@ TERM_TYPES = ["basic", "special", "other"]
 # 순서가 중요합니다. 먼저 매칭된 규칙이 우선 적용됩니다.
 # (예: 면책 키워드가 나오면 exclusion을 먼저 확정)
 CLAUSE_TYPE_RULES: List[Tuple[str, str]] = [
-    (r"(면책|보상하지\s*않|지급하지\s*않|제외)", "exclusion"),
-    (r"(대기기간|면책기간|경과\s*\d+\s*일)", "waiting"),
-    (r"(자기부담|공제금|본인부담)", "deductible"),
-    (r"(한도|지급한도|연간\s*한도|1회\s*한도|최대\s*지급)", "limit"),
-    (r"(보험금\s*청구|청구\s*서류|접수|지급\s*절차)", "claim"),
-    (r"(정의|용어의\s*정의)", "definition"),
-    (r"(갱신|재가입|갱신형)", "renewal"),
-    (r"(보장|지급\s*사유|보험금\s*지급)", "coverage"),
+    (r"(면책|보상하지\s*않|지급하지\s*않|제외|부지급)", "exclusion"),
+    (r"(보장|지급\s*사유|보험금\s*지급|보상)", "coverage"),
 ]
 
 RISK_DOMAIN_RULES: List[Tuple[str, str]] = [
@@ -195,14 +183,9 @@ def llm_tag_solar_pro2(
     user = (
         "다음 텍스트 청크를 라벨링해줘.\n"
         "분류 기준:\n"
-        "- exclusion: 보상하지 않음/지급하지 않음/면책/제외\n"
-        "- waiting: 대기기간/면책기간/경과 N일\n"
-        "- deductible: 자기부담/본인부담/공제금\n"
-        "- limit: 한도/최대/연간한도/1회한도\n"
-        "- coverage: 지급 사유/보장/보험금 지급\n"
-        "- claim: 청구 절차/서류/접수\n"
-        "- definition: 용어 정의\n"
-        "- renewal: 갱신/재가입\n"
+        "- exclusion: 보상하지 않음/지급하지 않음/면책/제외/부지급\n"
+        "- coverage: 보장 범위/지급 사유/보험금 지급/보상\n"
+        "- other: 위 두 가지에 명확히 해당하지 않는 내용\n"
         "risk_domains는 텍스트에 명시된 신체/질환 영역을 추정해.\n\n"
         f"TEXT:\n{text}"
     )
@@ -245,23 +228,16 @@ def validate_and_override(text: str, tag: Dict[str, Any]) -> Dict[str, Any]:
     # 강한 패턴은 모델 결과보다 우선 적용해 분류 안정성을 높입니다.
     # (보험 약관에서 면책/자기부담/한도는 의미가 매우 크기 때문)
 
-    # exclusion 강제 신호
-    if re.search(r"(보상하지\s*않|지급하지\s*않|면책|제외)", text):
+    # 면책 강제 신호
+    if re.search(r"(보상하지\s*않|지급하지\s*않|면책|제외|부지급)", text):
         tag["clause_type"] = "exclusion"
         tag["confidence"] = max(tag.get("confidence", 0.0), 0.85)
         tag["notes"] = (tag.get("notes") or "")[:150]
 
-    # deductible 강제 신호
-    if re.search(r"(자기부담|본인부담|공제금)", text):
-        tag["clause_type"] = "deductible"
-        tag["confidence"] = max(tag.get("confidence", 0.0), 0.85)
-        tag["notes"] = (tag.get("notes") or "")[:150]
-
-    # limit 강제 신호
-    if re.search(r"(지급한도|연간\s*한도|1회\s*한도|최대\s*지급|한도)", text):
-        # deductible이 더 우선일 때가 많아서, deductible이면 유지
-        if tag.get("clause_type") != "deductible":
-            tag["clause_type"] = "limit"
+    # 보장 강제 신호
+    if re.search(r"(보장|지급\s*사유|보험금\s*지급|보상)", text):
+        if tag.get("clause_type") != "exclusion":
+            tag["clause_type"] = "coverage"
             tag["confidence"] = max(tag.get("confidence", 0.0), 0.80)
             tag["notes"] = (tag.get("notes") or "")[:150]
 
@@ -404,7 +380,6 @@ def tag_chunks(
         target_dir = (
             TERMS_DIR / chunk.metadata["doc"]["file_name"].split(".")[0] / "chunks"
         )
-
         create_chunk_file(
             chunk=tagged_chunk,
             target_dir=target_dir,
