@@ -179,14 +179,14 @@ def split_pages_and_add_metadata(
             metadata={
                 **full_document.metadata,
                 "doc": {
-                    "doc_type": "terms",
-                    "file_name": file_name,
-                    "insurer_code": insurer_code,
-                    "product_code": product_code,
-                    "product_name": product_name,
-                    "total_pages": total_pages,
-                    "page": page_doc.page,
-                    "anchor_ids": page_doc.anchor_ids,
+                    "doc_type": "terms",  # 약관
+                    "file_name": file_name,  # 약관 파일명 (확장자 포함)
+                    "insurer_code": insurer_code,  # 보험사 코드 (e.g. samsung, kb, meritz, ...)
+                    "product_code": product_code,  # 보험 상품 코드 (e.g. 1, 2, 3, ...)
+                    "product_name": product_name,  # 보험 상품 명 (e.g. 메리츠 마음든든 반려동물보험)
+                    "total_pages": total_pages,  # 총 페이지 수
+                    "page": page_doc.page,  # 현재 페이지 번호
+                    "anchor_ids": page_doc.anchor_ids,  # 파싱 과정에서 식별되는 HTML 태그 ID (e.g. id="23")
                 },
             },
         )
