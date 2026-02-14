@@ -28,7 +28,8 @@ output_extension_by_format = {
 
 @dataclass
 class PageDoc:
-    page: int
+    page_number: int
+    html: str
     text: str
     anchor_ids: List[str]
 
@@ -118,13 +119,14 @@ def split_pages_and_add_metadata(
 
     result: List[Document] = []
 
-    html = full_document.page_content
-    soup = BeautifulSoup(html, "html.parser")
+    full_html = full_document.page_content
+    soup = BeautifulSoup(full_html, "html.parser")
 
     root = soup.body if soup.body else soup
 
     page_docs: List[PageDoc] = []
     buf_text: List[str] = []
+    buf_html: List[str] = []
     buf_ids: List[str] = []
 
     for node in root.descendants:
@@ -143,13 +145,15 @@ def split_pages_and_add_metadata(
 
                 page_docs.append(
                     PageDoc(
-                        page=page_num,
+                        page_number=page_num,
                         text=text,
+                        html="\n".join(buf_html).strip(),
                         anchor_ids=_dedup_keep_order(buf_ids),
                     )
                 )
 
                 buf_text.clear()
+                buf_html.clear()
                 buf_ids.clear()
 
             continue
@@ -161,6 +165,7 @@ def split_pages_and_add_metadata(
             table_text = _extract_table_text(node)
             if table_text:
                 buf_text.append(table_text)
+            buf_html.append(str(node))
 
             node_id = node.get("id")
             if node_id:
@@ -185,6 +190,7 @@ def split_pages_and_add_metadata(
             text = node.get_text(" ", strip=True)
             if text:
                 buf_text.append(text)
+            buf_html.append(str(node))
 
             node_id = node.get("id")
             if node_id:
@@ -192,11 +198,12 @@ def split_pages_and_add_metadata(
 
     # 마지막 페이지 footer가 누락된 경우를 대비한 fallback
     if buf_text:
-        inferred_page = page_docs[-1].page + 1 if page_docs else 1
+        inferred_page = page_docs[-1].page_number + 1 if page_docs else 1
         page_docs.append(
             PageDoc(
-                page=inferred_page,
+                page_number=inferred_page,
                 text=_norm_text("\n".join(buf_text)),
+                html="\n".join(buf_html).strip(),
                 anchor_ids=_dedup_keep_order(buf_ids),
             )
         )
@@ -209,55 +216,65 @@ def split_pages_and_add_metadata(
     ]
 
     for page_doc in page_docs:
-        if basic_term_start <= page_doc.page <= basic_term_end:
+        if basic_term_start <= page_doc.page_number <= basic_term_end:
             term_type = "basic"
-        elif special_term_start <= page_doc.page <= special_term_end:
+        elif special_term_start <= page_doc.page_number <= special_term_end:
             term_type = "special"
         else:
             term_type = ""
 
-        new_doc = Document(
-            page_content=page_doc.text,
-            metadata={
-                "source": {**full_document.metadata},
-                "doc": {
-                    "doc_type": "terms",  # 약관
-                    "file_name": file_name,  # 약관 파일명 (확장자 포함)
-                    "insurer_code": insurer_code,  # 보험사 코드 (e.g. samsung, kb, meritz, ...)
-                    "product_code": product_code,  # 보험 상품 코드 (e.g. 1, 2, 3, ...)
-                    "product_name": product_name,  # 보험 상품 명 (e.g. 메리츠 마음든든 반려동물보험)
-                    "total_pages": total_pages,  # 총 페이지 수
-                    "page": page_doc.page,  # 현재 페이지 번호
-                    "anchor_ids": page_doc.anchor_ids,  # 파싱 과정에서 식별되는 HTML 태그 ID (e.g. id="23")
-                },
-                "term_type": term_type,  # 약관 유형 (e.g. basic: 보통약관, special: 특별약관)'
+        new_metadata = {
+            "source": {**full_document.metadata},
+            "doc": {
+                "doc_type": "terms",  # 약관
+                "file_name": file_name,  # 약관 파일명 (확장자 포함)
+                "insurer_code": insurer_code,  # 보험사 코드 (e.g. samsung, kb, meritz, ...)
+                "product_code": product_code,  # 보험 상품 코드 (e.g. 1, 2, 3, ...)
+                "product_name": product_name,  # 보험 상품 명 (e.g. 메리츠 마음든든 반려동물보험)
+                "total_pages": total_pages,  # 총 페이지 수
+                "page": page_doc.page_number,  # 현재 페이지 번호
+                "anchor_ids": page_doc.anchor_ids,  # 파싱 과정에서 식별되는 HTML 태그 ID (e.g. id="23")
             },
-        )
+            "term_type": term_type,  # 약관 유형 (e.g. basic: 보통약관, special: 특별약관)'
+        }
+        new_doc = Document(page_content=page_doc.text, metadata=new_metadata)
         result.append(new_doc)
 
-        DP_RESULTS_DIR = TERMS_DIR / file_name.split(".")[0]
-        create_page_content_file(new_doc, DP_RESULTS_DIR, output_format)
+        file_name_without_extension = file_name.split(".")[0]
+        target_dir = TERMS_DIR / file_name_without_extension / output_format
+        create_page_html_and_text_files(
+            page_doc=page_doc,
+            target_dir=target_dir,
+            file_name_without_extension=file_name_without_extension,
+            output_format=output_format,
+            overwrite=True,
+        )
 
     return result
 
 
-def create_page_content_file(
-    doc: Document,
+def create_page_html_and_text_files(
+    *,
+    page_doc: PageDoc,
     target_dir: Path,
+    file_name_without_extension: str,
     output_format: OutputFormat = "html",
+    overwrite: bool = True,
 ):
-    # rprint("create_page_content_file target_dir:", target_dir)
     target_dir.mkdir(parents=True, exist_ok=True)
 
-    file_name_without_extension = doc.metadata["doc"]["file_name"].split(".")[0]
-    OUTPUT_EXTENSION = output_extension_by_format.get(output_format)
-    OUTPUT_FILE_NAME = f"{file_name_without_extension}_{doc.metadata['doc']['page']}.{OUTPUT_EXTENSION}"
-    OUTPUT_FILE_PATH = target_dir / OUTPUT_FILE_NAME
-    # rprint("🔗create_local_file OUTPUT_FILE_PATH:", OUTPUT_FILE_PATH)
-    if OUTPUT_FILE_PATH.exists():
-        # rprint("⚠️ create_local_file skipped (already exists)")
-        return
+    output_extension = output_extension_by_format.get(output_format)
+    if output_extension is None:
+        raise ValueError(f"Unsupported output_format: {output_format}")
 
-    # rprint("🚀create_local_file start")
-    OUTPUT_FILE_PATH.write_text(doc.page_content, encoding="utf-8")
-    # rprint("✅create_local_file done")
+    file_name = f"{file_name_without_extension}_page_{page_doc.page_number}"
+
+    page_file_name = f"{file_name}.{output_extension}"
+    page_file_path = target_dir / page_file_name
+    if overwrite or not page_file_path.exists():
+        page_file_path.write_text(page_doc.html, encoding="utf-8")
+
+    text_file_name = f"{file_name}.txt"
+    text_file_path = target_dir / text_file_name
+    if overwrite or not text_file_path.exists():
+        text_file_path.write_text(page_doc.text, encoding="utf-8")
