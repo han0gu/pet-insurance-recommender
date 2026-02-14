@@ -4,4 +4,5 @@ from app.agents.user_input_template_agent.state.user_input_template_state import
     HealthCondition,
     Insurer,
     UserInputTemplateState,
+    UserInputTemplateOutputState,
 )
