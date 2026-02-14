@@ -38,9 +38,14 @@ bash script/run_test_single.sh
 ### Guardrail Test
 
 ```bash
-# 입력 Sanitization 가드레일 테스트
+# 입력 Sanitization 가드레일 테스트 (노드 단위)
 # - 정상 입력 회귀 테스트 + 프롬프트 인젝션 정화 테스트
 bash script/run_test_guardrail.sh
+
+# 오케스트레이터 가드레일 테스트 (그래프 단위)
+# - 정상 입력: 전체 파이프라인 정상 수행
+# - 인젝션 입력: 즉시 종료(END) 확인
+bash script/run_test_orchestrator_guardrail.sh
 ```
 
 ### Qdrant
