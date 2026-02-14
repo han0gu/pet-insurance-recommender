@@ -35,4 +35,4 @@ Thumbs.db
 .specstory
 
 # document parsing results
-app/agents/document_parser/data/terms/**
+app/agents/document_parser/data/terms/**/

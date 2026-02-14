@@ -69,10 +69,10 @@ docker compose -f docker-compose.qdrant.yml up -d
 #### 3. 파싱/청킹 및 적재(optional)
 ```bash
 # 파싱, 청킹만
-uv run python -m app.agents.document_parser.dp_graph --file-name meritz_1_maum_pet_12_61.pdf
+uv run python -m app.agents.document_parser.dp_graph --file-name meritz_1_maum_pet_12_61.pdf --basic-term-start 1 --basic-term-end 21 --special-term-start 22 --special-term-end 50
 
 # DB 적재까지
-uv run python -m app.agents.document_parser.dp_graph --file-name meritz_1_maum_pet_12_61.pdf --ingest
+uv run python -m app.agents.document_parser.dp_graph --file-name meritz_1_maum_pet_12_61.pdf --basic-term-start 1 --basic-term-end 21 --special-term-start 22 --special-term-end 50 --ingest
 ```
 
 #### 4. Qdrant dashboard 확인

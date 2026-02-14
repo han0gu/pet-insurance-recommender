@@ -76,11 +76,46 @@ def _dedup_keep_order(items: List[str]) -> List[str]:
 
 
 def split_pages_and_add_metadata(
-    full_document: Document, file_name: str, output_format: OutputFormat = "html"
+    full_document: Document,
+    file_name: str,
+    *,
+    basic_term_start: int,
+    basic_term_end: int,
+    special_term_start: int,
+    special_term_end: int,
+    output_format: OutputFormat = "html",
 ) -> List[Document]:
     """
-    Upstage Document Parse 결과(단일 HTML Document)를 페이지 footer 기준으로 분리한다.
+    Upstage Document Parse 결과(단일 HTML Document)를
+    footer의 페이지 마커 기준으로 분리하고
+    각 페이지에 문서/약관 메타데이터를 추가한다.
+
+    Args:
+        full_document: Upstage Document Parser가 반환한 단일 HTML Document.
+        file_name: 원본 PDF 파일명(확장자 포함).
+        basic_term_start: 보통약관 시작 페이지 번호(문서 footer 기준).
+        basic_term_end: 보통약관 종료 페이지 번호(문서 footer 기준).
+        special_term_start: 특별약관 시작 페이지 번호(문서 footer 기준).
+        special_term_end: 특별약관 종료 페이지 번호(문서 footer 기준).
+        output_format: 페이지별 로컬 저장 파일 포맷(`html`, `text`, `markdown`).
+
+    Returns:
+        페이지별로 분리되고 metadata가 추가된 `Document` 리스트.
+
+    Raises:
+        ValueError: 필수 인자가 비어 있거나 유효하지 않은 경우.
     """
+
+    if (
+        not full_document
+        or not file_name
+        or not basic_term_start
+        or not basic_term_end
+        or not special_term_start
+        or not special_term_end
+    ):
+        raise ValueError("❗️split_pages_and_add_metadata invalid params")
+
     result: List[Document] = []
 
     html = full_document.page_content
@@ -174,10 +209,17 @@ def split_pages_and_add_metadata(
     ]
 
     for page_doc in page_docs:
+        if basic_term_start <= page_doc.page <= basic_term_end:
+            term_type = "basic"
+        elif special_term_start <= page_doc.page <= special_term_end:
+            term_type = "special"
+        else:
+            term_type = ""
+
         new_doc = Document(
             page_content=page_doc.text,
             metadata={
-                **full_document.metadata,
+                "source": {**full_document.metadata},
                 "doc": {
                     "doc_type": "terms",  # 약관
                     "file_name": file_name,  # 약관 파일명 (확장자 포함)
@@ -188,6 +230,7 @@ def split_pages_and_add_metadata(
                     "page": page_doc.page,  # 현재 페이지 번호
                     "anchor_ids": page_doc.anchor_ids,  # 파싱 과정에서 식별되는 HTML 태그 ID (e.g. id="23")
                 },
+                "term_type": term_type,  # 약관 유형 (e.g. basic: 보통약관, special: 특별약관)'
             },
         )
         result.append(new_doc)
