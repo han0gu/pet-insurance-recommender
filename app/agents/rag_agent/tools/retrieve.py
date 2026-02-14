@@ -2,9 +2,10 @@ from langchain_core.tools import tool
 
 from rich import print as rprint
 
+
 from app.agents.rag_agent.state.rag_state import RagState, RetrieveToolInput
 
-from app.agents.document_parser.dp_graph import COLLECTION_NAME
+from app.agents.document_parser.constants import COLLECTION_NAME
 from app.agents.document_parser.nodes.embeddings import load_underlying_embeddings
 from app.agents.document_parser.nodes.vector_store import setup_vector_store
 

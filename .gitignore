@@ -33,3 +33,6 @@ Thumbs.db
 
 # SpecStory artifacts
 .specstory
+
+# document parsing results
+app/agents/document_parser/data/terms/**/
