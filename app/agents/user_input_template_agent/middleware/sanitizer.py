@@ -79,6 +79,14 @@ class SanitizeResult:
     def has_changes(self) -> bool:
         return len(self.logs) > 0
 
+    @property
+    def has_injection(self) -> bool:
+        """인젝션 패턴이 감지된 로그가 있는지 확인"""
+        return any(
+            "injection_detected_field_nullified" in log.actions
+            for log in self.logs
+        )
+
 
 # ── 핵심 함수 ───────────────────────────────────────────
 def sanitize_text(
