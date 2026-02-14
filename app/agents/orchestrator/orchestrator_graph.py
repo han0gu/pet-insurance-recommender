@@ -80,6 +80,9 @@ def run_orchestration(yaml_path: str | Path, config: dict) -> dict:
 
 def print_orchestration_result(result: dict) -> None:
     """Orchestrator 실행 결과를 콘솔에 출력합니다."""
+    if result.get("is_blocked"):
+        rprint(f"[BLOCKED] {result.get('blocked_reason')}")
+        return
     rprint(f"질병 목록: {result['diseases']}")
     rprint(
         "RAG 결과: ",
@@ -97,9 +100,7 @@ def main():
 
 
 if __name__ == "__main__":
-    config = {"configurable": {"thread_id": "test_user"}}
-
-    main(config)
+    main()
 
 
 # uv run python -m app.agents.orchestrator.orchestrator_graph
