@@ -9,12 +9,9 @@ from app.agents.document_parser.nodes import document_parser
 from app.agents.document_parser.nodes.splitter import text_splitter
 from app.agents.document_parser.nodes.tagger import tagger
 from app.agents.document_parser.nodes import vector_store
+from app.agents.document_parser.state.document_parser_state import DocumentParserState
 
 from app.agents import utils
-
-
-class DocumentParserState:
-    file_name: str
 
 
 def build_graph() -> CompiledStateGraph:
