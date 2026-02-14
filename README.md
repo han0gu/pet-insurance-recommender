@@ -6,7 +6,7 @@ Multi-agent project structure for a FastAPI-served insurance recommendation syst
 
 - `app/main.py`: FastAPI application entrypoint
 - `app/agents/orchestrator/`: 최상위 오케스트레이션 그래프 (`orchestrator_graph.py`, `nodes/`, `state/`)
-- `app/agents/user_input_template_agent/`: 사용자 입력 처리 (`graph.py`, `nodes/`, `state/`, `samples/`)
+- `app/agents/user_input_template_agent/`: 사용자 입력 처리 (`graph.py`, `nodes/`, `state/`, `middleware/`, `samples/`)
 - `app/agents/vet_agent/`: 수의사 진단 에이전트 (`graph.py`, `nodes/`, `state/`)
 - `app/agents/rag_agent/`: 보험 약관 검색 에이전트 (`rag_graph.py`, `nodes/`, `state/`, `tools/`)
 - `app/agents/judge_agent/`: 보험 상품 검증 에이전트 (`graph.py`, `nodes/`, `state/`)
@@ -33,6 +33,14 @@ bash script/run_test_router.sh
 
 # 단일 입력 파이프라인 테스트
 bash script/run_test_single.sh
+```
+
+### Guardrail Test
+
+```bash
+# 입력 Sanitization 가드레일 테스트
+# - 정상 입력 회귀 테스트 + 프롬프트 인젝션 정화 테스트
+bash script/run_test_guardrail.sh
 ```
 
 ### Qdrant
