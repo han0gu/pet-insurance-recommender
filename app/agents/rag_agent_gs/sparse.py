@@ -4,6 +4,7 @@ import math
 from collections import defaultdict
 import sys
 import os
+from kiwipiepy import Kiwi
 try:
     from tc_chunk import chunks
 except Exception:
@@ -11,13 +12,13 @@ except Exception:
 
 # Initialize Kiwi tokenizer
 try:
-    from kiwipiepy import Kiwi
+    
     kiwi = Kiwi()
     KIWI_AVAILABLE = True
-    print("✓ Kiwipiepy loaded successfully")
+    # print("✓ Kiwipiepy loaded successfully")
 except ImportError:
     KIWI_AVAILABLE = False
-    print("⚠ Kiwipiepy not available. Install: pip install kiwipiepy")
+    # print("⚠ Kiwipiepy not available. Install: pip install kiwipiepy")
 
 def tokenize_korean(text: str) -> List[str]:
     """
