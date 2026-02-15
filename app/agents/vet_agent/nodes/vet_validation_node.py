@@ -2,6 +2,7 @@ import json
 
 from pydantic import BaseModel, Field
 
+from app.agents.vet_agent.cache import get_cached_diseases, set_cached_diseases
 from app.agents.vet_agent.model.model import llm
 from app.agents.vet_agent.state import VetAgentState
 from app.agents.vet_agent.tools.search import search_breed_diseases
@@ -96,19 +97,29 @@ def vet_validation_node(state: VetAgentState) -> dict:
 
     breed = state.breed or ""
 
-    # 1. 품종 질병 일괄 검색 (Tavily 1회)
-    search_results = search_breed_diseases(breed)
+    # 1. 캐시 조회
+    cached = get_cached_diseases(breed)
 
-    # 검색 결과 없음 -> 검증 건너뜀
-    if not search_results:
-        return {
-            "is_validated": True,
-            "validation_feedback": "검색 근거를 찾을 수 없어 검증을 건너뜁니다.",
-            "retry_count": state.retry_count + 1,
-        }
+    if cached is not None:
+        # 캐시 히트: 검색 + 추출 건너뜀
+        search_diseases = cached
+    else:
+        # 캐시 미스: 검색 + 추출 수행
+        search_results = search_breed_diseases(breed)
 
-    # 2. 검색 결과에서 질병 목록 추출 (LLM 1회)
-    search_diseases = _extract_diseases_from_search(search_results)
+        # 검색 결과 없음 -> 검증 건너뜀
+        if not search_results:
+            return {
+                "is_validated": True,
+                "validation_feedback": "검색 근거를 찾을 수 없어 검증을 건너뜁니다.",
+                "retry_count": state.retry_count + 1,
+            }
+
+        # 2. 검색 결과에서 질병 목록 추출 (LLM 1회)
+        search_diseases = _extract_diseases_from_search(search_results)
+
+        # 캐시 저장
+        set_cached_diseases(breed, "", search_diseases)
 
     # 3. LLM 진단 질병 vs 검색 추출 질병 대조 (LLM 1회)
     diagnosis_names = [d.name for d in state.diseases]
