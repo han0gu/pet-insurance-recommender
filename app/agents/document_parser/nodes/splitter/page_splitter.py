@@ -224,7 +224,7 @@ def split_pages_and_add_metadata(
             term_type = ""
 
         new_metadata = {
-            "source": {**full_document.metadata},
+            "source_doc": {**full_document.metadata},
             "doc": {
                 "doc_type": "terms",  # 약관
                 "file_name": file_name,  # 약관 파일명 (확장자 포함)

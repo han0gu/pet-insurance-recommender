@@ -1,14 +1,13 @@
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.graph import StateGraph, START, END
 
-from rich import print as rprint
-
 from app.agents import utils
 
 from app.agents.rag_agent.nodes.embed_query import embed_query
 from app.agents.rag_agent.nodes.generate_user_query import generate_user_query
+from app.agents.rag_agent.nodes.retrieve import retrieve_normal, retrieve_simple
+from app.agents.rag_agent.nodes.summary import summary
 from app.agents.rag_agent.state.rag_state import RagState
-from app.agents.rag_agent.tools.retrieve import retrieve
 
 from app.agents.vet_agent.state import VetAgentState
 
@@ -25,12 +24,17 @@ def build_graph() -> CompiledStateGraph:
 
     workflow.add_node("generate_user_query", generate_user_query)
     workflow.add_node("embed_query", embed_query)
-    workflow.add_node("retrieve", retrieve)
+    workflow.add_node("retrieve_normal", retrieve_normal)
+    workflow.add_node("retrieve_simple", retrieve_simple)
+    workflow.add_node("summary", summary)
 
     workflow.add_edge(START, "generate_user_query")
     workflow.add_edge("generate_user_query", "embed_query")
-    workflow.add_edge("embed_query", "retrieve")
-    workflow.add_edge("retrieve", END)
+    workflow.add_edge("embed_query", "retrieve_normal")
+    workflow.add_edge("embed_query", "retrieve_simple")
+    workflow.add_edge("retrieve_normal", "summary")
+    workflow.add_edge("retrieve_simple", "summary")
+    workflow.add_edge("summary", END)
 
     return workflow.compile()
 

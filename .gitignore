@@ -36,3 +36,6 @@ Thumbs.db
 
 # document parsing results
 app/agents/document_parser/data/terms/**/
+
+# RAG results
+app/agents/rag_agent/data/retrieval/**/

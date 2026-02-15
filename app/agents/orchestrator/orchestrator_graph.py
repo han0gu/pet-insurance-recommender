@@ -9,17 +9,17 @@ from app.agents.utils import create_graph_image, get_parent_path
 
 from app.agents.orchestrator.state.orchestrator_state import OrchestratorState
 from app.agents.orchestrator.nodes import route_after_user_input
+
+from app.agents.composer_agent.graph import graph as composer_graph
+from app.agents.judge_agent.graph import graph as judge_graph
+from app.agents.rag_agent.rag_graph import graph as rag_graph
+from app.agents.user_input_template_agent.graph import graph as user_input_graph
 from app.agents.user_input_template_agent.utils.cli import (
     create_arg_parser,
     load_state_from_yaml,
     make_config,
 )
-
-from app.agents.rag_agent.rag_graph import graph as retrieve_graph
-from app.agents.user_input_template_agent.graph import graph as user_input_graph
 from app.agents.vet_agent.graph import graph as vet_graph
-from app.agents.judge_agent.graph import graph as judge_graph
-from app.agents.composer_agent.graph import graph as composer_graph
 
 
 def save_recommendation(state: OrchestratorState) -> dict:
@@ -32,7 +32,7 @@ def build_orchestrator_graph(checkpointer=None):
 
     graph_builder.add_node("user_input_template", user_input_graph)
     graph_builder.add_node("vet_diagnosis", vet_graph)
-    graph_builder.add_node("RAG", retrieve_graph)
+    graph_builder.add_node("RAG", rag_graph)
     graph_builder.add_node("save_recommendation", save_recommendation)
     graph_builder.add_node("judge", judge_graph)
     graph_builder.add_node("composer", composer_graph)
