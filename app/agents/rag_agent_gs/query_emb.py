@@ -8,7 +8,7 @@ import numpy as np
 
 mock_state = create_mock_vet_agent_state()
 query = build_insurance_query(mock_state)
-# print(query)
+print(query)
 load_dotenv()    
 EMBED_MODEL_NAME = "solar-embedding-1-large" 
 upstage_embeddings = UpstageEmbeddings(

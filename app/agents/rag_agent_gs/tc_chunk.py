@@ -55,10 +55,10 @@ def pages_to_chunks(pages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
     return chunks
 chunks = pages_to_chunks(pages)  
-# (테스트) 업로드한 pdf 파일을 페이지 단위로 로드한 후 텍스트를 추출한 결과 확인하기
-print("pages:", len(pages)) # 총 페이지 수 확인
-print("chunks:", len(chunks)) # 총 청크 수 확인
-# print("sample page 149 text (first 500 chars):\n") # pdf에서 가져온 149 페이지 내용 확인
+# # (테스트) 업로드한 pdf 파일을 페이지 단위로 로드한 후 텍스트를 추출한 결과 확인하기
+# print("pages:", len(pages)) # 총 페이지 수 확인
+# print("chunks:", len(chunks)) # 총 청크 수 확인
+# # print("sample page 149 text (first 500 chars):\n") # pdf에서 가져온 149 페이지 내용 확인
 # print(pages[148]["text"][:500])
 
 # 특정 페이지 특정 청크 내용 확인
