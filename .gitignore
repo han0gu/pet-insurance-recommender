@@ -23,6 +23,7 @@ dist/
 
 # IDE/editor files
 .vscode/
+.cursor
 .idea/
 *.swp
 *.swo
