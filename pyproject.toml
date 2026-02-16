@@ -29,6 +29,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
     "httpx>=0.28.1",
     "ipython>=9.10.0",
     "pillow>=12.1.0",
