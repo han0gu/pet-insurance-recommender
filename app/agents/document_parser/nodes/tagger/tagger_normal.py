@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import re
 from contextlib import nullcontext
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple, Literal
 
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
@@ -290,7 +290,9 @@ def tag_chunk(
     text: str,
     *,
     upstage_api_key: str,
-    use_llm_when: str = "unknown_or_low_conf",  # "always" | "unknown_or_low_conf" | "never"
+    use_llm_when: Literal[
+        "always", "unknown_or_low_conf", "never"
+    ] = "unknown_or_low_conf",
     llm_conf_threshold: float = 0.55,
 ) -> Dict[str, Any]:
     """
@@ -347,7 +349,9 @@ def tag_chunks(
     chunks: List[Document],
     *,
     embedding_model: str = "solar-embedding-1-large",
-    use_llm_when: str = "never",
+    use_llm_when: Literal[
+        "always", "unknown_or_low_conf", "never"
+    ] = "unknown_or_low_conf",
     llm_conf_threshold: float = 0.55,
 ) -> List[Document]:
     """

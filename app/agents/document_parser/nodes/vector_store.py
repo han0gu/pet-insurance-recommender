@@ -1,4 +1,5 @@
 import os
+import threading
 import time
 from typing import List
 
@@ -69,11 +70,26 @@ def ingest_chunks(collection_name: str, chunks: List[Document]) -> VectorStore:
     vector_store = setup_vector_store(underlying_embeddings, collection_name)
 
     if chunks:
-        rprint("🚀ingest_chunks start")
+        rprint("🚀ingestion start")
         start_time = time.perf_counter()
-        vector_store.add_documents(chunks)  # embedding + saving
+        stop_event = threading.Event()
+
+        def _print_progress():
+            while not stop_event.wait(5):
+                elapsed = time.perf_counter() - start_time
+                rprint(f"ingestion in progress... (elapsed: {elapsed:.2f}s)")
+
+        progress_thread = threading.Thread(target=_print_progress, daemon=True)
+        progress_thread.start()
+
+        try:
+            vector_store.add_documents(chunks)  # embedding + saving
+        finally:
+            stop_event.set()
+            progress_thread.join()
+
         elapsed = time.perf_counter() - start_time
-        rprint(f"✅ingest_chunks complete (elapsed: {elapsed:.2f}s)")
+        rprint(f"ingestion complete (elapsed: {elapsed:.2f}s)")
     else:
         rprint("⚠️no documents")
 
