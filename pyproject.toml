@@ -35,3 +35,8 @@ dev = [
     "pytest>=9.0.2",
     "ruff>=0.15.0",
 ]
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: real external dependency integration tests",
+]
