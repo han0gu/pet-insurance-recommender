@@ -27,9 +27,17 @@ class RagState(BaseModel):
         default_factory=list,
         description="terms_normal_tag_dense 컬렉션에서 검색한 결과",
     )
+    terms_normal_tag_dense_unfiltered: Optional[List[Document]] = Field(
+        default_factory=list,
+        description="terms_normal_tag_dense 컬렉션에서 filter 미적용 검색 결과",
+    )
     terms_simple_tag_dense: Optional[List[Document]] = Field(
         default_factory=list,
         description="terms_simple_tag_dense 컬렉션에서 검색한 결과",
+    )
+    terms_simple_tag_dense_unfiltered: Optional[List[Document]] = Field(
+        default_factory=list,
+        description="terms_simple_tag_dense 컬렉션에서 filter 미적용 검색 결과",
     )
     retrieved_documents: Optional[List[Document]] = Field(
         default_factory=list,

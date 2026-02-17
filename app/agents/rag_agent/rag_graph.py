@@ -27,15 +27,15 @@ def build_graph() -> CompiledStateGraph:
 
     workflow.add_node("generate_query_texts", generate_query_texts)
     workflow.add_node("embed_query_texts", embed_query_texts)
-    # workflow.add_node("retrieve_normal", retrieve_normal_by_multi_query_texts)
+    workflow.add_node("retrieve_normal", retrieve_normal_by_multi_query_texts)
     workflow.add_node("retrieve_simple", retrieve_simple_by_multi_query_texts)
     workflow.add_node("summary", summary_multi)
 
     workflow.add_edge(START, "generate_query_texts")
     workflow.add_edge("generate_query_texts", "embed_query_texts")
-    # workflow.add_edge("embed_query_texts", "retrieve_normal")
+    workflow.add_edge("embed_query_texts", "retrieve_normal")
     workflow.add_edge("embed_query_texts", "retrieve_simple")
-    # workflow.add_edge("retrieve_normal", "summary")
+    workflow.add_edge("retrieve_normal", "summary")
     workflow.add_edge("retrieve_simple", "summary")
     workflow.add_edge("summary", END)
 
