@@ -10,13 +10,11 @@ def create_chunk_file(
     *,
     chunk: Document,
     target_dir: Path,
+    output_file_name: str,
     overwrite: bool = True,
 ) -> None:
     target_dir.mkdir(parents=True, exist_ok=True)
 
-    chunk_id = chunk.metadata["indexing"]["chunk_id"]
-    chunk_id_only_number = chunk_id.split("_")[-1]
-    output_file_name = f"{target_dir.parent.name}_{chunk_id_only_number}.py"
     output_file_path = target_dir / output_file_name
     if not overwrite and output_file_path.exists():
         return

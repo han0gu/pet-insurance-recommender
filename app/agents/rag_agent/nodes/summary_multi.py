@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path
+from pprint import pformat
 from typing import Literal
 
 from langchain.chat_models import init_chat_model
@@ -31,6 +32,13 @@ def _make_output_dir(timestamp: str) -> Path:
     target_dir = rag_agent_dir / "data" / "retrieval" / timestamp
     target_dir.mkdir(parents=True, exist_ok=True)
     return target_dir
+
+
+def _save_literal_as_python(
+    output_file: Path, variable_name: str, value: object
+) -> None:
+    lines = [f"{variable_name} = {pformat(value, sort_dicts=False)}", ""]
+    output_file.write_text("\n".join(lines), encoding="utf-8")
 
 
 def _save_documents_as_python(
@@ -99,6 +107,15 @@ def _split_docs_by_query(
         end = start + k
         grouped.append(documents[start:end])
     return grouped
+
+
+def _sorted_total_scores(
+    evaluations: dict[int, RelevanceEvaluationItem],
+) -> list[int]:
+    return [
+        item.total_score
+        for _, item in sorted(evaluations.items(), key=lambda entry: entry[0])
+    ]
 
 
 def _evaluate_relevance_by_llm(
@@ -181,80 +198,161 @@ def _attach_evaluation_metadata(
     return scored_docs
 
 
+def _average_total_score(total_scores: list[int]) -> float:
+    if not total_scores:
+        return 0.0
+    return round(sum(total_scores) / len(total_scores), 2)
+
+
+def _process_collection_with_unfiltered(
+    *,
+    query_context: str,
+    query_texts: list[str],
+    filtered_docs: list[Document],
+    unfiltered_docs: list[Document],
+    source_name: str,
+    output_dir: Path,
+    timestamp: str,
+) -> tuple[list[Document], list[dict[str, object]]]:
+    rprint(
+        f"⏳{source_name} relevance scoring start "
+        f"(filtered={len(filtered_docs)}, unfiltered={len(unfiltered_docs)})"
+    )
+    filtered_evaluations = _evaluate_relevance_by_llm(query_context, filtered_docs)
+    filtered_scored_docs = _attach_evaluation_metadata(
+        documents=filtered_docs,
+        evaluations=filtered_evaluations,
+        query_context=query_context,
+        source=source_name,
+    )
+    filtered_scored_docs.sort(key=_evaluation_total_score, reverse=True)
+
+    filtered_docs_by_query = _split_docs_by_query(
+        filtered_docs, len(query_texts), TOP_K
+    )
+    unfiltered_docs_by_query = _split_docs_by_query(
+        unfiltered_docs, len(query_texts), TOP_K
+    )
+    comparison_rows: list[dict[str, object]] = []
+    unfiltered_source_name = f"{source_name}_unfiltered"
+    rprint(f"⏳{source_name} per-query scoring start (queries={len(query_texts)})")
+
+    for query_index, query_text in enumerate(query_texts, start=1):
+        rprint(f"⏳{source_name} evaluating query {query_index}/{len(query_texts)}")
+        per_query_filtered_docs = filtered_docs_by_query[query_index - 1]
+        per_query_unfiltered_docs = unfiltered_docs_by_query[query_index - 1]
+
+        per_query_filtered_evaluations = _evaluate_relevance_by_llm(
+            query_text, per_query_filtered_docs
+        )
+        per_query_unfiltered_evaluations = _evaluate_relevance_by_llm(
+            query_text, per_query_unfiltered_docs
+        )
+
+        per_query_filtered_scored_docs = _attach_evaluation_metadata(
+            documents=per_query_filtered_docs,
+            evaluations=per_query_filtered_evaluations,
+            query_context=query_text,
+            source=source_name,
+        )
+        per_query_unfiltered_scored_docs = _attach_evaluation_metadata(
+            documents=per_query_unfiltered_docs,
+            evaluations=per_query_unfiltered_evaluations,
+            query_context=query_text,
+            source=unfiltered_source_name,
+        )
+        per_query_filtered_scored_docs.sort(key=_evaluation_total_score, reverse=True)
+        per_query_unfiltered_scored_docs.sort(key=_evaluation_total_score, reverse=True)
+
+        if per_query_filtered_scored_docs:
+            _save_documents_as_python(
+                output_file=output_dir / f"{source_name}_q{query_index}_{timestamp}.py",
+                variable_name=f"{source_name}_q{query_index}_documents",
+                documents=per_query_filtered_scored_docs,
+            )
+        if per_query_unfiltered_scored_docs:
+            _save_documents_as_python(
+                output_file=output_dir
+                / f"{unfiltered_source_name}_q{query_index}_{timestamp}.py",
+                variable_name=f"{unfiltered_source_name}_q{query_index}_documents",
+                documents=per_query_unfiltered_scored_docs,
+            )
+
+        filtered_total_scores = _sorted_total_scores(per_query_filtered_evaluations)
+        unfiltered_total_scores = _sorted_total_scores(per_query_unfiltered_evaluations)
+        filtered_avg = _average_total_score(filtered_total_scores)
+        unfiltered_avg = _average_total_score(unfiltered_total_scores)
+        comparison_rows.append(
+            {
+                "query_index": query_index,
+                "query_text": query_text,
+                "filtered_total_scores": filtered_total_scores,
+                "unfiltered_total_scores": unfiltered_total_scores,
+                "filtered_avg_total_score": filtered_avg,
+                "unfiltered_avg_total_score": unfiltered_avg,
+                "avg_total_score_delta": round(filtered_avg - unfiltered_avg, 2),
+            }
+        )
+
+    rprint(f"✅{source_name} relevance scoring complete")
+    return filtered_scored_docs, comparison_rows
+
+
 def summary_multi(state: RagState) -> RagState:
+    rprint("⏳summarize_multi start")
     query_context = _build_query_context(state)
     query_texts = _collect_query_texts(state)
     normal_docs = state.terms_normal_tag_dense or []
+    normal_docs_unfiltered = state.terms_normal_tag_dense_unfiltered or []
     simple_docs = state.terms_simple_tag_dense or []
-
-    normal_evaluations = _evaluate_relevance_by_llm(query_context, normal_docs)
-    simple_evaluations = _evaluate_relevance_by_llm(query_context, simple_docs)
-
-    normal_scored_docs = _attach_evaluation_metadata(
-        documents=normal_docs,
-        evaluations=normal_evaluations,
-        query_context=query_context,
-        source="terms_normal_tag_dense",
-    )
-    simple_scored_docs = _attach_evaluation_metadata(
-        documents=simple_docs,
-        evaluations=simple_evaluations,
-        query_context=query_context,
-        source="terms_simple_tag_dense",
-    )
-    normal_scored_docs.sort(key=_evaluation_total_score, reverse=True)
-    simple_scored_docs.sort(key=_evaluation_total_score, reverse=True)
+    simple_docs_unfiltered = state.terms_simple_tag_dense_unfiltered or []
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_dir = _make_output_dir(timestamp)
-    normal_docs_by_query = _split_docs_by_query(normal_docs, len(query_texts), TOP_K)
-    simple_docs_by_query = _split_docs_by_query(simple_docs, len(query_texts), TOP_K)
-
-    # query_text별로 normal/simple 2개 파일 생성 (각 파일은 k=TOP_K 기준 독립 결과 저장)
-    for query_index, query_text in enumerate(query_texts, start=1):
-        per_query_normal_source_docs = normal_docs_by_query[query_index - 1]
-        per_query_simple_source_docs = simple_docs_by_query[query_index - 1]
-
-        per_query_normal_evaluations = _evaluate_relevance_by_llm(
-            query_text, per_query_normal_source_docs
+    rprint(f"🗂️summary output dir: {output_dir}")
+    normal_scored_docs, normal_total_score_comparison_rows = (
+        _process_collection_with_unfiltered(
+            query_context=query_context,
+            query_texts=query_texts,
+            filtered_docs=normal_docs,
+            unfiltered_docs=normal_docs_unfiltered,
+            source_name="terms_normal_tag_dense",
+            output_dir=output_dir,
+            timestamp=timestamp,
         )
-        per_query_simple_evaluations = _evaluate_relevance_by_llm(
-            query_text, per_query_simple_source_docs
+    )
+    simple_scored_docs, simple_total_score_comparison_rows = (
+        _process_collection_with_unfiltered(
+            query_context=query_context,
+            query_texts=query_texts,
+            filtered_docs=simple_docs,
+            unfiltered_docs=simple_docs_unfiltered,
+            source_name="terms_simple_tag_dense",
+            output_dir=output_dir,
+            timestamp=timestamp,
+        )
+    )
+
+    if normal_total_score_comparison_rows:
+        _save_literal_as_python(
+            output_file=output_dir
+            / f"terms_normal_total_score_comparison_{timestamp}.py",
+            variable_name="terms_normal_total_score_comparison",
+            value=normal_total_score_comparison_rows,
         )
 
-        per_query_normal_docs = _attach_evaluation_metadata(
-            documents=per_query_normal_source_docs,
-            evaluations=per_query_normal_evaluations,
-            query_context=query_text,
-            source="terms_normal_tag_dense",
+    if simple_total_score_comparison_rows:
+        _save_literal_as_python(
+            output_file=output_dir
+            / f"terms_simple_total_score_comparison_{timestamp}.py",
+            variable_name="terms_simple_total_score_comparison",
+            value=simple_total_score_comparison_rows,
         )
-        per_query_simple_docs = _attach_evaluation_metadata(
-            documents=per_query_simple_source_docs,
-            evaluations=per_query_simple_evaluations,
-            query_context=query_text,
-            source="terms_simple_tag_dense",
-        )
-        per_query_normal_docs.sort(key=_evaluation_total_score, reverse=True)
-        per_query_simple_docs.sort(key=_evaluation_total_score, reverse=True)
-
-        if per_query_normal_docs:
-            _save_documents_as_python(
-                output_file=output_dir
-                / f"terms_normal_tag_dense_q{query_index}_{timestamp}.py",
-                variable_name=f"terms_normal_tag_dense_q{query_index}_documents",
-                documents=per_query_normal_docs,
-            )
-        if per_query_simple_docs:
-            _save_documents_as_python(
-                output_file=output_dir
-                / f"terms_simple_tag_dense_q{query_index}_{timestamp}.py",
-                variable_name=f"terms_simple_tag_dense_q{query_index}_documents",
-                documents=per_query_simple_docs,
-            )
 
     merged_docs: list[Document] = [*normal_scored_docs, *simple_scored_docs]
 
     merged_docs.sort(key=_evaluation_total_score, reverse=True)
     rprint("📝total dense retrieval results:", len(merged_docs))
+    rprint("✅summarize_multi complete")
 
     return {"retrieved_documents": merged_docs}

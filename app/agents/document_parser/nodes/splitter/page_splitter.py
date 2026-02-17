@@ -17,6 +17,11 @@ product_name_by_code = {
     ("meritz", "1"): "메리츠 마음든든 반려동물보험",
     ("meritz", "2"): "무배당 펫퍼민트 Puppy&Family보험 다이렉트2601",
     ("meritz", "3"): "무배당 펫퍼민트 Cat&Family보험 다이렉트2601",
+    ("samsung", "1"): "(일반)반려견보험 애니펫",
+    ("samsung", "2"): "(일반)반려묘보험 애니펫",
+    ("samsung", "3"): "(장기)무배당 삼성화재 다이렉트 착한펫보험(강아지)",
+    ("samsung", "4"): "(장기)무배당 삼성화재 펫보험 위풍댕댕",
+    ("samsung", "5"): "(장기)무배당 삼성화재 펫보험 의기냥냥",
 }
 
 output_extension_by_format = {
@@ -209,6 +214,7 @@ def split_pages_and_add_metadata(
         )
 
     total_pages = len(page_docs)
+    last_page = page_docs[-1]
     insurer_code = file_name.split("_")[0]
     product_code = file_name.split("_")[1]
     product_name = product_name_by_code[
@@ -216,12 +222,17 @@ def split_pages_and_add_metadata(
     ]
 
     for page_doc in page_docs:
-        if basic_term_start <= page_doc.page_number <= basic_term_end:
-            term_type = "basic"
-        elif special_term_start <= page_doc.page_number <= special_term_end:
-            term_type = "special"
+        # 정상적으로 페이지 분할이 된 경우
+        if last_page.page_number > 1:
+            if basic_term_start <= page_doc.page_number <= basic_term_end:
+                term_type = "basic"
+            elif special_term_start <= page_doc.page_number <= special_term_end:
+                term_type = "special"
+            else:
+                term_type = "unknown"
+        # 페이지 분할을 실패한 경우
         else:
-            term_type = ""
+            term_type = "unknown"
 
         new_metadata = {
             "source_doc": {**full_document.metadata},
@@ -233,9 +244,9 @@ def split_pages_and_add_metadata(
                 "product_name": product_name,  # 보험 상품 명 (e.g. 메리츠 마음든든 반려동물보험)
                 "total_pages": total_pages,  # 총 페이지 수
                 "page": page_doc.page_number,  # 현재 페이지 번호
-                "anchor_ids": page_doc.anchor_ids,  # 파싱 과정에서 식별되는 HTML 태그 ID (e.g. id="23")
+                # "anchor_ids": page_doc.anchor_ids,  # 파싱 과정에서 식별되는 HTML 태그 ID (e.g. id="23")
             },
-            "term_type": term_type,  # 약관 유형 (e.g. basic: 보통약관, special: 특별약관)'
+            "term_type": term_type,  # 약관 유형 (e.g. basic: 보통 약관, special: 특별 약관, unkown: 식별 불가)'
         }
         new_doc = Document(page_content=page_doc.text, metadata=new_metadata)
         result.append(new_doc)
