@@ -329,6 +329,7 @@ def tag_chunks(
         "always", "unknown_or_low_conf", "never"
     ] = "unknown_or_low_conf",
     llm_conf_threshold: float = 0.55,
+    overwrite: bool = False,
 ) -> List[Document]:
     """
     chunk(Document) 리스트를 입력받아 태깅 메타데이터를 확장한 Document 리스트를 반환합니다.
@@ -348,9 +349,23 @@ def tag_chunks(
     if use_llm_when != "never" and not upstage_api_key:
         raise ValueError("UPSTAGE_API_KEY is not set. Please check your .env file.")
 
+    target_dir = (
+        TERMS_DIR / chunks[0].metadata["doc"]["file_name"].split(".")[0] / "chunks"
+    )
+    if chunks and not overwrite:
+        marker_file_path = target_dir / f"{target_dir.parent.name}_000000_simple.py"
+        if marker_file_path.exists():
+            print(
+                "⚠️[tagging] marker chunk file exists. skip entire batch: "
+                f"{marker_file_path}"
+            )
+            return []
+
     tagged_chunks: List[Document] = []
     llm_used_count = 0
     for idx, chunk in enumerate(chunks):
+        output_file_name = f"{target_dir.parent.name}_{idx:06d}_simple.py"
+
         # tag_chunk는 str 입력을 기대하므로 page_content만 전달합니다.
         chunk_text = chunk.page_content
         tag = tag_chunk(
@@ -381,12 +396,10 @@ def tag_chunks(
         # page_content는 원문 텍스트를 유지하고 metadata만 확장합니다.
         tagged_chunk = Document(page_content=chunk_text, metadata=metadata)
         tagged_chunks.append(tagged_chunk)
-        target_dir = (
-            TERMS_DIR / chunk.metadata["doc"]["file_name"].split(".")[0] / "chunks"
-        )
         create_chunk_file(
             chunk=tagged_chunk,
             target_dir=target_dir,
+            output_file_name=output_file_name,
         )
 
         if tag["method"] == "llm":
