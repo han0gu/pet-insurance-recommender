@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     chunks = text_splitter.split(pages)
 
-    # tagged_chunks = tagger_normal.tag_chunks(chunks, use_llm_when="never")
+    # tagged_chunks = tagger_normal.tag_chunks(chunks)
     tagged_chunks = tagger_simple.tag_chunks(chunks)
 
     if args.ingest:
@@ -94,4 +94,5 @@ if __name__ == "__main__":
 
 
 # uv run python -m app.agents.document_parser.dp_graph --file-name meritz_1_maum_pet_12_61.pdf --basic-term-start 1 --basic-term-end 21 --special-term-start 22 --special-term-end 50
-# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_1_maum_pet_12_61.pdf --basic-term-start 1 --basic-term-end 21 --special-term-start 22 --special-term-end 50 --ingest
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_1_dog_anypet_4_47.pdf --basic-term-start 1 --basic-term-end 17 --special-term-start 18 --special-term-end 44
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_2_cat_anypet_4_37.pdf --basic-term-start 1 --basic-term-end 17 --special-term-start 18 --special-term-end 34

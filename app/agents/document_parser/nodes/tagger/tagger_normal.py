@@ -374,7 +374,10 @@ def tag_chunks(
         raise ValueError("UPSTAGE_API_KEY is not set. Please check your .env file.")
 
     target_dir = (
-        TERMS_DIR / chunks[0].metadata["doc"]["file_name"].split(".")[0] / "chunks"
+        TERMS_DIR
+        / chunks[0].metadata["doc"]["file_name"].split(".")[0]
+        / "chunks"
+        / "normal"
     )
     if chunks and not overwrite:
         marker_file_path = target_dir / f"{target_dir.parent.name}_000000_normal.py"
@@ -439,6 +442,7 @@ def tag_chunks(
 
     summarize_counts(
         tagged_chunks,
+        tag_type="normal",
         clause_types=CLAUSE_TYPES,
         term_types=TERM_TYPES,
     )
