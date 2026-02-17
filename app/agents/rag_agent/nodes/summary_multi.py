@@ -214,6 +214,10 @@ def _process_collection_with_unfiltered(
     output_dir: Path,
     timestamp: str,
 ) -> tuple[list[Document], list[dict[str, object]]]:
+    rprint(
+        f"⏳{source_name} relevance scoring start "
+        f"(filtered={len(filtered_docs)}, unfiltered={len(unfiltered_docs)})"
+    )
     filtered_evaluations = _evaluate_relevance_by_llm(query_context, filtered_docs)
     filtered_scored_docs = _attach_evaluation_metadata(
         documents=filtered_docs,
@@ -223,14 +227,18 @@ def _process_collection_with_unfiltered(
     )
     filtered_scored_docs.sort(key=_evaluation_total_score, reverse=True)
 
-    filtered_docs_by_query = _split_docs_by_query(filtered_docs, len(query_texts), TOP_K)
+    filtered_docs_by_query = _split_docs_by_query(
+        filtered_docs, len(query_texts), TOP_K
+    )
     unfiltered_docs_by_query = _split_docs_by_query(
         unfiltered_docs, len(query_texts), TOP_K
     )
     comparison_rows: list[dict[str, object]] = []
     unfiltered_source_name = f"{source_name}_unfiltered"
+    rprint(f"⏳{source_name} per-query scoring start (queries={len(query_texts)})")
 
     for query_index, query_text in enumerate(query_texts, start=1):
+        rprint(f"⏳{source_name} evaluating query {query_index}/{len(query_texts)}")
         per_query_filtered_docs = filtered_docs_by_query[query_index - 1]
         per_query_unfiltered_docs = unfiltered_docs_by_query[query_index - 1]
 
@@ -286,10 +294,12 @@ def _process_collection_with_unfiltered(
             }
         )
 
+    rprint(f"✅{source_name} relevance scoring complete")
     return filtered_scored_docs, comparison_rows
 
 
 def summary_multi(state: RagState) -> RagState:
+    rprint("⏳summarize_multi start")
     query_context = _build_query_context(state)
     query_texts = _collect_query_texts(state)
     normal_docs = state.terms_normal_tag_dense or []
@@ -299,6 +309,7 @@ def summary_multi(state: RagState) -> RagState:
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_dir = _make_output_dir(timestamp)
+    rprint(f"🗂️summary output dir: {output_dir}")
     normal_scored_docs, normal_total_score_comparison_rows = (
         _process_collection_with_unfiltered(
             query_context=query_context,
@@ -342,5 +353,6 @@ def summary_multi(state: RagState) -> RagState:
 
     merged_docs.sort(key=_evaluation_total_score, reverse=True)
     rprint("📝total dense retrieval results:", len(merged_docs))
+    rprint("✅summarize_multi complete")
 
     return {"retrieved_documents": merged_docs}
