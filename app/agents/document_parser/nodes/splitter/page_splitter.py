@@ -209,6 +209,7 @@ def split_pages_and_add_metadata(
         )
 
     total_pages = len(page_docs)
+    last_page = page_docs[-1]
     insurer_code = file_name.split("_")[0]
     product_code = file_name.split("_")[1]
     product_name = product_name_by_code[
@@ -216,12 +217,17 @@ def split_pages_and_add_metadata(
     ]
 
     for page_doc in page_docs:
-        if basic_term_start <= page_doc.page_number <= basic_term_end:
-            term_type = "basic"
-        elif special_term_start <= page_doc.page_number <= special_term_end:
-            term_type = "special"
+        # 정상적으로 페이지 분할이 된 경우
+        if last_page.page_number > 1:
+            if basic_term_start <= page_doc.page_number <= basic_term_end:
+                term_type = "basic"
+            elif special_term_start <= page_doc.page_number <= special_term_end:
+                term_type = "special"
+            else:
+                term_type = "unknown"
+        # 페이지 분할을 실패한 경우
         else:
-            term_type = ""
+            term_type = "unknown"
 
         new_metadata = {
             "source_doc": {**full_document.metadata},
@@ -235,7 +241,7 @@ def split_pages_and_add_metadata(
                 "page": page_doc.page_number,  # 현재 페이지 번호
                 "anchor_ids": page_doc.anchor_ids,  # 파싱 과정에서 식별되는 HTML 태그 ID (e.g. id="23")
             },
-            "term_type": term_type,  # 약관 유형 (e.g. basic: 보통약관, special: 특별약관)'
+            "term_type": term_type,  # 약관 유형 (e.g. basic: 보통 약관, special: 특별 약관, unkown: 식별 불가)'
         }
         new_doc = Document(page_content=page_doc.text, metadata=new_metadata)
         result.append(new_doc)
