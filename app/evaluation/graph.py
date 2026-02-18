@@ -19,7 +19,7 @@ from app.evaluation.nodes import (
     judge_predict,
     load_all_yaml_states,
 )
-from app.evaluation.state import EvaluationRecord
+from app.evaluation.state import EvaluationRecord, EvaluationTestCase
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -53,6 +53,46 @@ async def run_vet_agent(state: VetAgentState) -> list[DiseaseInfo]:
     return [DiseaseInfo.model_validate(d) for d in result.get("diseases", [])]
 
 
+async def _evaluate_test_cases(
+    test_cases: list[EvaluationTestCase],
+) -> list[EvaluationRecord]:
+    """테스트 케이스 목록에 대해 Judge + Evaluator 판단을 수행하고 EvaluationRecord 리스트를 반환합니다.
+
+    각 테스트 케이스마다 Judge(예측)와 Evaluator(정답)를 호출한 뒤, 비교하여 TP/TN/FP/FN 라벨을 부여합니다.
+    """
+    records: list[EvaluationRecord] = []
+    label_colors = {"TP": "green", "TN": "blue", "FP": "bold red", "FN": "yellow"}
+
+    for tc_idx, test_case in enumerate(test_cases, 1):
+        rprint(
+            f"    [{tc_idx}/{len(test_cases)}] "
+            f"질병='{test_case.disease_name}' 판단 중...",
+            end="",
+        )
+
+        judge_result = await judge_predict(test_case)
+        evaluator_result = await evaluate_test_case(test_case)
+        label = compute_label(judge_result, evaluator_result)
+
+        color = label_colors.get(label, "white")
+        rprint(
+            f" → Judge={'O' if judge_result.is_covered else 'X'} / "
+            f"Evaluator={'O' if evaluator_result.is_covered else 'X'} / "
+            f"[{color}]{label}[/{color}]"
+        )
+
+        records.append(
+            EvaluationRecord(
+                test_case=test_case,
+                judge_prediction=judge_result,
+                evaluator_ground_truth=evaluator_result,
+                label=label,
+            )
+        )
+
+    return records
+
+
 async def run_evaluation_pipeline() -> list[EvaluationRecord]:
     """LLM-as-a-Judge 평가 파이프라인 전체를 실행합니다."""
     rprint("\n[bold cyan]═══ LLM-as-a-Judge 평가 파이프라인 시작 ═══[/bold cyan]\n")
@@ -63,6 +103,7 @@ async def run_evaluation_pipeline() -> list[EvaluationRecord]:
 
     all_records: list[EvaluationRecord] = []
 
+    # YAML 파일 단위로 순회: 각 파일마다 질병 추출 → 약관 검색 → 테스트 케이스 생성 → Judge/Evaluator 판단
     for idx, (file_name, state) in enumerate(yaml_states, 1):
         rprint(
             f"[bold]── [{idx}/{len(yaml_states)}] {file_name} "
@@ -87,38 +128,8 @@ async def run_evaluation_pipeline() -> list[EvaluationRecord]:
         )
 
         rprint("  [5/5] Judge + Evaluator 판단 실행 중...")
-        for tc_idx, test_case in enumerate(test_cases, 1):
-            rprint(
-                f"    [{tc_idx}/{len(test_cases)}] "
-                f"질병='{test_case.disease_name}' 판단 중...",
-                end="",
-            )
-
-            judge_result = await judge_predict(test_case)
-            evaluator_result = await evaluate_test_case(test_case)
-            label = compute_label(judge_result, evaluator_result)
-
-            label_color = {
-                "TP": "green",
-                "TN": "blue",
-                "FP": "bold red",
-                "FN": "yellow",
-            }.get(label, "white")
-
-            rprint(
-                f" → Judge={'O' if judge_result.is_covered else 'X'} / "
-                f"Evaluator={'O' if evaluator_result.is_covered else 'X'} / "
-                f"[{label_color}]{label}[/{label_color}]"
-            )
-
-            all_records.append(
-                EvaluationRecord(
-                    test_case=test_case,
-                    judge_prediction=judge_result,
-                    evaluator_ground_truth=evaluator_result,
-                    label=label,
-                )
-            )
+        file_records = await _evaluate_test_cases(test_cases)
+        all_records.extend(file_records)
 
         rprint()
 

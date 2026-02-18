@@ -37,11 +37,11 @@ EVALUATOR_SYSTEM_PROMPT = """\
 
 4. **불확실한 경우의 원칙 (보수적 판단)**
    - 약관 문구만으로 명확히 판단 불가 시 → is_covered = False
-   - reason에 왜 불확실한지 구체적으로 서술
+   - reason에 왜 불확실한지 핵심만 요약 (80자 이내)
 
 # 출력 규칙
 - is_covered: True(보장됨) 또는 False(보장 안 됨 / 면책)
-- reason: 약관의 **구체적인 문구**를 인용하며, 어떤 조항에 근거했는지 2~3문장으로 서술
+- reason: 핵심 근거만 1~2문장(80자 이내)으로 짧게 요약해. 약관 조항 번호와 핵심 키워드만 포함하면 됨.
 """
 
 EVALUATOR_HUMAN_PROMPT = """\
