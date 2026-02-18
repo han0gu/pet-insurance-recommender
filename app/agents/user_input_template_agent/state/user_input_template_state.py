@@ -59,6 +59,16 @@ class UserInputTemplateState(BaseModel):
     )
 
 
+# 서브그래프 출력 스키마 (가드레일 제어 신호 포함)
+class UserInputTemplateOutputState(UserInputTemplateState):
+    """user_input_template 서브그래프의 출력 스키마.
+    사용자 입력 필드에 가드레일 차단 플래그를 추가한다.
+    """
+
+    is_blocked: bool = False
+    blocked_reason: Optional[str] = None
+
+
 if __name__ == "__main__":
     from rich import print as rprint
     from app.agents.user_input_template_agent.utils.cli import (

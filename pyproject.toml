@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "bs4>=0.0.2",
     "chromadb>=1.4.1",
     "fastapi>=0.128.5",
     "langchain>=0.2",
@@ -13,6 +14,7 @@ dependencies = [
     "langchain-community>=0.2",
     "langchain-core>=0.2",
     "langchain-qdrant>=1.1.0",
+    "langchain-tavily>=0.2.17",
     "langchain-text-splitters>=0.2",
     "langchain-upstage>=0.7.6",
     "langgraph>=1.0.8",
@@ -21,14 +23,22 @@ dependencies = [
     "python-dotenv>=1.2.1",
     "qdrant-client>=1.16.2",
     "rich>=14.3.2",
+    "streamlit>=1.54.0",
     "uvicorn>=0.40.0",
 ]
 
 [dependency-groups]
 dev = [
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
     "httpx>=0.28.1",
     "ipython>=9.10.0",
     "pillow>=12.1.0",
     "pytest>=9.0.2",
     "ruff>=0.15.0",
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: real external dependency integration tests",
 ]

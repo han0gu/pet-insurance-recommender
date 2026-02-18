@@ -1,9 +1,15 @@
 from langgraph.graph import StateGraph, START, END
 from app.agents.user_input_template_agent.nodes import user_input_template_node
-from app.agents.user_input_template_agent.state import UserInputTemplateState
+from app.agents.user_input_template_agent.state import (
+    UserInputTemplateState,
+    UserInputTemplateOutputState,
+)
 
 
-builder = StateGraph(UserInputTemplateState)
+builder = StateGraph(
+    UserInputTemplateState,
+    output=UserInputTemplateOutputState,
+)
 
 builder.add_node("user_input_template", user_input_template_node)
 builder.add_edge(START, "user_input_template")

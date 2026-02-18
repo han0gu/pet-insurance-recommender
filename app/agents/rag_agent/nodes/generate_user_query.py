@@ -1,9 +1,6 @@
 from langchain.chat_models import init_chat_model
 
-from rich import print as rprint
-
-from app.agents.rag_agent.state.rag_state import RagState, GenerateUserQueryOutput
-
+from app.agents.rag_agent.state.rag_state import RagState, GenerateQueryTextOutput
 from app.agents.vet_agent.state import VetAgentState
 
 
@@ -28,11 +25,11 @@ def generate_user_query(state: VetAgentState) -> RagState:
 
     MODEL = "solar-pro2"
     llm = init_chat_model(model=MODEL, temperature=0.0)
-    structured_llm = llm.with_structured_output(GenerateUserQueryOutput)
-    llm_response: GenerateUserQueryOutput = structured_llm.invoke(
+    structured_llm = llm.with_structured_output(GenerateQueryTextOutput)
+    llm_response: GenerateQueryTextOutput = structured_llm.invoke(
         # [{"role": "system", "content": prompt}]
         prompt
     )
     # rprint(">>> llm_response", llm_response)
 
-    return {"user_query": llm_response.user_query}
+    return {"user_query": llm_response.query_text}
