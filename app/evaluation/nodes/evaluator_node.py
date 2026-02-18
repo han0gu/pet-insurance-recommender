@@ -1,23 +1,17 @@
 """
-정답지 생성 LLM (Evaluator) 모듈.
+정답지 생성 LLM (Evaluator) 노드.
 
 금융감독원 수준의 매우 엄격한 '보험 심사 평가자' 프롬프트를 사용하여
 각 [질병 x 약관] 조합에 대한 보장 여부 정답을 생성합니다.
-
-이 모듈이 생성하는 EvaluatorGroundTruth가 Confusion Matrix의 '실제값(Actual)'이 됩니다.
 """
 
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_upstage import ChatUpstage
 
-from app.evaluation.schemas import EvaluationTestCase, EvaluatorGroundTruth
+from app.evaluation.state import EvaluationTestCase, EvaluatorGroundTruth
 
 load_dotenv()
-
-# ==========================================
-# 평가자 프롬프트 (매우 엄격한 보험 심사 전문가)
-# ==========================================
 
 EVALUATOR_SYSTEM_PROMPT = """\
 당신은 금융감독원 출신의 **보험 약관 심사 최고 전문가**입니다.
@@ -70,18 +64,7 @@ EVALUATOR_HUMAN_PROMPT = """\
 async def evaluate_test_case(
     test_case: EvaluationTestCase,
 ) -> EvaluatorGroundTruth:
-    """평가용 LLM(solar-pro2)으로 [질병 x 약관] 보장 여부의 '정답'을 생성합니다.
-
-    Evaluator는 JudgeAgent보다 훨씬 엄격한 프롬프트를 사용하여
-    약관 문구를 글자 그대로 해석하고, 보수적으로 판단합니다.
-
-    Args:
-        test_case: 유저 상태 + 질병 1개 + 약관 1개로 구성된 테스트 케이스
-
-    Returns:
-        EvaluatorGroundTruth: 평가 LLM이 판단한 정답 (is_covered, reason)
-    """
-    # solar-pro2를 temperature=0으로 호출하여 결정론적 판단 유도
+    """평가용 LLM(solar-pro2)으로 [질병 x 약관] 보장 여부의 '정답'을 생성합니다."""
     llm = ChatUpstage(model="solar-pro2", temperature=0)
     structured_llm = llm.with_structured_output(EvaluatorGroundTruth)
 
@@ -93,8 +76,6 @@ async def evaluate_test_case(
     )
 
     chain = prompt | structured_llm
-
-    # ainvoke로 비동기 호출 (Rate Limit 대비 순차 실행 권장)
     result: EvaluatorGroundTruth = await chain.ainvoke(
         {
             "species": test_case.species,

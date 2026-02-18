@@ -45,14 +45,14 @@
 
 | 단계 | 무엇을 하나요? | 어디서? |
 |------|---------------|---------|
-| ① YAML 로드 | 네이버 펫보험 상담 글에서 추출한 반려동물 정보 128개를 읽어옴 | `data_loader.py` |
-| ② Vet Agent | 반려동물 정보(품종, 나이, 건강상태)를 기반으로 잘 걸리는 질병 목록 생성 | `runner.py` → `vet_agent` |
-| ③ RAG 검색 | 질병에 관련된 보험 약관 텍스트를 벡터DB에서 검색 (현재 Mock 3개) | `runner.py` |
-| ④ 테스트 케이스 | 질병 N개 × 약관 M개 = N×M개의 [질병, 약관] 조합 생성 | `runner.py` |
-| ⑤-A Judge 판단 | 기존 JudgeAgent 프롬프트로 "이 질병이 보장되는가?" 판단 | `runner.py` |
-| ⑤-B Evaluator 판단 | 훨씬 엄격한 프롬프트로 동일한 질문의 "정답" 생성 | `evaluator.py` |
-| ⑥ 라벨 부여 | Judge와 Evaluator 결과를 비교하여 TP/TN/FP/FN 판정 | `runner.py` |
-| ⑦ 결과 출력 | 혼동 행렬 + 성능 지표 터미널 출력, CSV 파일 저장 | `metrics.py` |
+| ① YAML 로드 | 네이버 펫보험 상담 글에서 추출한 반려동물 정보 128개를 읽어옴 | `nodes/load_data_node.py` |
+| ② Vet Agent | 반려동물 정보(품종, 나이, 건강상태)를 기반으로 잘 걸리는 질병 목록 생성 | `graph.py` → `vet_agent` |
+| ③ RAG 검색 | 질병에 관련된 보험 약관 텍스트를 벡터DB에서 검색 (현재 Mock 3개) | `mocks/mock_data.py` |
+| ④ 테스트 케이스 | 질병 N개 × 약관 M개 = N×M개의 [질병, 약관] 조합 생성 | `nodes/build_test_cases_node.py` |
+| ⑤-A Judge 판단 | 기존 JudgeAgent 프롬프트로 "이 질병이 보장되는가?" 판단 | `nodes/judge_node.py` |
+| ⑤-B Evaluator 판단 | 훨씬 엄격한 프롬프트로 동일한 질문의 "정답" 생성 | `nodes/evaluator_node.py` |
+| ⑥ 라벨 부여 | Judge와 Evaluator 결과를 비교하여 TP/TN/FP/FN 판정 | `nodes/judge_node.py` |
+| ⑦ 결과 출력 | 혼동 행렬 + 성능 지표 터미널 출력, CSV 파일 저장 | `nodes/metrics_node.py` |
 
 ---
 
@@ -60,20 +60,30 @@
 
 ```
 app/evaluation/
-├── __init__.py        # 패키지 초기화
-├── README.md          # 이 문서
-├── schemas.py         # Pydantic 데이터 모델 정의
-├── evaluator.py       # 정답지 생성 LLM (Evaluator)
-├── data_loader.py     # YAML 테스트셋 로더
-├── runner.py          # 파이프라인 실행 + JudgeAgent 단건 판단
-├── metrics.py         # 혼동 행렬 계산 + CSV 저장
-└── results/           # 평가 결과 CSV 자동 저장 폴더
+├── __init__.py
+├── README.md
+├── state/                        # Pydantic 데이터 모델 (상태/스키마)
+│   ├── __init__.py
+│   └── evaluation_state.py       # EvaluationTestCase, JudgePrediction, ...
+├── nodes/
+│   ├── __init__.py
+│   ├── load_data_node.py         # YAML 테스트셋 로더
+│   ├── build_test_cases_node.py  # [질병×약관] 조합 생성
+│   ├── judge_node.py             # JudgeAgent 단건 판단 + 라벨 계산
+│   ├── evaluator_node.py         # Evaluator LLM (정답지 생성)
+│   └── metrics_node.py           # 혼동 행렬 + CSV 저장
+├── mocks/
+│   ├── __init__.py
+│   └── mock_data.py              # Mock 약관/질병 (get_mock_policies, get_mock_diseases)
+├── graph.py                      # 파이프라인 흐름 (run_evaluation_pipeline)
+├── runner.py                     # 엔트리포인트 (asyncio.run(main))
+└── results/
     └── eval_result_{timestamp}.csv
 ```
 
 ---
 
-## 핵심 데이터 모델 (`schemas.py`)
+## 핵심 데이터 모델 (`state/evaluation_state.py`)
 
 평가 파이프라인을 관통하는 4개의 Pydantic 모델입니다.
 
@@ -161,12 +171,12 @@ uv run python -m app.evaluation.runner
 ### data_loader만 단독 테스트
 
 ```bash
-uv run python -m app.evaluation.data_loader
+uv run python -m app.evaluation.nodes.load_data_node
 ```
 
 ### 설정 변경
 
-`runner.py` 상단의 상수로 동작을 제어할 수 있습니다:
+`graph.py` 상단의 상수로 동작을 제어할 수 있습니다:
 
 ```python
 # True: 실제 Vet Agent 호출 / False: Mock 질병 사용 (API 비용 절감)
