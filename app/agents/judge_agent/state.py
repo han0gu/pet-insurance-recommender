@@ -50,7 +50,6 @@ class ValidationResult(BaseModel):
 # 3. [Graph State] 통합 상태 정의
 # ==========================================
 class JudgeAgentState(VetAgentState):
-    # vet_result: Dict[str, Any] = Field(default_factory=dict)
 
     # RAG 결과
     retrieved_documents: List[Document] = Field(default_factory=list)
