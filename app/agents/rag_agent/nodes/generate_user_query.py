@@ -94,7 +94,7 @@ def generate_user_query(state: VetAgentState) -> RagState:
 3) "없음", "해당 없음", "이력 없음", "특이사항 없음" 같은 의미 없는 값은 사용하지 않는다.
 4) 출력은 질문형이 아닌, 검색 인텐트가 분명한 단일 한국어 문장으로 작성한다.
 """.strip()
-    rprint("👉🏻생성된 user_prompt:", user_prompt)
+    # rprint("👉🏻생성된 user_prompt:", user_prompt)
 
     MODEL = "solar-pro2"
     llm = init_chat_model(model=MODEL, temperature=0.0)
