@@ -20,11 +20,16 @@ def validator_node(state: JudgeAgentState):
     vet_data = state.model_dump(include=vet_field_keys)
     docs = state.retrieved_documents
 
-    # 2. Documents 객체들을 LLM이 읽을 수 있는 문자열로 변환 
-    # (실제 RAG에서는 page_content에 약관 텍스트가 있음)
+    # 2. Documents 객체들을 LLM이 읽을 수 있는 문자열로 변환
+    # - document_parser에서 적재한 청크는 metadata.doc.product_name 에 실제 상품명이 있음
+    # - (상품명: ...)을 문맥에 포함시켜 LLM이 selected_policies.product_name에 그대로 쓰도록 유도
     rag_context = ""
     for idx, doc in enumerate(docs):
-        rag_context += f"\n[약관 {idx+1}] {doc.page_content}\n"
+        doc_meta = (doc.metadata or {}).get("doc") or {}
+        product_name = (
+            doc_meta.get("product_name") if isinstance(doc_meta, dict) else None
+        ) or "상품명 미표기"
+        rag_context += f"\n[약관 {idx+1}] (상품명: {product_name})\n{doc.page_content}\n"
 
     # 3. LLM 설정 
     llm = ChatUpstage(model="solar-pro2", temperature=0)
@@ -45,8 +50,11 @@ def validator_node(state: JudgeAgentState):
 
     3. **축종(Species) 확인**
         - 대상이 '개(Dog)'인지 '고양이(Cat)'인지만 확인하여 약관을 적용하세요.
-    """        
-    # - 약관에 명시되지 않은 질병은 '보장 가능'으로 간주하세요.
+
+    4. **selected_policies의 product_name (필수)**
+        - 각 약관에는 "(상품명: ...)" 형태로 실제 보험 상품명이 적혀 있습니다.
+        - selected_policies에 넣을 때 product_name 필드에는 반드시 위 [Insurance Policies]에 적힌 **(상품명: ...)** 값을 글자 그대로 사용하세요. "약관 6", "약관 7" 같은 번호만 적지 마세요.
+    """
 
     prompt = ChatPromptTemplate.from_messages([
         ("system", system_prompt),
