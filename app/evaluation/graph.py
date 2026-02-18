@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 # True: 실제 Vet Agent 호출 / False: Mock 질병 사용
 USE_REAL_VET_AGENT = True
 # 로드할 YAML 파일 개수 (None이면 전체)
-YAML_LOAD_LIMIT = 3
+YAML_LOAD_LIMIT = 1
 
 
 async def run_vet_agent(state: VetAgentState) -> list[DiseaseInfo]:
