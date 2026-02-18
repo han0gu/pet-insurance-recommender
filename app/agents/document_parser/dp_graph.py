@@ -4,6 +4,7 @@ from langgraph.graph.state import StateGraph, CompiledStateGraph, START, END
 
 from app.agents.document_parser.nodes import document_parser
 from app.agents.document_parser.nodes.splitter import page_splitter, text_splitter
+from app.agents.document_parser.nodes.tagger import chunk_loader
 from app.agents.document_parser.nodes.tagger import tagger_normal, tagger_simple
 from app.agents.document_parser.nodes import vector_store
 from app.agents.document_parser.state.document_parser_state import DocumentParserState
@@ -34,7 +35,14 @@ def create_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run document parser graph.")
     parser.add_argument(
         "--file-name",
+        required=True,
         help="PDF file name  with extension",
+    )
+    parser.add_argument(
+        "--tag-type",
+        required=True,
+        choices=["normal", "simple"],
+        help="metadata tag type",
     )
     parser.add_argument(
         "--ingest",
@@ -71,28 +79,39 @@ def create_arg_parser() -> argparse.ArgumentParser:
 if __name__ == "__main__":
     args = create_arg_parser().parse_args()
     file_name: str = args.file_name
+    tag_type: str = args.tag_type
 
-    dp_result = document_parser.parse_document(file_name)
-
-    pages = page_splitter.split_pages_and_add_metadata(
-        dp_result,
-        file_name,
-        basic_term_start=args.basic_term_start,
-        basic_term_end=args.basic_term_end,
-        special_term_start=args.special_term_start,
-        special_term_end=args.special_term_end,
+    tagged_chunks = chunk_loader.load_chunk_files(
+        file_name=file_name, tag_type=tag_type
     )
+    if tagged_chunks:
+        print(f"✅load existing chunks: {len(tagged_chunks)} (tag_type={tag_type})")
+    else:
+        dp_result = document_parser.parse_document(file_name)
 
-    chunks = text_splitter.split(pages)
+        pages = page_splitter.split_pages_and_add_metadata(
+            dp_result,
+            file_name,
+            basic_term_start=args.basic_term_start,
+            basic_term_end=args.basic_term_end,
+            special_term_start=args.special_term_start,
+            special_term_end=args.special_term_end,
+        )
 
-    # tagged_chunks = tagger_normal.tag_chunks(chunks)
-    tagged_chunks = tagger_simple.tag_chunks(chunks)
+        chunks = text_splitter.split(pages)
+
+        if tag_type == "normal":
+            tagged_chunks = tagger_normal.tag_chunks(chunks)
+        elif tag_type == "simple":
+            tagged_chunks = tagger_simple.tag_chunks(chunks)
 
     if args.ingest:
-        # vector_store.ingest_chunks("terms_normal_tag_dense", tagged_chunks)
-        vector_store.ingest_chunks("terms_simple_tag_dense", tagged_chunks)
+        if tag_type == "normal":
+            vector_store.ingest_chunks("terms_normal_tag_dense", tagged_chunks)
+        elif tag_type == "simple":
+            vector_store.ingest_chunks("terms_simple_tag_dense", tagged_chunks)
 
 
-# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_1_maum_pet_12_61.pdf --basic-term-start 1 --basic-term-end 21 --special-term-start 22 --special-term-end 50
-# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_1_dog_anypet_4_47.pdf --basic-term-start 1 --basic-term-end 17 --special-term-start 18 --special-term-end 44
-# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_2_cat_anypet_4_37.pdf --basic-term-start 1 --basic-term-end 17 --special-term-start 18 --special-term-end 34
+# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_1_maum_pet_12_61.pdf --basic-term-start 1 --basic-term-end 21 --special-term-start 22 --special-term-end 50 --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_1_dog_anypet_4_47.pdf --basic-term-start 1 --basic-term-end 17 --special-term-start 18 --special-term-end 44 --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_2_cat_anypet_4_37.pdf --basic-term-start 1 --basic-term-end 17 --special-term-start 18 --special-term-end 34 --tag-type simple
