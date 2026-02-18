@@ -5,6 +5,7 @@ from app.agents import utils
 
 from app.agents.rag_agent.nodes.embed_query_texts import embed_query_texts
 from app.agents.rag_agent.nodes.generate_query_texts import generate_query_texts
+from app.agents.rag_agent.nodes.generate_user_query import generate_user_query
 from app.agents.rag_agent.nodes.retrieve_multi import (
     retrieve_normal_by_multi_query_texts,
     retrieve_simple_by_multi_query_texts,
@@ -25,17 +26,18 @@ def build_graph() -> CompiledStateGraph:
         # output_schema=RagState,
     )
 
-    workflow.add_node("generate_query_texts", generate_query_texts)
+    # workflow.add_node("generate_query_texts", generate_query_texts)
+    workflow.add_node("generate_query_texts", generate_user_query)
     workflow.add_node("embed_query_texts", embed_query_texts)
-    workflow.add_node("retrieve_normal", retrieve_normal_by_multi_query_texts)
+    # workflow.add_node("retrieve_normal", retrieve_normal_by_multi_query_texts)
     workflow.add_node("retrieve_simple", retrieve_simple_by_multi_query_texts)
     workflow.add_node("summary", summary_multi)
 
     workflow.add_edge(START, "generate_query_texts")
     workflow.add_edge("generate_query_texts", "embed_query_texts")
-    workflow.add_edge("embed_query_texts", "retrieve_normal")
+    # workflow.add_edge("embed_query_texts", "retrieve_normal")
     workflow.add_edge("embed_query_texts", "retrieve_simple")
-    workflow.add_edge("retrieve_normal", "summary")
+    # workflow.add_edge("retrieve_normal", "summary")
     workflow.add_edge("retrieve_simple", "summary")
     workflow.add_edge("summary", END)
 
