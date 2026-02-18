@@ -15,5 +15,54 @@
       "liver disease"
     ],
     "cached_at": "2026-02-15T14:06:59.612510"
+  },
+  "스코티시폴드": {
+    "breed_en": "",
+    "search_diseases": [
+      "Hypertrophic Cardiomyopathy",
+      "Polycystic Kidney Disease",
+      "epistaxis",
+      "coagulation abnormalities",
+      "thrombocytopenia",
+      "osteoarthritis",
+      "osteochondrodysplasia"
+    ],
+    "cached_at": "2026-02-18T20:24:09.445415"
+  },
+  "믹스견": {
+    "breed_en": "",
+    "search_diseases": [
+      "cancers",
+      "back problems",
+      "hip dysplasia",
+      "dilated cardiomyopathy",
+      "elbow dysplasia",
+      "cataracts",
+      "hypothyroidism",
+      "hip dysplasia (HD)",
+      "juvenile epilepsy",
+      "canine multifocal retinopathy 2",
+      "neonatal encephalopathy with seizures",
+      "cystinuria type I-A",
+      "glycogen storage disease type IIIa",
+      "mucopolysaccharidosis type VII",
+      "pyruvate dehydrogenase phosphatase deficiency 1"
+    ],
+    "cached_at": "2026-02-18T20:24:49.538451"
+  },
+  "말티즈": {
+    "breed_en": "",
+    "search_diseases": [
+      "skin allergies",
+      "White Shakers Syndrome",
+      "liver shunts",
+      "periodontal disease",
+      "dental disease",
+      "obesity",
+      "eye conditions",
+      "luxating patella",
+      "gum disease"
+    ],
+    "cached_at": "2026-02-18T20:25:55.956051"
   }
 }
