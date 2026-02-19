@@ -1,7 +1,7 @@
 import difflib
 from app.agents.vet_agent.state.vet_state import VetAgentState
 from dotenv import load_dotenv
-from langchain_upstage import ChatUpstage 
+from langchain_upstage import ChatUpstage
 from langchain_core.prompts import ChatPromptTemplate
 from ..state import JudgeAgentState, ValidationResult
 
@@ -79,7 +79,7 @@ def _deduplicate_policies(policies: list[dict]) -> list[dict]:
 # ==========================================
 def validator_node(state: JudgeAgentState):
 
-    # 1. 데이터 꺼내기 
+    # 1. 데이터 꺼내기
     vet_field_keys = VetAgentState.model_fields.keys()
     vet_data = state.model_dump(include=vet_field_keys)
     docs = state.retrieved_documents
@@ -109,15 +109,14 @@ def validator_node(state: JudgeAgentState):
             if eval_reason
             else ""
         )
-        
+
         rag_context += (
             f"\n[약관 {idx+1}] (상품명: {product_name})\n"
             f"{eval_block}"
             f"{doc.page_content}\n"
         )
 
-
-    # 3. LLM 설정 
+    # 3. LLM 설정
     llm = ChatUpstage(model="solar-pro2", temperature=0)
     structured_llm = llm.with_structured_output(ValidationResult)
 
@@ -162,23 +161,30 @@ def validator_node(state: JudgeAgentState):
         - **중요: selected_policies에는 서로 다른 상품만 선정하세요. 같은 상품명이 2회 이상 나오면 안 됩니다.**
     """
 
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", system_prompt),
-        ("human", """
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", system_prompt),
+            (
+                "human",
+                """
         === [Vet Analysis (유저 정보 + 진단 결과)] ===
         {vet_data}
         
         === [Insurance Policies (약관 검색 결과)] ===
         {rag_context}
-        """)
-    ])
+        """,
+            ),
+        ]
+    )
 
     # 5. 실행
     chain = prompt | structured_llm
-    result = chain.invoke({
-        "vet_data": str(vet_data),
-        "rag_context": rag_context,
-    })
+    result = chain.invoke(
+        {
+            "vet_data": str(vet_data),
+            "rag_context": rag_context,
+        }
+    )
 
     # 6. 후처리: 중복 상품 제거 + 상품명 오타 보정 + 보험사명 추가
     actual_names = _collect_actual_product_names(docs)
