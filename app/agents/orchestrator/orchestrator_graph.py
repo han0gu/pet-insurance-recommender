@@ -24,6 +24,8 @@ from app.agents.vet_agent.graph import graph as vet_graph
 
 def save_recommendation(state: OrchestratorState) -> dict:
     """현재 사이클의 retrieved_documents를 recommendation_history에 누적합니다."""
+
+    rprint("state", [a.metadata["evaluation"] for a in state.retrieved_documents])
     return {"recommendation_history": [state.retrieved_documents]}
 
 
