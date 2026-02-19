@@ -1,0 +1,22 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('1. 보험금 청구서(회사 양식) 2. 등록묘의 경우에는 동물등록증 또는 등록번호 3. 미등록묘의 경우에는 가입동물의 사진 2매(얼굴전면, '
+ '측면전신사진)를 회사에 제 출하고 가입동물이 보험에 가입한 동물과 동일함을 확인 후 보험금을 지급합니다. 4. 사망을 확인할 수 있는 '
+ '서류(동물폐사확인서, 동물화장증명서 등) 5'),
+    metadata={'source_doc': {'total_pages': 129},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_5_pet_majestic_cat_31_47_50_159.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '5',
+         'product_name': '(장기)무배당 삼성화재 펫보험 의기냥냥',
+         'total_pages': 107,
+         'page': 111},
+ 'term_type': 'special',
+ 'clause': {'clause_type': 'coverage', 'risk_domains': ['other']},
+ 'indexing': {'chunk_id': 'chunk_000690',
+              'chunk_char_len': 176,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_method': 'llm',
+              'tag_confidence': 0.95}},
+)

@@ -1,0 +1,26 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('<유의사항>\n'
+ '[해약환급금 일부지급형의 해약환급금 관련]\n'
+ '• 보험료 납입기간 중 계약이 해지될 경우 표준형 상품 대비 적은 해약환급금을 지급하는 대신 표준형 상품보다 낮은 보험료로 가입할 수 '
+ '있도록 한 상품입니다. • 해약환급금을 계산할 때 기준이 되는 표준형 상품의 해약환급금은 “보험료 및 해약환급금 산출방법서”에 따라 '
+ '계산한 금액으로 해지율을 적용하지 않고 계산합니다. • 회사는 계약을 체결할 때 표준형 상품의 보험료 및 해약환급금(환급률 포함) 수준을 '
+ '비교∙ 안내해 드립니다.'),
+    metadata={'source_doc': {'total_pages': 78},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_3_direct_good_pet_28_42_45_105.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '3',
+         'product_name': '(장기)무배당 삼성화재 다이렉트 '
+                         '착한펫보험(강아지)',
+         'total_pages': 66,
+         'page': 57},
+ 'term_type': 'special',
+ 'clause': {'clause_type': 'exclusion', 'risk_domains': ['other']},
+ 'indexing': {'chunk_id': 'chunk_000282',
+              'chunk_char_len': 270,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_method': 'rule',
+              'tag_confidence': 0.85}},
+)

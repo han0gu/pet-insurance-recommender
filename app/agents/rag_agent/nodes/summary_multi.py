@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 from pprint import pformat
+from time import perf_counter
 from typing import Literal
 
 from langchain.chat_models import init_chat_model
@@ -204,7 +205,7 @@ def _average_total_score(total_scores: list[int]) -> float:
     return round(sum(total_scores) / len(total_scores), 2)
 
 
-def _process_collection_with_unfiltered(
+def _process_collection(
     *,
     query_context: str,
     query_texts: list[str],
@@ -214,6 +215,7 @@ def _process_collection_with_unfiltered(
     output_dir: Path,
     timestamp: str,
 ) -> tuple[list[Document], list[dict[str, object]]]:
+    collection_started_at = perf_counter()
     rprint(
         f"⏳{source_name} relevance scoring start "
         f"(filtered={len(filtered_docs)}, unfiltered={len(unfiltered_docs)})"
@@ -234,11 +236,13 @@ def _process_collection_with_unfiltered(
         unfiltered_docs, len(query_texts), TOP_K
     )
     comparison_rows: list[dict[str, object]] = []
-    unfiltered_source_name = f"{source_name}_unfiltered"
     rprint(f"⏳{source_name} per-query scoring start (queries={len(query_texts)})")
 
     for query_index, query_text in enumerate(query_texts, start=1):
-        rprint(f"⏳{source_name} evaluating query {query_index}/{len(query_texts)}")
+        step_started_at = perf_counter()
+        rprint(
+            f"⏳{source_name} evaluating query {query_index}/{len(query_texts)} start"
+        )
         per_query_filtered_docs = filtered_docs_by_query[query_index - 1]
         per_query_unfiltered_docs = unfiltered_docs_by_query[query_index - 1]
 
@@ -259,22 +263,21 @@ def _process_collection_with_unfiltered(
             documents=per_query_unfiltered_docs,
             evaluations=per_query_unfiltered_evaluations,
             query_context=query_text,
-            source=unfiltered_source_name,
+            source=source_name,
         )
         per_query_filtered_scored_docs.sort(key=_evaluation_total_score, reverse=True)
         per_query_unfiltered_scored_docs.sort(key=_evaluation_total_score, reverse=True)
 
         if per_query_filtered_scored_docs:
             _save_documents_as_python(
-                output_file=output_dir / f"{source_name}_q{query_index}_{timestamp}.py",
+                output_file=output_dir / f"{source_name}_q{query_index}.py",
                 variable_name=f"{source_name}_q{query_index}_documents",
                 documents=per_query_filtered_scored_docs,
             )
         if per_query_unfiltered_scored_docs:
             _save_documents_as_python(
-                output_file=output_dir
-                / f"{unfiltered_source_name}_q{query_index}_{timestamp}.py",
-                variable_name=f"{unfiltered_source_name}_q{query_index}_documents",
+                output_file=output_dir / f"{source_name}_q{query_index}_unfiltered.py",
+                variable_name=f"{source_name}_q{query_index}_unfiltered_documents",
                 documents=per_query_unfiltered_scored_docs,
             )
 
@@ -293,8 +296,17 @@ def _process_collection_with_unfiltered(
                 "avg_total_score_delta": round(filtered_avg - unfiltered_avg, 2),
             }
         )
+        elapsed_seconds = perf_counter() - step_started_at
+        rprint(
+            f"✅{source_name} evaluating query {query_index}/{len(query_texts)} "
+            f"done ({elapsed_seconds:.2f}s)"
+        )
 
-    rprint(f"✅{source_name} relevance scoring complete")
+    total_elapsed_seconds = perf_counter() - collection_started_at
+    rprint(
+        f"✅{source_name} relevance scoring complete "
+        f"(total={total_elapsed_seconds:.2f}s)"
+    )
     return filtered_scored_docs, comparison_rows
 
 
@@ -302,49 +314,46 @@ def summary_multi(state: RagState) -> RagState:
     rprint("⏳summarize_multi start")
     query_context = _build_query_context(state)
     query_texts = _collect_query_texts(state)
+    NORMAL_SOURCE_NAME = "terms_normal_tag_dense"
     normal_docs = state.terms_normal_tag_dense or []
     normal_docs_unfiltered = state.terms_normal_tag_dense_unfiltered or []
+    SIMPLE_SOURCE_NAME = "terms_simple_tag_dense"
     simple_docs = state.terms_simple_tag_dense or []
     simple_docs_unfiltered = state.terms_simple_tag_dense_unfiltered or []
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_dir = _make_output_dir(timestamp)
     rprint(f"🗂️summary output dir: {output_dir}")
-    normal_scored_docs, normal_total_score_comparison_rows = (
-        _process_collection_with_unfiltered(
-            query_context=query_context,
-            query_texts=query_texts,
-            filtered_docs=normal_docs,
-            unfiltered_docs=normal_docs_unfiltered,
-            source_name="terms_normal_tag_dense",
-            output_dir=output_dir,
-            timestamp=timestamp,
-        )
+
+    normal_scored_docs, normal_total_score_comparison_rows = _process_collection(
+        query_context=query_context,
+        query_texts=query_texts,
+        filtered_docs=normal_docs,
+        unfiltered_docs=normal_docs_unfiltered,
+        source_name=NORMAL_SOURCE_NAME,
+        output_dir=output_dir,
+        timestamp=timestamp,
     )
-    simple_scored_docs, simple_total_score_comparison_rows = (
-        _process_collection_with_unfiltered(
-            query_context=query_context,
-            query_texts=query_texts,
-            filtered_docs=simple_docs,
-            unfiltered_docs=simple_docs_unfiltered,
-            source_name="terms_simple_tag_dense",
-            output_dir=output_dir,
-            timestamp=timestamp,
-        )
+    simple_scored_docs, simple_total_score_comparison_rows = _process_collection(
+        query_context=query_context,
+        query_texts=query_texts,
+        filtered_docs=simple_docs,
+        unfiltered_docs=simple_docs_unfiltered,
+        source_name=SIMPLE_SOURCE_NAME,
+        output_dir=output_dir,
+        timestamp=timestamp,
     )
 
     if normal_total_score_comparison_rows:
         _save_literal_as_python(
-            output_file=output_dir
-            / f"terms_normal_total_score_comparison_{timestamp}.py",
+            output_file=output_dir / f"{NORMAL_SOURCE_NAME}_score_comparison.py",
             variable_name="terms_normal_total_score_comparison",
             value=normal_total_score_comparison_rows,
         )
 
     if simple_total_score_comparison_rows:
         _save_literal_as_python(
-            output_file=output_dir
-            / f"terms_simple_total_score_comparison_{timestamp}.py",
+            output_file=output_dir / f"{SIMPLE_SOURCE_NAME}_score_comparison.py",
             variable_name="terms_simple_total_score_comparison",
             value=simple_total_score_comparison_rows,
         )

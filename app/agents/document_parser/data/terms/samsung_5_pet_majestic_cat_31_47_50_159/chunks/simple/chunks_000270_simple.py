@@ -1,0 +1,25 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('제24조 (보험나이 등)\n'
+ '① 이 약관에서의 피보험자의 나이는 보험나이를 기준으로 합니다. 다만, 제22조(특별약 관의 무효) 제1항 제2호의 경우에는 실제 만 '
+ '나이를 적용합니다. ② 제1항의 보험나이는 계약일 현재 피보험자의 실제 만 나이를 기준으로 6개월 미만의 끝수는 버리고 6개월 이상의 '
+ '끝수는 1년으로 하여 계산하며, 이후 매년 계약해당일에 나이가 증가하는 것으로 합니다. ③ 피보험자의 나이 또는 성별에 관한 기재사항이 '
+ '사실과 다른 경우에는 정정된 나이 또 는 성별에 해당하는 보험금 및 보험료로 변경합니다.\n'
+ '<예시안내>'),
+    metadata={'source_doc': {'total_pages': 129},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_5_pet_majestic_cat_31_47_50_159.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '5',
+         'product_name': '(장기)무배당 삼성화재 펫보험 의기냥냥',
+         'total_pages': 107,
+         'page': 58},
+ 'term_type': 'special',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['other']},
+ 'indexing': {'chunk_id': 'chunk_000270',
+              'chunk_char_len': 296,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_method': 'llm',
+              'tag_confidence': 0.95}},
+)

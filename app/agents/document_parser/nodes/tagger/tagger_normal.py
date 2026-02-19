@@ -415,6 +415,7 @@ def tag_chunks(
                 "chunk_id": f"chunk_{idx:06d}",
                 "chunk_char_len": len(chunk_text),
                 "embedding_model": embedding_model,
+                "tag_type": "normal",
                 "tag_method": tag["method"],
                 "tag_confidence": tag["confidence"],
             },

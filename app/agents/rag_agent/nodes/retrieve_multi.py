@@ -134,9 +134,10 @@ def _retrieve_by_multi_query_texts(
         k=TOP_K,
         search_filter=search_filter,
     )
-    unfiltered_search_result = _search_by_embeddings(
-        collection_name, query_texts_embeddings, k=TOP_K, search_filter=None
-    )
+    # unfiltered_search_result = _search_by_embeddings(
+    #     collection_name, query_texts_embeddings, k=TOP_K, search_filter=None
+    # )
+    unfiltered_search_result = []
     rprint(
         f"✅{collection_label} collection: retrieve complete "
         f"(top_k={TOP_K}, filtered={len(filtered_search_result)}, "
