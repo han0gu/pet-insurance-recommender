@@ -112,6 +112,11 @@ if __name__ == "__main__":
             vector_store.ingest_chunks("terms_simple_tag_dense", tagged_chunks)
 
 
-# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_1_maum_pet_12_61.pdf --basic-term-start 1 --basic-term-end 21 --special-term-start 22 --special-term-end 50 --tag-type simple
-# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_1_dog_anypet_4_47.pdf --basic-term-start 1 --basic-term-end 17 --special-term-start 18 --special-term-end 44 --tag-type simple
-# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_2_cat_anypet_4_37.pdf --basic-term-start 1 --basic-term-end 17 --special-term-start 18 --special-term-end 34 --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_1_maum_pet_1_21_22_50.pdf --basic-term-start 1 --basic-term-end 21 --special-term-start 22 --special-term-end 50 --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_2_petpermint_cat_family_45_82_83_206.pdf --basic-term-start 45 --basic-term-end 82 --special-term-start 83 --special-term-end 206 --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_3_petpermint_dog_family_51_86_87_230.pdf --basic-term-start 51 --basic-term-end 86 --special-term-start 87 --special-term-end 230 --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_1_dog_anypet_3_20_21_47.pdf --basic-term-start 3 --basic-term-end 20 --special-term-start 21 --special-term-end 47 --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_2_cat_anypet_3_20_21_37.pdf --basic-term-start 3 --basic-term-end 20 --special-term-start 21 --special-term-end 37 --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_3_direct_good_pet_28_42_45_105.pdf --basic-term-start 28 --basic-term-end 42 --special-term-start 45 --special-term-end 105 --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_4_pet_majestic_dog_33_49_52_139.pdf --basic-term-start 33 --basic-term-end 49 --special-term-start 52 --special-term-end 139 --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_5_pet_majestic_cat_31_47_50_159.pdf --basic-term-start 31 --basic-term-end 47 --special-term-start 50 --special-term-end 159 --tag-type simple

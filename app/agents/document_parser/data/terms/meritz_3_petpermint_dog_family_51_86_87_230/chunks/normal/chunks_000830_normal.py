@@ -1,0 +1,23 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('음식물 섭취 | - 입으로 식사를 전혀 할수 없어 계속적으로 튜 브(비위관 또는 위루관)나 경정맥 수액을 통해 부분 혹은 전적인 '
+ '영양공급을 받는 상태(20%) - 수저 사용이 불가능하여 다른 사람의 계속적 인 도움이 없이는 식사를 전혀 할 수 없는 상 태(15%) '
+ '- 숟가락 사용은 가능하나 젓가락 사용이 불가능 하여 음식물 섭취에 있어 부분적으로 다른 사 람의 도움이 필요한 상태(10%) - '
+ '독립적인 음식물 섭취는 가능하나 젓가락을 이 용하여 생선을 바르거나 음식물을 자르지는 못 하는 상태(5%)'),
+    metadata={'source_doc': {'total_pages': 180},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_3_petpermint_dog_family_51_86_87_230.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '3',
+         'product_name': '무배당 펫퍼민트 Puppy&Family보험 다이렉트2601',
+         'total_pages': 180,
+         'page': 230},
+ 'term_type': 'special',
+ 'clause': {'clause_type': 'coverage', 'risk_domains': ['digestive', 'other']},
+ 'indexing': {'chunk_id': 'chunk_000830',
+              'chunk_char_len': 280,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_method': 'llm',
+              'tag_confidence': 0.95}},
+)
