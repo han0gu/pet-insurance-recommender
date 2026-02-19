@@ -200,22 +200,22 @@ def sparse_qt_score(state: RagState) -> Dict[str, Any]:
 
         evaluation["sparse_score"] = round(sparse_score, 2)
         evaluation["predefined_match_count"] = predefined_match_count
-        evaluation["sparse_debug"] = {
-            "query_text": query_text,
-            "query_tokens": query_tokens,
-            "vocab_path": str(vocab_path),
-            "matched_vocab_tokens": matched_vocab_tokens,
-            "unmatched_vocab_tokens": unmatched_vocab_tokens,
-            "matched_predefined": matched_predefined,
-            "matched_predefined_count": predefined_match_count,
-            "vocab_bm25_total": vocab_total,
-            "predefined_bm25_total": predefined_total,
-            "weights": {
-                "vocab": VOCAB_BM25_WEIGHT,
-                "predefined": PREDEFINED_BM25_WEIGHT,
-            },
-            "bm25": {"k1": BM25_K1, "b": BM25_B, "dl": dl, "avgdl": avgdl},
-        }
+        # evaluation["sparse_debug"] = {
+        #     "query_text": query_text,
+        #     "query_tokens": query_tokens,
+        #     "vocab_path": str(vocab_path),
+        #     "matched_vocab_tokens": matched_vocab_tokens,
+        #     "unmatched_vocab_tokens": unmatched_vocab_tokens,
+        #     "matched_predefined": matched_predefined,
+        #     "matched_predefined_count": predefined_match_count,
+        #     "vocab_bm25_total": vocab_total,
+        #     "predefined_bm25_total": predefined_total,
+        #     "weights": {
+        #         "vocab": VOCAB_BM25_WEIGHT,
+        #         "predefined": PREDEFINED_BM25_WEIGHT,
+        #     },
+        #     "bm25": {"k1": BM25_K1, "b": BM25_B, "dl": dl, "avgdl": avgdl},
+        # }
 
     if state.retrieved_documents:
         # print("\n[Sparse score results - top 5 chunks]")
@@ -250,6 +250,6 @@ def sparse_qt_score(state: RagState) -> Dict[str, Any]:
 
             total_score = evaluation.get("total_score", "N/A")
             sparse_score = evaluation.get("sparse_score", "N/A")
-            print(f"  evaluation: ({total_score}, {sparse_score})")
+            # print(f"  evaluation: ({total_score}, {sparse_score})")
 
     return {"retrieved_documents": state.retrieved_documents}
