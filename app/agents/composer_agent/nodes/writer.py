@@ -9,17 +9,20 @@ from app.agents.vet_agent.state import VetAgentState
 # .env 파일 로드 (API Key 때문에 필수)
 load_dotenv()
 
+
 def writer_node(state: JudgeAgentState):
 
     # 1. 데이터 꺼내기
     vet_field_keys = VetAgentState.model_fields.keys()
-    vet_data = state.model_dump(include=vet_field_keys)    # 유저/강아지 정보 (이름, 견종 등)
-    val_result = state.validation_result # 검증 결과 (점수, 이유)
-    
+    vet_data = state.model_dump(
+        include=vet_field_keys
+    )  # 유저/강아지 정보 (이름, 견종 등)
+    val_result = state.validation_result  # 검증 결과 (점수, 이유)
+
     # 2. LLM 설정 (창의적인 글쓰기를 위해 temperature를 약간 높임)
     llm = ChatUpstage(model="solar-pro2", temperature=0.7)
-    
-# 3. 프롬프트 작성 (따뜻하고 다정한 상담사 톤)
+
+    # 3. 프롬프트 작성 (따뜻하고 다정한 상담사 톤)
     system_prompt = """당신은 반려동물과 보호자의 마음을 깊이 헤아리는 다정하고 전문적인 '펫보험 전문 상담사'입니다.
     제공된 [강아지 정보(질병 포함)]와 [검증 결과]를 바탕으로, 보호자가 읽기 쉽고 마음이 편안해지는 상담 안내문을 작성하세요.
 
@@ -56,25 +59,26 @@ def writer_node(state: JudgeAgentState):
         - 전화번호, 이메일, "상담이 필요하실 때" 같은 연락처/상담 안내 문구 금지.
     """
 
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", system_prompt),
-        ("human", """
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", system_prompt),
+            (
+                "human",
+                """
         === [강아지 정보] ===
         {vet_data}
         
         === [검증 및 추천 결과] ===
         {val_result}
-        """)
-    ])
+        """,
+            ),
+        ]
+    )
 
     # 4. 실행
-    chain = prompt | llm | StrOutputParser() 
-    
-    final_msg = chain.invoke({
-        "vet_data": str(vet_data),
-        "val_result": str(val_result)
-    })
-    
-    
+    chain = prompt | llm | StrOutputParser()
+
+    final_msg = chain.invoke({"vet_data": str(vet_data), "val_result": str(val_result)})
+
     # 5. State 업데이트
     return {"final_message": final_msg}
