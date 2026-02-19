@@ -90,7 +90,7 @@ def print_orchestration_result(result: dict) -> None:
     #     "RAG 결과: ",
     #     [doc.page_content for doc in result["retrieved_documents"]],
     # )
-    # rprint("Judge 검증 결과:", result.get("validation_result"))
+    rprint("Judge 검증 결과:", result.get("validation_result"))
     rprint("최종 유저 답변:", result.get("final_message"))
 
 

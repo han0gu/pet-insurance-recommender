@@ -218,7 +218,7 @@ def sparse_qt_score(state: RagState) -> Dict[str, Any]:
         }
 
     if state.retrieved_documents:
-        print("\n[Sparse score results - top 5 chunks]")
+        # print("\n[Sparse score results - top 5 chunks]")
         first_query_printed = False
         for idx, document in enumerate(state.retrieved_documents[:5], start=1):
             evaluation = document.metadata.get("evaluation", {})
@@ -230,12 +230,12 @@ def sparse_qt_score(state: RagState) -> Dict[str, Any]:
             chunk_id = doc_meta.get("chunk_id") or indexing_meta.get("chunk_id") or ""
 
             if not first_query_printed:
-                print(f"query: {debug_info.get('query_text', '')}")
+                # print(f"query: {debug_info.get('query_text', '')}")
                 first_query_printed = True
 
-            print(f"\n{idx}. file={file_name} page={page} chunk_id={chunk_id}")
+            # print(f"\n{idx}. file={file_name} page={page} chunk_id={chunk_id}")
             chunk_content = " ".join(document.page_content.split())
-            print(f"  chunk_content: {chunk_content}")
+            # print(f"  chunk_content: {chunk_content}")
 
             if isinstance(debug_info, dict):
                 query_tokens = debug_info.get("query_tokens", [])
@@ -244,9 +244,9 @@ def sparse_qt_score(state: RagState) -> Dict[str, Any]:
                 query_tokens_str = ", ".join(query_tokens)
                 matched_vocab_str = ", ".join(matched_vocab)
                 unmatched_vocab_str = ", ".join(unmatched_vocab)
-                print(f"  query_tokens: [{query_tokens_str}]")
-                print(f"  matched_vocab_tokens: [{matched_vocab_str}]")
-                print(f"  unmatched_vocab_tokens: [{unmatched_vocab_str}]")
+                # print(f"  query_tokens: [{query_tokens_str}]")
+                # print(f"  matched_vocab_tokens: [{matched_vocab_str}]")
+                # print(f"  unmatched_vocab_tokens: [{unmatched_vocab_str}]")
 
             total_score = evaluation.get("total_score", "N/A")
             sparse_score = evaluation.get("sparse_score", "N/A")
