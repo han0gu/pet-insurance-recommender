@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 from pprint import pformat
+from time import perf_counter
 from typing import Literal
 
 from langchain.chat_models import init_chat_model
@@ -214,6 +215,7 @@ def _process_collection(
     output_dir: Path,
     timestamp: str,
 ) -> tuple[list[Document], list[dict[str, object]]]:
+    collection_started_at = perf_counter()
     rprint(
         f"⏳{source_name} relevance scoring start "
         f"(filtered={len(filtered_docs)}, unfiltered={len(unfiltered_docs)})"
@@ -237,7 +239,10 @@ def _process_collection(
     rprint(f"⏳{source_name} per-query scoring start (queries={len(query_texts)})")
 
     for query_index, query_text in enumerate(query_texts, start=1):
-        rprint(f"⏳{source_name} evaluating query {query_index}/{len(query_texts)}")
+        step_started_at = perf_counter()
+        rprint(
+            f"⏳{source_name} evaluating query {query_index}/{len(query_texts)} start"
+        )
         per_query_filtered_docs = filtered_docs_by_query[query_index - 1]
         per_query_unfiltered_docs = unfiltered_docs_by_query[query_index - 1]
 
@@ -291,8 +296,17 @@ def _process_collection(
                 "avg_total_score_delta": round(filtered_avg - unfiltered_avg, 2),
             }
         )
+        elapsed_seconds = perf_counter() - step_started_at
+        rprint(
+            f"✅{source_name} evaluating query {query_index}/{len(query_texts)} "
+            f"done ({elapsed_seconds:.2f}s)"
+        )
 
-    rprint(f"✅{source_name} relevance scoring complete")
+    total_elapsed_seconds = perf_counter() - collection_started_at
+    rprint(
+        f"✅{source_name} relevance scoring complete "
+        f"(total={total_elapsed_seconds:.2f}s)"
+    )
     return filtered_scored_docs, comparison_rows
 
 
