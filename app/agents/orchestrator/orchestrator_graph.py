@@ -25,7 +25,7 @@ from app.agents.vet_agent.graph import graph as vet_graph
 def save_recommendation(state: OrchestratorState) -> dict:
     """현재 사이클의 retrieved_documents를 recommendation_history에 누적합니다."""
 
-    rprint("state", [a.metadata["evaluation"] for a in state.retrieved_documents])
+    # rprint("state", [a.metadata["evaluation"] for a in state.retrieved_documents])
     return {"recommendation_history": [state.retrieved_documents]}
 
 
@@ -85,12 +85,12 @@ def print_orchestration_result(result: dict) -> None:
     if result.get("is_blocked"):
         rprint(f"[BLOCKED] {result.get('blocked_reason')}")
         return
-    rprint(f"질병 목록: {result['diseases']}")
-    rprint(
-        "RAG 결과: ",
-        [doc.page_content for doc in result["retrieved_documents"]],
-    )
-    rprint("Judge 검증 결과:", result.get("validation_result"))
+    # rprint(f"질병 목록: {result['diseases']}")
+    # rprint(
+    #     "RAG 결과: ",
+    #     [doc.page_content for doc in result["retrieved_documents"]],
+    # )
+    # rprint("Judge 검증 결과:", result.get("validation_result"))
     rprint("최종 유저 답변:", result.get("final_message"))
 
 
