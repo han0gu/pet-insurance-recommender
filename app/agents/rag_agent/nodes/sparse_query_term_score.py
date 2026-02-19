@@ -1,20 +1,14 @@
 # sparse embedding model - simple version for inference only
-from typing import List, Dict, Any
-import math
+from typing import Dict, Any
 from collections import defaultdict
+from collections import Counter
 import sys
-import os
-import argparse
-import importlib.util
 import json
 from pathlib import Path
-from kiwipiepy import Kiwi
-from pypdf import PdfReader
 from dotenv import load_dotenv
 
 from app.agents.rag_agent.state.rag_state import RagState
 from app.agents.rag_agent_gs.sparse import (
-    calculate_tfidf_weights,
     match_predefined_words,
     tokenize_korean,
 )
@@ -25,6 +19,12 @@ load_dotenv(ENV_PATH)
 ROOT_DIR = Path(__file__).resolve().parents[3]
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
+
+
+BM25_K1 = 1.5
+BM25_B = 0.75
+VOCAB_BM25_WEIGHT = 0.6
+PREDEFINED_BM25_WEIGHT = 1.8
 
 
 def _get_terms_dir() -> Path:
@@ -59,6 +59,51 @@ def _load_vocab_jsond(vocab_path: Path) -> Dict[str, Any]:
         return {}
 
 
+def _safe_avgdl(lengths: list[int]) -> float:
+    if not lengths:
+        return 1.0
+    avgdl = sum(lengths) / len(lengths)
+    return avgdl if avgdl > 0 else 1.0
+
+
+def _bm25_tf_component(tf: int, dl: int, avgdl: float) -> float:
+    if tf <= 0:
+        return 0.0
+    denominator = tf + BM25_K1 * (1 - BM25_B + BM25_B * (dl / max(avgdl, 1e-9)))
+    if denominator <= 0:
+        return 0.0
+    return (tf * (BM25_K1 + 1)) / denominator
+
+
+def _resolve_idf(term: str, idf: Dict[str, float]) -> float:
+    term_lower = term.lower()
+    if term_lower in idf:
+        return float(idf[term_lower])
+
+    split_terms = [token for token in term_lower.split() if token]
+    if not split_terms:
+        return 0.0
+    split_idf = [float(idf[token]) for token in split_terms if token in idf]
+    if not split_idf:
+        return 0.0
+    return sum(split_idf) / len(split_idf)
+
+
+def _count_phrase_occurrences(text: str, phrase: str) -> int:
+    text_lower = (text or "").lower()
+    phrase_lower = (phrase or "").lower().strip()
+    if not phrase_lower:
+        return 0
+
+    direct_count = text_lower.count(phrase_lower)
+
+    text_no_space = text_lower.replace(" ", "")
+    phrase_no_space = phrase_lower.replace(" ", "")
+    compact_count = text_no_space.count(phrase_no_space) if phrase_no_space else 0
+
+    return max(direct_count, compact_count)
+
+
 def sparse_qt_score(state: RagState) -> Dict[str, Any]:
     """
     Extract insurance product information from retrieved documents.
@@ -81,7 +126,21 @@ def sparse_qt_score(state: RagState) -> Dict[str, Any]:
 
     vocab_cache: Dict[str, Dict[str, Any]] = {}
 
+    tokenized_chunk_cache: list[list[str]] = []
+    doc_length_by_file: Dict[str, list[int]] = defaultdict(list)
     for document in state.retrieved_documents:
+        chunk_tokens = tokenize_korean(document.page_content or "")
+        tokenized_chunk_cache.append(chunk_tokens)
+        doc_meta = document.metadata.get("doc", {})
+        file_name = doc_meta.get("file_name", "")
+        doc_length_by_file[file_name].append(max(len(chunk_tokens), 1))
+
+    avgdl_by_file: Dict[str, float] = {
+        file_name: _safe_avgdl(lengths)
+        for file_name, lengths in doc_length_by_file.items()
+    }
+
+    for idx, document in enumerate(state.retrieved_documents):
         evaluation = document.metadata.setdefault("evaluation", {})
         query_text = evaluation.get("query_context", "")
         doc_meta = document.metadata.get("doc", {})
@@ -89,10 +148,16 @@ def sparse_qt_score(state: RagState) -> Dict[str, Any]:
         vocab_path = _get_vocab_jsond_path_for_doc(file_name)
 
         if vocab_path is None:
-            evaluation["sparse_score"] = 0.0
+            evaluation["sparse_score"] = 0.00
+            evaluation["predefined_match_count"] = 0
             continue
 
         query_tokens = tokenize_korean(query_text)
+        chunk_tokens = tokenized_chunk_cache[idx]
+        chunk_token_counter = Counter(chunk_tokens)
+        dl = max(len(chunk_tokens), 1)
+        avgdl = avgdl_by_file.get(file_name, float(dl))
+
         vocab_key = str(vocab_path)
         if vocab_key not in vocab_cache:
             vocab_cache[vocab_key] = _load_vocab_jsond(vocab_path)
@@ -107,14 +172,34 @@ def sparse_qt_score(state: RagState) -> Dict[str, Any]:
 
         matched_vocab_tokens = [t for t in query_tokens if t in vocab]
         unmatched_vocab_tokens = [t for t in query_tokens if t not in vocab]
-        vocab_weights = calculate_tfidf_weights(matched_vocab_tokens, idf)
-        vocab_total = sum(vocab_weights.values())
+        vocab_query_tf = Counter(token.lower() for token in matched_vocab_tokens)
+        vocab_total = 0.0
+        for token, qtf in vocab_query_tf.items():
+            tf = chunk_token_counter.get(token, 0)
+            if tf <= 0:
+                continue
+            token_idf = _resolve_idf(token, idf)
+            bm25_tf = _bm25_tf_component(tf=tf, dl=dl, avgdl=avgdl)
+            vocab_total += qtf * token_idf * bm25_tf
 
         matched_predefined = match_predefined_words(query_text, predefined_words)
-        predefined_weights = calculate_tfidf_weights(matched_predefined, idf)
-        predefined_total = sum(predefined_weights.values())
+        predefined_query_tf = Counter(term.lower() for term in matched_predefined)
+        predefined_total = 0.0
+        for term, qtf in predefined_query_tf.items():
+            tf = _count_phrase_occurrences(document.page_content or "", term)
+            if tf <= 0:
+                continue
+            term_idf = _resolve_idf(term, idf)
+            bm25_tf = _bm25_tf_component(tf=tf, dl=dl, avgdl=avgdl)
+            predefined_total += qtf * term_idf * bm25_tf
 
-        evaluation["sparse_score"] = vocab_total + predefined_total
+        sparse_score = (
+            VOCAB_BM25_WEIGHT * vocab_total + PREDEFINED_BM25_WEIGHT * predefined_total
+        )
+        predefined_match_count = len(matched_predefined)
+
+        evaluation["sparse_score"] = round(sparse_score, 2)
+        evaluation["predefined_match_count"] = predefined_match_count
         evaluation["sparse_debug"] = {
             "query_text": query_text,
             "query_tokens": query_tokens,
@@ -122,8 +207,14 @@ def sparse_qt_score(state: RagState) -> Dict[str, Any]:
             "matched_vocab_tokens": matched_vocab_tokens,
             "unmatched_vocab_tokens": unmatched_vocab_tokens,
             "matched_predefined": matched_predefined,
-            "vocab_total": vocab_total,
-            "predefined_total": predefined_total,
+            "matched_predefined_count": predefined_match_count,
+            "vocab_bm25_total": vocab_total,
+            "predefined_bm25_total": predefined_total,
+            "weights": {
+                "vocab": VOCAB_BM25_WEIGHT,
+                "predefined": PREDEFINED_BM25_WEIGHT,
+            },
+            "bm25": {"k1": BM25_K1, "b": BM25_B, "dl": dl, "avgdl": avgdl},
         }
 
     if state.retrieved_documents:

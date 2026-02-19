@@ -71,11 +71,11 @@ if __name__ == "__main__":
                 "disease_surgery_history": "수술 이력은 없어요",
             },
             diseases=[
-                # DiseaseInfo(
-                #     name="슬개골 탈구",
-                #     incidence_rate="높음",
-                #     onset_period="전 연령",
-                # ),
+                DiseaseInfo(
+                    name="슬개골 탈구",
+                    incidence_rate="높음",
+                    onset_period="전 연령",
+                ),
                 DiseaseInfo(
                     name="심장판막증",
                     incidence_rate="중간",
@@ -86,11 +86,11 @@ if __name__ == "__main__":
                     incidence_rate="중간",
                     onset_period="5세 이상",
                 ),
-                # DiseaseInfo(
-                #     name="간질",
-                #     incidence_rate="낮음",
-                #     onset_period="1-5세",
-                # ),
+                DiseaseInfo(
+                    name="간질",
+                    incidence_rate="낮음",
+                    onset_period="1-5세",
+                ),
             ],
         )
     )
