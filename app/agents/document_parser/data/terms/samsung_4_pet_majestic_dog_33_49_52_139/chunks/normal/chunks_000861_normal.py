@@ -1,0 +1,28 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content='. ⑨ 제1항의 특정신체부위와 특정질병은 4개 이내에서 선택하여 부가할 수 있습니다.',
+    metadata={'source_doc': {'total_pages': 107},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_4_pet_majestic_dog_33_49_52_139.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '4',
+         'product_name': '(장기)무배당 삼성화재 펫보험 위풍댕댕',
+         'total_pages': 91,
+         'page': 136},
+ 'term_type': 'special',
+ 'clause': {'clause_type': 'coverage',
+            'risk_domains': ['head',
+                             'dental',
+                             'skin',
+                             'joint',
+                             'urinary',
+                             'eye',
+                             'digestive',
+                             'other']},
+ 'indexing': {'chunk_id': 'chunk_000861',
+              'chunk_char_len': 47,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_method': 'llm',
+              'tag_confidence': 0.85}},
+)

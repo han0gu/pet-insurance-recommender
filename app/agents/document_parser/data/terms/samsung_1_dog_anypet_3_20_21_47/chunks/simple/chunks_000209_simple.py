@@ -1,0 +1,25 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('【용어해설】\n'
+ '<소득세법 제59조의4(특별세액공제)>\n'
+ '근로소득이 있는 거주자(일용근로자는 제외한다. 이하 이 조에서 같다)가 해당 과세기간에 만기에 환급 되는 금액이 납입보험료를 초과하지 '
+ '아니하는 보험의 보험계약에 따라 지급하는 다음 각 호의 보험료 를 지급한 경우 그 금액의 100분의 12(제1호의 경우에는 100분의 '
+ '15)에 해당하는 금액을 해당 과세기 간의 종합소득산출세액에서 공제한다. 다만, 다음 각 호의 보험료별로 그 합계액이 각각 연 '
+ '100만원을 초과하는 경우 그 초과하는 금액은 각각 없는 것으로 한다.'),
+    metadata={'source_doc': {'total_pages': 45},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_1_dog_anypet_3_20_21_47.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '1',
+         'product_name': '(일반)반려견보험 애니펫',
+         'total_pages': 45,
+         'page': 43},
+ 'term_type': 'special',
+ 'clause': {'clause_type': 'exclusion', 'risk_domains': ['other']},
+ 'indexing': {'chunk_id': 'chunk_000209',
+              'chunk_char_len': 289,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_method': 'rule',
+              'tag_confidence': 0.85}},
+)
