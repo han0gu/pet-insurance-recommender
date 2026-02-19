@@ -1,0 +1,11 @@
+summary = {'clause_type': {'total': 184,
+                 'coverage': 25,
+                 'exclusion': 31,
+                 'waiting': 0,
+                 'deductible': 4,
+                 'limit': 2,
+                 'claim': 23,
+                 'definition': 12,
+                 'renewal': 11,
+                 'other': 76},
+ 'term_type': {'total': 184, 'basic': 113, 'special': 71, 'other': 0}}

@@ -1,0 +1,34 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('구 분 | 특정질병 | 분류코드 | 항목명\n'
+ 'GAA004 | 외이도염 (원인 불명)\n'
+ 'GAA006 | 외이염\n'
+ 'GBA001 | 중이염\n'
+ 'GCA001 | 내이염\n'
+ 'LAA001 | 농피증 / 세균성 피부염\n'
+ 'LAA002 | 말라세지아 피부염\n'
+ 'LAA003 | 피부 사상균증 · 곰팡이성 피부염\n'
+ 'LAA004 | 모낭염\n'
+ 'LAA005 LAA006 | 모낭충증\n'
+ 'LAA007 | 식이 알러지 알러지 피부염 (항원 특이적)\n'
+ 'LAA008 | 아토피 (만성 피부염)\n'
+ 'LAA009 | 지루성 피부염\n'
+ 'LAA010 | 피하 농양\n'
+ 'LAA011 | 지방층염'),
+    metadata={'source_doc': {'total_pages': 160},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_2_petpermint_cat_family_45_82_83_206.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '2',
+         'product_name': '무배당 펫퍼민트 Puppy&Family보험 다이렉트2601',
+         'total_pages': 160,
+         'page': 172},
+ 'term_type': 'special',
+ 'clause': {'clause_type': 'definition', 'risk_domains': ['skin', 'other']},
+ 'indexing': {'chunk_id': 'chunk_000603',
+              'chunk_char_len': 289,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_method': 'llm',
+              'tag_confidence': 0.95}},
+)
