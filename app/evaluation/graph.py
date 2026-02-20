@@ -8,6 +8,7 @@ YAML 로드 → 질병 추출(Vet/Mock) → 질병별 RAG 검색 → 테스트 �
   - 질병 5개 × 질병별 top-k 약관 = 정확한 매핑
 """
 
+import asyncio
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -39,7 +40,11 @@ logger = logging.getLogger(__name__)
 # ── 실행 모드 플래그 ──
 USE_REAL_VET_AGENT = True  # True: 실제 Vet Agent / False: Mock 질병
 USE_REAL_RAG = True  # True: 실제 RAG Agent / False: Mock 약관
-YAML_LOAD_LIMIT = 1  # 로드할 YAML 파일 개수 (None이면 전체)
+YAML_LOAD_LIMIT = None  # 로드할 YAML 파일 개수 (None이면 전체)
+
+# Rate limit 여유: API 호출 간 대기(초)
+DELAY_BETWEEN_EVAL_CASES = 0.5  # Judge/Evaluator 케이스 간
+DELAY_BETWEEN_RAG_DISEASES = 2.0  # 질병별 RAG 호출 간 (RAG 내부 부하 큼)
 
 # 질병-약관 매핑 타입 별칭: [(질병, [해당 질병의 약관 텍스트들])]
 DiseasePolicyPairs = list[tuple[DiseaseInfo, list[str]]]
@@ -110,6 +115,8 @@ async def run_rag_per_disease(
     pairs: DiseasePolicyPairs = []
 
     for d_idx, disease in enumerate(diseases, 1):
+        if d_idx > 1 and DELAY_BETWEEN_RAG_DISEASES > 0:
+            await asyncio.sleep(DELAY_BETWEEN_RAG_DISEASES)
         rprint(
             f"    RAG [{d_idx}/{len(diseases)}] '{disease.name}' 검색 중...",
             end="",
@@ -158,6 +165,10 @@ async def _evaluate_test_cases(
         )
         records.append(record)
         append_record_to_csv(record, csv_path)  # 중간 실패 대비 1건마다 즉시 저장
+
+        # Rate limit 여유: 다음 케이스 전 대기
+        if DELAY_BETWEEN_EVAL_CASES > 0:
+            await asyncio.sleep(DELAY_BETWEEN_EVAL_CASES)
 
     return records
 

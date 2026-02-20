@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 from pprint import pformat
-from time import perf_counter
+from time import perf_counter, sleep
 from typing import Literal
 
 from langchain.chat_models import init_chat_model
@@ -155,8 +155,24 @@ def _evaluate_relevance_by_llm(
 
     model = init_chat_model(model="solar-pro2", temperature=0.0)
     structured_model = model.with_structured_output(RelevanceEvaluationOutput)
-    result: RelevanceEvaluationOutput = structured_model.invoke(prompt)
-    return {item.doc_index: item for item in result.evaluations}
+    max_retries = 3
+    retry_delay_sec = 5
+
+    for attempt in range(max_retries):
+        result: RelevanceEvaluationOutput | None = structured_model.invoke(prompt)
+        if result is not None and getattr(result, "evaluations", None):
+            return {item.doc_index: item for item in result.evaluations}
+        if attempt < max_retries - 1:
+            rprint(
+                f"[yellow]⚠ LLM 평가 응답 없음 → {retry_delay_sec}초 후 재시도 "
+                f"({attempt + 1}/{max_retries})[/yellow]"
+            )
+            sleep(retry_delay_sec)
+
+    rprint(
+        "[yellow]⚠ LLM 평가 응답 없음(None/빈값) → 해당 문서군은 평가 결과 없음으로 처리[/yellow]"
+    )
+    return {}
 
 
 def _attach_evaluation_metadata(
@@ -301,6 +317,10 @@ def _process_collection(
             f"✅{source_name} evaluating query {query_index}/{len(query_texts)} "
             f"done ({elapsed_seconds:.2f}s)"
         )
+
+        # Rate limit 여유: 다음 쿼리 평가 전 대기(초)
+        if query_index < len(query_texts):
+            sleep(1.0)
 
     total_elapsed_seconds = perf_counter() - collection_started_at
     rprint(
