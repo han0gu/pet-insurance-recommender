@@ -2,21 +2,28 @@ from __future__ import annotations
 
 import re
 from runpy import run_path
-from pathlib import Path
-from typing import List, Literal
+from typing import List
 
 from langchain_core.documents import Document
+from langchain_upstage.document_parse import OutputFormat
 
-from app.agents.document_parser.constants import TERMS_DIR
+from app.agents.document_parser.constants import TAG_TYPE
+from app.agents.document_parser.nodes.path_utils import build_tagged_chunks_dir
 
-_CHUNK_FILE_PATTERN = re.compile(r"^chunks_(\d{6})_(simple|normal)\.py$")
+_CHUNK_FILE_PATTERN = re.compile(r"^chunk_(\d{6})\.py$")
 
 
 def load_chunk_files(
-    *, file_name: str, tag_type: Literal["normal", "simple"] = "simple"
+    *,
+    file_name: str,
+    output_format: OutputFormat,
+    tag_type: TAG_TYPE,
 ) -> List[Document]:
-    doc_stem = Path(file_name).stem
-    chunk_dir = TERMS_DIR / doc_stem / "chunks" / tag_type
+    chunk_dir = build_tagged_chunks_dir(
+        file_name=file_name,
+        output_format=output_format,
+        tag_type=tag_type,
+    )
     if not chunk_dir.exists():
         return []
 

@@ -1,11 +1,19 @@
 import argparse
 
+from langchain_upstage.document_parse import OutputFormat
 from langgraph.graph.state import StateGraph, CompiledStateGraph, START, END
 
+from app.agents.document_parser.constants import (
+    TAG_TYPE,
+    VECTOR_STORE_NAME_BY_TAG_TYPE,
+)
 from app.agents.document_parser.nodes import document_parser
-from app.agents.document_parser.nodes.splitter import page_splitter, text_splitter
-from app.agents.document_parser.nodes.tagger import chunk_loader
-from app.agents.document_parser.nodes.tagger import tagger_normal, tagger_simple
+from app.agents.document_parser.nodes.path_utils import build_document_base_paths
+from app.agents.document_parser.nodes.splitter import text_splitter
+from app.agents.document_parser.nodes.splitter.metadata_adder import (
+    add_metadata_to_documents,
+)
+from app.agents.document_parser.nodes.tagger import tagger
 from app.agents.document_parser.nodes import vector_store
 from app.agents.document_parser.state.document_parser_state import DocumentParserState
 
@@ -39,9 +47,13 @@ def create_arg_parser() -> argparse.ArgumentParser:
         help="PDF file name  with extension",
     )
     parser.add_argument(
+        "--output-format",
+        required=True,
+        help="document parsing output format",
+    )
+    parser.add_argument(
         "--tag-type",
         required=True,
-        choices=["normal", "simple"],
         help="metadata tag type",
     )
     parser.add_argument(
@@ -79,44 +91,48 @@ def create_arg_parser() -> argparse.ArgumentParser:
 if __name__ == "__main__":
     args = create_arg_parser().parse_args()
     file_name: str = args.file_name
-    tag_type: str = args.tag_type
+    tag_type: TAG_TYPE = args.tag_type
+    output_format: OutputFormat = args.output_format
+    base_paths = build_document_base_paths(file_name=file_name)
 
-    tagged_chunks = chunk_loader.load_chunk_files(
-        file_name=file_name, tag_type=tag_type
+    dp_result = document_parser.parse_document(
+        file_name=base_paths.source_file_name,
+        output_format=output_format,
     )
-    if tagged_chunks:
-        print(f"✅load existing chunks: {len(tagged_chunks)} (tag_type={tag_type})")
-    else:
-        dp_result = document_parser.parse_document(file_name)
 
-        pages = page_splitter.split_pages_and_add_metadata(
-            dp_result,
-            file_name,
-            basic_term_start=args.basic_term_start,
-            basic_term_end=args.basic_term_end,
-            special_term_start=args.special_term_start,
-            special_term_end=args.special_term_end,
-        )
+    dp_result_with_metadata = add_metadata_to_documents(
+        documents=dp_result,
+        file_name=file_name,
+        basic_term_start=args.basic_term_start,
+        basic_term_end=args.basic_term_end,
+        special_term_start=args.special_term_start,
+        special_term_end=args.special_term_end,
+    )
 
-        chunks = text_splitter.split(pages)
+    chunks = text_splitter.split(
+        dp_result=dp_result_with_metadata,
+        output_format=output_format,
+    )
 
-        if tag_type == "normal":
-            tagged_chunks = tagger_normal.tag_chunks(chunks)
-        elif tag_type == "simple":
-            tagged_chunks = tagger_simple.tag_chunks(chunks)
+    tagged_chunks = tagger.tag_chunks(
+        chunks=chunks,
+        output_format=output_format,
+        tag_type=tag_type,
+    )
 
     if args.ingest:
-        if tag_type == "normal":
-            vector_store.ingest_chunks("terms_normal_tag_dense", tagged_chunks)
-        elif tag_type == "simple":
-            vector_store.ingest_chunks("terms_simple_tag_dense", tagged_chunks)
+        vector_store.ingest_chunks(
+            VECTOR_STORE_NAME_BY_TAG_TYPE[tag_type],
+            tagged_chunks,
+        )
 
 
-# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_1_maum_pet_1_21_22_50.pdf --basic-term-start 1 --basic-term-end 21 --special-term-start 22 --special-term-end 50 --tag-type simple
-# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_2_petpermint_cat_family_45_82_83_206.pdf --basic-term-start 45 --basic-term-end 82 --special-term-start 83 --special-term-end 206 --tag-type simple
-# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_3_petpermint_dog_family_51_86_87_230.pdf --basic-term-start 51 --basic-term-end 86 --special-term-start 87 --special-term-end 230 --tag-type simple
-# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_1_dog_anypet_3_20_21_47.pdf --basic-term-start 3 --basic-term-end 20 --special-term-start 21 --special-term-end 47 --tag-type simple
-# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_2_cat_anypet_3_20_21_37.pdf --basic-term-start 3 --basic-term-end 20 --special-term-start 21 --special-term-end 37 --tag-type simple
-# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_3_direct_good_pet_28_42_45_105.pdf --basic-term-start 28 --basic-term-end 42 --special-term-start 45 --special-term-end 105 --tag-type simple
-# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_4_pet_majestic_dog_33_49_52_139.pdf --basic-term-start 33 --basic-term-end 49 --special-term-start 52 --special-term-end 139 --tag-type simple
-# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_5_pet_majestic_cat_31_47_50_159.pdf --basic-term-start 31 --basic-term-end 47 --special-term-start 50 --special-term-end 159 --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_1_maum_pet_1_21_22_50.pdf --basic-term-start 1 --basic-term-end 21 --special-term-start 22 --special-term-end 50 --output-format markdown --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_2_petpermint_cat_family_45_82_83_206.pdf --basic-term-start 45 --basic-term-end 82 --special-term-start 83 --special-term-end 206 --output-format markdown --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name meritz_3_petpermint_dog_family_51_86_87_230.pdf --basic-term-start 51 --basic-term-end 86 --special-term-start 87 --special-term-end 230 --output-format markdown --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_1_dog_anypet_3_20_21_47.pdf --basic-term-start 3 --basic-term-end 20 --special-term-start 21 --special-term-end 4 --output-format markdown --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_2_cat_anypet_3_20_21_37.pdf --basic-term-start 3 --basic-term-end 20 --special-term-start 21 --special-term-end 37 --output-format markdown --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_3_direct_good_pet_28_42_45_105.pdf --basic-term-start 28 --basic-term-end 42 --special-term-start 45 --special-term-end 105 --output-format markdown --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_4_pet_majestic_dog_33_49_52_139.pdf --basic-term-start 33 --basic-term-end 49 --special-term-start 52 --special-term-end 139 --output-format markdown --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name samsung_5_pet_majestic_cat_31_47_50_159.pdf --basic-term-start 31 --basic-term-end 47 --special-term-start 50 --special-term-end 159 --output-format markdown --tag-type simple
+# uv run python -m app.agents.document_parser.dp_graph --file-name kb_17390_gold_pet_dog_54_72_74_166.pdf --basic-term-start 54 --basic-term-end 72 --special-term-start 74 --special-term-end 166 --output-format markdown --tag-type simple
