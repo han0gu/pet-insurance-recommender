@@ -1,0 +1,18 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('. 정상적으로 영업하는 날을</td></tr><tr><td>영업일</td><td>회사가 영업점에서 말하며, 토요 일, "관공서의 공휴일에 '
+ '관한 규정"에 따른 공휴일과 노동 절을 제외합니다.</td></tr></tbody></table><br><table id=\'11\' '
+ "style='font-size:16px'><thead></thead><tbody><tr><td></td><td>(대통령령 "
+ "제31930호)</td></tr></tbody></table><br><h1 id='12' style='font-size:16px'>관 련 "
+ '법'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

@@ -1,0 +1,22 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('- 다) 근전도 검사상 완전손상(complete injury) 소\n'
+ '- 견이 있으면서 도수근력검사(MMT)에서 근력이\n'
+ '- “1등급(Trace)"인 경우\n'
+ '9) “관절 하나의 기능에 뚜렷한 장해를 남긴 때”라 함\n'
+ '은 아래의 경우 중 하나에 해당하는 경우를 말한다.- 가) 해당 관절의 운동범위 합계가 정상운동범위의\n'
+ '- 1/2 이하로 제한된 경우\n'
+ '- 나) 근전도 검사상 불완전한 손상(incomplete\n'
+ '- injury) 소견이 있으면서 도수근력검사(MMT)\n'
+ '- 에서 근력이 2등급(poor)인 경우'),
+    metadata={'source_doc': {'total_pages': 160},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_2_petpermint_cat_family_45_82_83_206.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '2',
+         'product_name': '무배당 펫퍼민트 Cat&Family보험 다이렉트2601',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

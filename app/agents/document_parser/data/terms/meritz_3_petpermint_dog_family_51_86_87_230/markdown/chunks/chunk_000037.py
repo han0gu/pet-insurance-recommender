@@ -1,0 +1,24 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('| --- | --- |\n'
+ '| 2025년 4월 1일 | 2천만원 |\n'
+ '| 2026년 4월 1일 | 2천만원 × (1 + 평균공시이율) |\n'
+ '| 2027년 4월 1일 | 2천만원 × (1 + 평균공시이율)2 |\n'
+ '2. 나누어 지급할 금액을 일시에 지급하는 경우\n'
+ '보험금 : 매년 1천만원\n'
+ '보험금 지급기간 : 3년\n'
+ '보험금 지급 시작일자 : 2025년 4월 1일\n'
+ '보험금을 3년간 나누어 지급받지 않고, 2025년 4월 1일\n'
+ '보험금을 일시에 지급받는 경우| 지급일 | 보험금 받는 방법 변경 후 지급액 |\n'
+ '| --- | --- |'),
+    metadata={'source_doc': {'total_pages': 180},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_3_petpermint_dog_family_51_86_87_230.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '3',
+         'product_name': '무배당 펫퍼민트 Puppy&Family보험 다이렉트2601',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

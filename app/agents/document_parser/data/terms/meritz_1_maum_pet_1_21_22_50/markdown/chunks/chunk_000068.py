@@ -1,0 +1,19 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('- 는 거절의 통지가 없으면 승낙된 것으로 봅니다.\n'
+ '- ④ 회사가 제1회 보험료를 받고 승낙을 거절한 경우에는 거절통지와 함께 받은 금액을 계\n'
+ '- 약자에게 돌려 드리며, 보험료를 받은 기간에 대하여 ‘보험개발원이 공시하는 월평균\n'
+ '- 정기예금이율 + 1%’를 연단위 복리로 계산한 금액을 더하여 지급합니다. 다만, 회사는\n'
+ '- 계약자가 제1회 보험료를 신용카드로 납입한 계약의 승낙을 거절하는 경우에는 신용카\n'
+ '- 드의 매출을 취소하며 이자를 더하여 지급하지 않습니다.'),
+    metadata={'source_doc': {'total_pages': 50},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_1_maum_pet_1_21_22_50.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '1',
+         'product_name': '메리츠 마음든든 반려동물보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

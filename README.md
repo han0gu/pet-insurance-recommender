@@ -112,6 +112,7 @@ uv run python -m app.agents.document_parser.dp_graph \
   --file-name meritz_1_maum_pet_1_21_22_50.pdf \
   --basic-term-start 1 --basic-term-end 21 \
   --special-term-start 22 --special-term-end 50 \
+  --output-format markdown \
   --tag-type simple
 
 # 위 과정 + Qdrant 적재
@@ -119,7 +120,9 @@ uv run python -m app.agents.document_parser.dp_graph \
   --file-name meritz_1_maum_pet_1_21_22_50.pdf \
   --basic-term-start 1 --basic-term-end 21 \
   --special-term-start 22 --special-term-end 50 \
-  --tag-type simple --ingest
+  --output-format markdown \
+  --tag-type simple \
+  --ingest
 ```
 
 ## 평가 파이프라인

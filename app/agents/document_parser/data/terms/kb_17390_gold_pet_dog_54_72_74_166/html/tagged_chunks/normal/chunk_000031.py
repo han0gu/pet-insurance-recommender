@@ -1,0 +1,25 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=("관한</h1><br><p id='39' data-category='paragraph' "
+ "style='font-size:14px'>세부규정)</p><br><h1 id='40' style='font-size:14px'>제2절 "
+ "보통약관의 보장을 따릅니다.</h1><p id='41' data-category='paragraph' "
+ "style='font-size:14px'>제5조(보험금을 지급하지 않는 사유)<br>\uf000 회사는 다음 중 어느 한가지로 보험금 "
+ "지급사유가 발생한 때에는 보험금을 지급하</p><br><p id='42'"),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'exclusion', 'risk_domains': ['digestive']},
+ 'indexing': {'chunk_id': 'chunk_000031',
+              'chunk_char_len': 290,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.85}},
+)

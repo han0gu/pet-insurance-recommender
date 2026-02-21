@@ -1,0 +1,22 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('가입 계약의 종료일까지의 기간을 말하며, 이하 「계약의\n'
+ '보험기간」이라 합니다)으로 하며, 그 판단기준은 회사에서\n'
+ '정한 계약사정기준을 따릅니다. 다만, 각각의 질병의 상태\n'
+ '등에 대한 수의사의 소견에 따라 다르게 적용할 수 있습니\n'
+ '다.\n'
+ '\uf000 제2항에도 불구하고 보험업법 제97조 제1항 제5호 및 동192법 시행령 제43조의2 제1항에 따른 보장내용 등이 비슷한\n'
+ '보험계약(이하 「유사계약」이라 합니다)이 계약 청약일 현\n'
+ '재 유지중이거나, 계약 청약일 전 6개월 이내에 계약자 및\n'
+ '피보험자의 요구 또는 보험료 납입 연체로 해지된 경우 유'),
+    metadata={'source_doc': {'total_pages': 180},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_3_petpermint_dog_family_51_86_87_230.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '3',
+         'product_name': '무배당 펫퍼민트 Puppy&Family보험 다이렉트2601',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

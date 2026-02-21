@@ -1,0 +1,16 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('| 1년 | 12회 | 제1회 분납보험료를 납입한 날로부터 매1개월 마다 보험증권에 기재된 납입기일 안 에 분납보험료를 납입 |\n'
+ '③ 보험기간동안 이 보험의 보험요율이 변경된 경우라도 이 특별약관에 따라 납입하는 분납보험료는\n'
+ '변경 적용하지 않습니다. 다만, 보통약관 제13조(계약 후 알릴 의무)에 따라 보험료가 변경된 경우'),
+    metadata={'source_doc': {'total_pages': 45},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_1_dog_anypet_3_20_21_47.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '1',
+         'product_name': '(일반)반려견보험 애니펫',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

@@ -1,0 +1,25 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=("발생한 경우)는 장해로 평가하지 않<br>는다.</p><br><p id='10' data-category='list' "
+ "style='font-size:16px'>3) “발가락을 잃었을 때”라 함은 첫째 발가락에서는<br>지관절부터 심장에 가까운 쪽을, "
+ '나머지 네 발가락에<br>서는 제1지관절(근위지관절)부터(제1지관절 포함) 심<br>장에서 가까운 쪽을 잃었을 때를 말한다.<br>4) '
+ '리스프랑 관절 이상에서 잃은 때라 함은 족근-중족골<br>간 관절 이상에서 절단된 경우를 말한다.<br>5) “발가락뼈 일부를 잃었을 '
+ '때”라 함은'),
+    metadata={'source_doc': {'total_pages': 160},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_2_petpermint_cat_family_45_82_83_206.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '2',
+         'product_name': '무배당 펫퍼민트 Cat&Family보험 다이렉트2601',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['digestive', 'joint']},
+ 'indexing': {'chunk_id': 'chunk_001065',
+              'chunk_char_len': 297,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

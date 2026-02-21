@@ -1,0 +1,28 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('험 계약상의 모든 권리, 의무를 행사할 수 있어야 합니다.# 1. 제1종 단체- 동일한 회사, 사업장, 관공서, 국영기업체, 조합 등 '
+ '5인 이상의 근로자를 고용하고 있는 단체.\n'
+ '- 다만, 사업장, 직제, 직종 등으로 구분되어 있는 경우의 단체소속 여부는 관련법규 등에서 정하\n'
+ '- 는 바에 따릅니다.\n'
+ '- 2. 제2종 단체\n'
+ '- 비영리법인단체 또는 변호사회, 의사회등 동업자단체로서 5인 이상의 구성원이 있는 단체\n'
+ '- 3. 제3종 단체\n'
+ '- 그밖에 단체의 구성원을 확정시킬 수 있고 계약의 일괄적인 관리가 가능한 단체로서 5인 이상'),
+    metadata={'source_doc': {'total_pages': 35},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_2_cat_anypet_3_20_21_37.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '2',
+         'product_name': '(일반)반려묘보험 애니펫',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['digestive']},
+ 'indexing': {'chunk_id': 'chunk_000106',
+              'chunk_char_len': 293,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

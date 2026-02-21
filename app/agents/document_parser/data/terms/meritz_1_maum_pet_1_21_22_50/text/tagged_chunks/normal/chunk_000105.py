@@ -1,0 +1,26 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('(서면, 전자우편, 휴대전화 문자메시지 또는 이에 준하는 전자적 의사표시 포함)가 보험\n'
+ '계약자 또는 그의 대리인에게 도달한 날로 봅니다.제7관 분쟁의 조정 등제34조(분쟁의 조정)① 계약에 관하여 분쟁이 있는 경우 분쟁 '
+ '당사자 또는 기타 이해관계인과 회사는 금융감독\n'
+ '원장에게 조정을 신청할 수 있으며, 분쟁조정 과정에서 계약자는 관계 법령이 정하는\n'
+ '바에 따라 회사가 기록 및 유지･관리하는 자료의 열람(사본의 제공 또는 청취를 포함한\n'
+ '다)을 요구할 수 있습니다.'),
+    metadata={'source_doc': {'total_pages': 50},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_1_maum_pet_1_21_22_50.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '1',
+         'product_name': '메리츠 마음든든 반려동물보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['digestive']},
+ 'indexing': {'chunk_id': 'chunk_000105',
+              'chunk_char_len': 258,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

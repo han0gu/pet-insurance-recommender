@@ -1,0 +1,19 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('는 전문의를 둔 병원을 말합니다.⑤ 같은 상해로 두 가지 이상의 후유장해가 생긴 경우에는 후유장해 지급률을 합산하여\n'
+ '지급합니다. 다만, 장해분류표의 각 신체부위별 판정기준에 별도로 정한 경우에는 그\n'
+ '기준에 따릅니다.\n'
+ '⑥ 다른 상해로 인하여 후유장해가 2회 이상 발생하였을 경우에는 그 때마다 이에 해당\n'
+ '하는 후유장해지급률을 결정합니다. 그러나 그 후유장해가 이미 상해 후유장해(80%\n'
+ '이상)보험금을 지급받은 동일한 부위에 가중된 때에는 최종 장해상태에 해당하는 상'),
+    metadata={'source_doc': {'total_pages': 129},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_5_pet_majestic_cat_31_47_50_159.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '5',
+         'product_name': '(장기)무배당 삼성화재 펫보험 의기냥냥',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

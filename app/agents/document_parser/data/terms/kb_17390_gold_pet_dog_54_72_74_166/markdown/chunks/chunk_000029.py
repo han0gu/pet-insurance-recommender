@@ -1,0 +1,15 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('. | 용 어 풀 이 가지급보험금 보험금 지급이 늦어지는 경우 회사가 지급할 것으로 예상되는 보험금의 일부를 먼저 지급하는 보험금 '
+ '가지급제도에 따라 먼저 지급하는 보험금을 말합니다. |'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

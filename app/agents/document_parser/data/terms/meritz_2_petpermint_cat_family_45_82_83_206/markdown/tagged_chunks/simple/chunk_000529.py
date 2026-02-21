@@ -1,0 +1,30 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('형장해 평가항목별 합산점수가 30점 이상인 경우를\n'
+ '말한다.| 항목 | 내 용 | 점수 |\n'
+ '| --- | --- | --- |\n'
+ '| 검사 소견 | 양측 전정기능 소실 | 14 |\n'
+ '| 검사 소견 | 양측 전정기능 감소 | 10 |\n'
+ '| 검사 소견 | 일측 전정기능 소실 | 4 |\n'
+ '| 치료 병력 | 장기 통원치료(1년간 12회이상) | 6 |\n'
+ '| 치료 병력 | 장기 통원치료(1년간 6회이상) | 4 |\n'
+ '| 치료 병력 | 단기 통원치료(6개월간 6회이상) | 2 |\n'
+ '| 치료 병력 | 단기 통원치료(6개월간 6회미만) | 0 |'),
+    metadata={'source_doc': {'total_pages': 160},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_2_petpermint_cat_family_45_82_83_206.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '2',
+         'product_name': '무배당 펫퍼민트 Cat&Family보험 다이렉트2601',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['digestive']},
+ 'indexing': {'chunk_id': 'chunk_000529',
+              'chunk_char_len': 291,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'simple',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)
