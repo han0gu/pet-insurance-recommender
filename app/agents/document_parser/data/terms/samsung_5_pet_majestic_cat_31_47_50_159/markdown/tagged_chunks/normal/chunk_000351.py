@@ -1,0 +1,27 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('- - 추간판 관련 경막외 신경차단술\n'
+ '- - 치, 치수, 치은, 치근, 치조골의 처치\n'
+ '※ 본 시술들은 수술의 정의에 해당하지 않는 시술의 예시로, 예시에 기재되어 있지 않다 하더라도\n'
+ '수술의 정의에 해당하지 않는 경우 보상되지 않습니다.제4조 (보험금을 지급하지 않는 사유)- 77 -# 회사는 아래의 사유를 원인으로 '
+ '하여 생긴 손해는 보상하지 않습니다.- 1. 특별약관 일반사항 제7조(보험금을 지급하지 않는 사유)\n'
+ '- 2. 위생관리, 미모를 위한 성형수술. 다만, 사고전 상태로의 회복을 위한 수술은 보상\n'
+ '- 합니다.'),
+    metadata={'source_doc': {'total_pages': 129},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_5_pet_majestic_cat_31_47_50_159.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '5',
+         'product_name': '(장기)무배당 삼성화재 펫보험 의기냥냥',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'exclusion', 'risk_domains': ['digestive', 'head']},
+ 'indexing': {'chunk_id': 'chunk_000351',
+              'chunk_char_len': 290,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.85}},
+)

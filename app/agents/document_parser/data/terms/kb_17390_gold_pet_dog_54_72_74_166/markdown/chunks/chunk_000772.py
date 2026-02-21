@@ -1,0 +1,16 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('. \uf000 제1항의 경우에 회사는 청약서를 접수한 날로부터 30일 이내에 승낙 또는 거절하 여야 하며, 승낙한 때에는 금융기관의 '
+ '해당계좌에서 제1회 보험료를 받고 보험증 권을 드립니다. 제2조(계약 후 알릴 의무) 계약자는 지정계좌의 번호가 변경 또는 거래정지된 '
+ '경우에는 이 사실을 즉시 회사에 알려야 합니다. 제3조(준용규정) 134 KB 금쪽같은 펫보험(강아지)(무배당)(26.01) |'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

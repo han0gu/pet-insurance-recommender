@@ -1,0 +1,24 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=("의한 보험금의 청구)</p><br><h1 id='142' style='font-size:14px'>지정대리청구인은 회사가 정하는 방법에 "
+ '따라 다음의 서류를 제출하고 보험금을 청구 보험금청구권, 만기환급금청구권, 보험료 반환청구권, 해약환급금 청구권 및 '
+ "계약자</h1><br><p id='143' data-category='list' style='font-size:14px'>하여야 "
+ '합니다.<br>1'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'claim', 'risk_domains': ['other']},
+ 'indexing': {'chunk_id': 'chunk_000302',
+              'chunk_char_len': 222,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.55}},
+)

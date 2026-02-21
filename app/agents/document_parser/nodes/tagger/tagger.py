@@ -368,7 +368,7 @@ def tag_chunks(
 
         if tag["method"] == "llm":
             llm_used_count += 1
-        if (idx + 1) % 25 == 0 or idx == len(chunks) - 1:
+        if (idx + 1) % 100 == 0 or idx == len(chunks) - 1:
             print(
                 f"🚀[tagging] processed {idx + 1}/{len(chunks)} chunks "
                 f"(llm_used={llm_used_count})"

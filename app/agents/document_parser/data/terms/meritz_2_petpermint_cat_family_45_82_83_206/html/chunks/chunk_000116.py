@@ -1,0 +1,17 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=("id='63' style='font-size:18px'>【 일부보장 제외(부담보) 】</h1><br><p id='64' "
+ "data-category='paragraph' style='font-size:18px'>일반적인 경우보다 위험이 높은 피보험자가 가입하기 "
+ '위<br>한 방법의 하나로, 특정 질병 또는 특정 신체 부위를 보<br>장에서 제외하는 방법을 말합니다.</p><br><h1 '
+ "id='65' style='font-size:18px'>【 보험금 삭감 】</h1><br><p id='66'"),
+    metadata={'source_doc': {'total_pages': 160},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_2_petpermint_cat_family_45_82_83_206.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '2',
+         'product_name': '무배당 펫퍼민트 Cat&Family보험 다이렉트2601',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

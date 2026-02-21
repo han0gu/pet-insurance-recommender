@@ -1,0 +1,18 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=("대하여 회사는 이 특별약관의 보험계약대출이율을 연</h1><br><h1 id='37' style='font-size:16px'>단위 "
+ "복리로 계산한 금액을</h1><br><p id='38' data-category='paragraph' "
+ "style='font-size:16px'>더하여 돌려 드립니다.</p><br><p id='39' "
+ "data-category='paragraph' style='font-size:14px'>별</p><br><p id='40' "
+ "data-category='paragraph'"),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

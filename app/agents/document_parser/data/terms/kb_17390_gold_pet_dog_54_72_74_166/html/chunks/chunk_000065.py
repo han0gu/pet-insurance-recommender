@@ -1,0 +1,18 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('. 세부적인 "보장성-1701 공시이율"의 운용방법은 회사에서 별도로 정한 "보장성<br>-1701 공시이율 적용에 관한 지침"을 '
+ "따릅니다.</p><br><p id='81' data-category='list' style='font-size:14px'>\uf000 "
+ '회사는 제4항 및 제5항의 "보장성-1701 공시이율" 및 산출방법 등을 회사의 인터넷<br>홈페이지 등에 매월 '
+ '공시합니다.<br>\uf000 계약자가 제36조(중도인출)에서 정한 방법에 따라 중도인출시 인출금액 및 만기환<br>법<br>급금의 지급 '
+ '시점까지 인출금액에 적립되었을 이자만큼'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

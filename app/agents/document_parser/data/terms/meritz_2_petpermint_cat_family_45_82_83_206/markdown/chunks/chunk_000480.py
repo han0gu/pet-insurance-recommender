@@ -1,0 +1,20 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('| 3 | 순환기 질환 | ACB001 | 순환기 계통의 악성 신생물 |\n'
+ '| 3 | 순환기 질환 | ACC001 | 순환기 계통의 신생물(양성 또는 악성이 불확 실한) |\n'
+ '| 3 | 순환기 질환 | HAA001 | 고혈압 |\n'
+ '| 3 | 순환기 질환 | HAA002 HAA003 | 저혈압 부정맥 |\n'
+ '| 3 | 순환기 질환 | HAA004 | 판막 질환(의증, 심잡음 포함) |\n'
+ '| 3 | 순환기 질환 | HAA005 | 판막 질환 (심부전 증상) |\n'
+ '| 3 | 순환기 질환 | HAA006 | 심비대 (원인 불명) |'),
+    metadata={'source_doc': {'total_pages': 160},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_2_petpermint_cat_family_45_82_83_206.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '2',
+         'product_name': '무배당 펫퍼민트 Cat&Family보험 다이렉트2601',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

@@ -1,0 +1,26 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('릴 것을 권유했을 때. 다만, 보험설계사 등의 행위가 없었다 하더라도 계약자 또는\n'
+ '피보험자가 사실대로 알리지 않거나 부실한 사항을 알렸다고 인정되는 경우에는 계\n'
+ '약을 해지할 수 있습니다.③ 제1항에 따라 계약의 해지가 보험금 지급사유 발생 전에 이루어진 경우, 이로 인하여\n'
+ '회사가 환급하여야 할 보험료가 있을 때에는 보통약관 제33조(보험료의 환급)에 따른\n'
+ '보험료를 계약자에게 지급합니다.\n'
+ '④ 제1항 제1호에 따른 계약의 해지가 손해발생 후에 이루어진 경우에 회사는 그 손해를'),
+    metadata={'source_doc': {'total_pages': 50},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_1_maum_pet_1_21_22_50.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '1',
+         'product_name': '메리츠 마음든든 반려동물보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'coverage', 'risk_domains': ['digestive']},
+ 'indexing': {'chunk_id': 'chunk_000152',
+              'chunk_char_len': 266,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.55}},
+)

@@ -1,0 +1,25 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('비용 및 계약관리비용과 보험금 지급조사를 위한 손해조사비)로 구성됩니다.- - 보험료 = 보장보험료 + 적립보험료\n'
+ '- - 보장보험료 = 위험보험료 + 부가보험료\n'
+ '- - 적립보험료 = 적립부분 순보험료 + 부가보험료\n'
+ '⑥ [갱신형] 특별약관의 갱신 관련 용어- 1. 최초계약: [갱신형] 특별약관이 최초로 부가되는 경우를 말합니다.\n'
+ '- 2. 갱신계약: [갱신형] 특별약관의 보험기간이 끝난 후 제도성 특별약관 「5-1. [갱신'),
+    metadata={'source_doc': {'total_pages': 107},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_4_pet_majestic_dog_33_49_52_139.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '4',
+         'product_name': '(장기)무배당 삼성화재 펫보험 위풍댕댕',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'renewal', 'risk_domains': ['digestive']},
+ 'indexing': {'chunk_id': 'chunk_000008',
+              'chunk_char_len': 236,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.55}},
+)

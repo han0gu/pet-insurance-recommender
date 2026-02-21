@@ -1,0 +1,21 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('- 회 보험료 및 회사의 보장개시), 보통약관 제1절 일반조항 제18조(보험계약의 성\n'
+ '- 립)를 준용합니다. 이 때 회사는 해지 전 발생한 보험금 지급사유를 이유로 부활\n'
+ '- (효력회복)을 거절하지 않습니다.\n'
+ '- \uf000 제1항에서 정한 특별약관의 부활(효력회복)이 이루어진 경우라도 계약자 또는 피\n'
+ '- 보험자가 최초계약 청약시(2회 이상 부활이 이루어진 경우 종전 모든 부활 청약\n'
+ '- 포함) 제7조(계약 전 알릴 의무)를 위반한 경우에는 제9조(알릴 의무 위반의 효\n'
+ '- 과)가 적용됩니다.\n'
+ '- 용 어 풀 이 부활'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

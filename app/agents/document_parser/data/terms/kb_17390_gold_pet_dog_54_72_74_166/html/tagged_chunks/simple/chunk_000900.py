@@ -1,0 +1,25 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('사법상 또는 행정법상의 의무를 이행하지 않는 사람에 대하여 국<br>가가 강제 권력으로 그 의무를 이행하는 것을 '
+ "말합니다.</p><br><p id='73' data-category='paragraph' "
+ "style='font-size:16px'>∙</p><br><p id='74' data-category='paragraph' "
+ "style='font-size:16px'>담보권실행</p><br><p id='75' data-category='paragraph' "
+ "style='font-size:14px'>담보권실행이란 담보권을 설정한 채권자가"),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['other']},
+ 'indexing': {'chunk_id': 'chunk_000900',
+              'chunk_char_len': 299,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'simple',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

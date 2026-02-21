@@ -1,0 +1,19 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('- 보험료는 보험료 납입영수증에 장애인전용 보장성보험료로 표시됩니다.\n'
+ '# 【예시】2019년 1월 15일에 전환대상계약에 가입한 계약자가 2019년 6월 1일에 이 특별약관을\n'
+ '청약하고 회사가 승낙하여 전환대상계약이 장애인전용보험으로 전환된 경우, 이 특별약\n'
+ '관을 청약하기 전(2019년 1월 15일 ~ 2019년 5월 31일)에 납입된 보험료는 당해 연도\n'
+ '보험료 납입영수증에 장애인전용 보장성 보험료로 표시되지 않고 특별세액공제 대상에\n'
+ '포함되지 않으며, 장애인전용보험으로 전환된 이후(2019년6월1일 ~ 2019년12월31일)'),
+    metadata={'source_doc': {'total_pages': 50},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_1_maum_pet_1_21_22_50.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '1',
+         'product_name': '메리츠 마음든든 반려동물보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

@@ -1,0 +1,22 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('. 그러나,<br>별<br>동일한 질병에 대한 입원이라도 환경성질환입원일당이 지급된 최종 입원의 퇴원일<br>약<br>부터 180일이 '
+ '지나서 개시한 입원은 새로운 입원으로 봅니다'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['other']},
+ 'indexing': {'chunk_id': 'chunk_000688',
+              'chunk_char_len': 99,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'simple',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

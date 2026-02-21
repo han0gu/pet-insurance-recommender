@@ -1,0 +1,18 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('| 안면 또는 경부 | 창상봉합술(안면또는경부,변연절제포함,근육,길이10cm 이상, 5cm마다 추가) | SA040 |\n'
+ '- 155 -[별표-상해및질병관련3] 급여 창상봉합술(안면부,단순봉합제외) 대상 수가코드약 관에 규정하는 창상봉합술(안면부, '
+ '단순봉합제외, 급여)로 분류되는 치료는 보건복지부\n'
+ '가 고시하는 건강보험 행위 급여·비급여 목록 및 급여 상대가치점수」제2부(행위 급여 목\n'
+ '록·상대가치점수 및 산정지침)이 제9장(처치 및 수술료) 중 다음에 적은 수가코드에 해당'),
+    metadata={'source_doc': {'total_pages': 129},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_5_pet_majestic_cat_31_47_50_159.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '5',
+         'product_name': '(장기)무배당 삼성화재 펫보험 의기냥냥',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

@@ -1,0 +1,25 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('. 위험이 뚜렷이 변경되거나 변경되었음을 알았을 때<br>\uf000 제1항에 따라 위험이 증가하거나 감소되는 경우 납입보험료가 변경될 '
+ "수 있으며,</p><br><p id='10' data-category='paragraph' "
+ "style='font-size:14px'>계약내용 변경시점 이후 잔여 보험기간의 보장을 위한 재원인 계약자적립액 등의<br>차이로 "
+ "계약자가 추가로 납입하여야 할 (또는 반환받을) 금액이 발생할 수 있습<br>니다.</p><br><p id='11' "
+ "data-category='paragraph'"),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'coverage', 'risk_domains': ['digestive']},
+ 'indexing': {'chunk_id': 'chunk_001213',
+              'chunk_char_len': 285,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.55}},
+)

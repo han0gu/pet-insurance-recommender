@@ -1,0 +1,29 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('| --- | --- |\n'
+ '| 1) 두 눈이 멀었을 때 | 100 |\n'
+ '| 2) 한 눈이 멀었을 때 | 50 |\n'
+ '| 3) 한 눈의 교정시력이 0.02 이하로 된 때 | 35 |\n'
+ '| 4) 한 눈의 교정시력이 0.06 이하로 된 때 | 25 |\n'
+ '| 5) 한 눈의 교정시력이 0.1 이하로 된 때 | 15 |\n'
+ '| 6) 한 눈의 교정시력이 0.2 이하로 된 때 | 5 |\n'
+ '| 7) 한 눈의 안구(눈동자)에 뚜렷한 운동장해나 뚜렷한 조절기능장해를 남긴 때 | 10 |\n'
+ '| 8) 한 눈에 뚜렷한 시야장해를 남긴 때 | 5 |'),
+    metadata={'source_doc': {'total_pages': 129},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_5_pet_majestic_cat_31_47_50_159.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '5',
+         'product_name': '(장기)무배당 삼성화재 펫보험 의기냥냥',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['digestive', 'eye']},
+ 'indexing': {'chunk_id': 'chunk_000735',
+              'chunk_char_len': 285,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

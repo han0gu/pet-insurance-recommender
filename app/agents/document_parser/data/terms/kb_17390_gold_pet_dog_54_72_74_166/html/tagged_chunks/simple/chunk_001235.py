@@ -1,0 +1,25 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=("id='40' data-category='paragraph' style='font-size:14px'>약</p><br><p id='41' "
+ "data-category='paragraph' style='font-size:14px'>관<br>제23조(타인을 위한 "
+ '계약)<br>\uf000 계약자는 타인을 위한 계약을 체결하는 경우에 그 타인의 위임이 없는 때에는 반<br>드시 이를 회사에 알려야 '
+ '하며, 이를 알리지 않았을 때에는 그 타인은 이 계약이<br>체결된 사실을 알지 못하였다는 사유로 회사에 이의를 제기할 수 '
+ '없습니다.<br>\uf000 타인을 위한'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['digestive']},
+ 'indexing': {'chunk_id': 'chunk_001235',
+              'chunk_char_len': 299,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'simple',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

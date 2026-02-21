@@ -1,0 +1,24 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('. 다음 정한 질병 및 이에 기인하는 질병(다만, 질병의 발생일로부터 과거 1년 이내의<br>동물병원 예방접종 기록이 있는 경우에는 '
+ "보상합니다.)</p><footer id='48' style='font-size:14px'>- 4 -</footer><p id='49' "
+ "data-category='list' style='font-size:14px'>: 파보 바이러스 감염, 디스템퍼 바이러스 감염, 파라 "
+ '인플루엔자 감염, 전염성 간염,<br>아데노 바이러스 2형 감염, 광견병, 코로나 바이러스 감염, 렙토스피라 감염,'),
+    metadata={'source_doc': {'total_pages': 50},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_1_maum_pet_1_21_22_50.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '1',
+         'product_name': '메리츠 마음든든 반려동물보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'coverage', 'risk_domains': ['other']},
+ 'indexing': {'chunk_id': 'chunk_000039',
+              'chunk_char_len': 288,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'simple',
+              'tag_method': 'rule',
+              'tag_confidence': 0.8}},
+)

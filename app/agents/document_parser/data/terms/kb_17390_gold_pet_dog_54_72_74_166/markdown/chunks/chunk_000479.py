@@ -1,0 +1,18 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('| --- | --- | --- |\n'
+ '| 유사보험으로서 공제 사업을 실시하는 경영주체와 공제 계약자 사이에 체결되 해 는 계약을 말합니다. 우체국, 신협, 새마을금고 등이 '
+ '공제계약을 취급합니다. 및 | 유사보험으로서 공제 사업을 실시하는 경영주체와 공제 계약자 사이에 체결되 해 는 계약을 말합니다. 우체국, '
+ '신협, 새마을금고 등이 공제계약을 취급합니다. 및 | 유사보험으로서 공제 사업을 실시하는 경영주체와 공제 계약자 사이에 체결되 해 는 '
+ '계약을 말합니다. 우체국, 신협, 새마을금고 등이 공제계약을 취급합니다. 및 |'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

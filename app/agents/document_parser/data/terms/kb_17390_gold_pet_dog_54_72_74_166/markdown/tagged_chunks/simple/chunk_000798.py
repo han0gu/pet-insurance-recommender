@@ -1,0 +1,29 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('보험, 공제의 보험료, 공제료를 말한다.\n'
+ '② 소득세법 제59조의 4 제1항 제2호에서 "대통령령으로 정하는 보험료"란# 다음 각 호의 어느 하나에 해당하는 보험, 보증, 공제의 '
+ '보험료, 보증료,- 공제료 중 기획재정부령으로 정하는 것을 말한다.\n'
+ '- 1. 생명보험\n'
+ '- 2. 상해보험\n'
+ '- 3. 화재, 도난이나 그 밖의 손해를 담보하는 가계에 관한 손해보험\n'
+ '- 4. "수산업협동조합법", "신용협동조합법" 또는 "새마을금고법"에 따른\n'
+ '- 공제\n'
+ '- 5. "군인공제회법", "한국교직원공제회법", "대한지방행정공제회법", "'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['other']},
+ 'indexing': {'chunk_id': 'chunk_000798',
+              'chunk_char_len': 288,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'simple',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)
