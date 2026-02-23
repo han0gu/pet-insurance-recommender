@@ -40,3 +40,6 @@ Thumbs.db
 
 # RAG results
 app/agents/rag_agent/data/retrieval/**/
+
+# Log files
+evaluation_runner.log

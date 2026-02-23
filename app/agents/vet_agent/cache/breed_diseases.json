@@ -65,124 +65,115 @@
     ],
     "cached_at": "2026-02-18T20:25:55.956051"
   },
+  "말티푸": {
+    "breed_en": "",
+    "search_diseases": [
+      "luxating patella",
+      "periodontal disease",
+      "degenerative disc disease",
+      "paresis",
+      "chondrodystrophy",
+      "intervertebral disc disease",
+      "inflammatory bowel disease",
+      "hypothyroidism",
+      "kidney disease",
+      "diabetes",
+      "dental pain"
+    ],
+    "cached_at": "2026-02-19T03:52:20.585824"
+  },
+  "골든 리트리버": {
+    "breed_en": "",
+    "search_diseases": [
+      "joint problems",
+      "atrophic rhinitis",
+      "pneumonia",
+      "gastrointestinal problems",
+      "intestinal tract rupture",
+      "intestinal parasites",
+      "vestibular disease",
+      "middle or inner ear infections",
+      "head trauma or injury",
+      "tumors",
+      "hypothyroidism",
+      "cardiac sensitivity",
+      "respiratory infections",
+      "gastrointestinal diseases",
+      "scurvy (vitamin C deficiency)",
+      "abscesses due to infection",
+      "urinary problems",
+      "fungal skin infections",
+      "lice and mites infestations",
+      "dental disease"
+    ],
+    "cached_at": "2026-02-19T05:25:34.269041"
+  },
   "믹스": {
     "breed_en": "",
     "search_diseases": [
-      "Diseases of the skin and subcutaneous tissue",
+      "genetic disease",
       "dermatitis",
       "eczema",
       "malassezia infection in skin",
       "dermatomycoses",
       "skin pruritus",
       "pyoderma",
-      "hip dysplasia",
-      "hypoadrenocorticism",
-      "hyperadrenocorticism",
-      "cancers",
-      "lens luxation",
-      "patellar luxation",
-      "dilated cardiomyopathy",
-      "elbow dysplasia",
-      "cataracts",
-      "hypothyroidism",
-      "allergic skin disease",
-      "cryptorchidism",
-      "aortic stenosis",
-      "atopy/allergic dermatitis",
-      "gastric dilatation volvulus (GDV)",
-      "early onset cataracts",
-      "epilepsy",
-      "intervertebral disk disease (IVDD)",
-      "hepatic portosystemic shunt"
+      "leaky valve disease",
+      "recessive disease"
     ],
-    "cached_at": "2026-02-19T23:48:07.809852"
+    "cached_at": "2026-02-19T12:44:23.115404"
   },
   "토이푸들": {
     "breed_en": "",
     "search_diseases": [
-      "Patellar luxation",
-      "PRA",
-      "cataracts",
+      "Mitral Valve Disease (MVD)",
+      "Addison's Disease",
+      "Dyschondroplasia",
+      "Legg-Calvé-Perthes",
+      "Hypothyroidism",
+      "Patellar",
       "Legg-Calve-Perthes",
       "Dental disease",
-      "von Willebrand disease (vWD)",
-      "Duchenne muscular dystrophy",
-      "muscular dystrophy",
-      "periodontal disease",
-      "delayed tooth eruption"
+      "Muscular dystrophy",
+      "Patellar luxation (PL)"
     ],
-    "cached_at": "2026-02-19T23:50:17.686143"
+    "cached_at": "2026-02-19T12:45:47.820547"
   },
   "요크셔테리어": {
     "breed_en": "",
     "search_diseases": [
       "Periodontal disease",
-      "Dental disease",
       "liver shunts",
       "hypoglycemia",
       "hepatic microvascular dysplasia",
-      "gingivitis",
-      "periodontitis"
+      "Dental disease"
     ],
-    "cached_at": "2026-02-19T23:54:12.924273"
+    "cached_at": "2026-02-19T12:49:02.711058"
   },
   "포메라니안": {
     "breed_en": "",
     "search_diseases": [
-      "Chiari-like malformation",
-      "syringomyelia",
+      "Chiari-like malformation (CM)",
+      "syringomyelia (SM)",
       "dental disease",
-      "skin issues",
-      "eye issues",
-      "joint issues",
-      "Diseases of the skin and subcutaneous tissue",
-      "dermatitis",
-      "eczema",
-      "malassezia infection",
-      "dermatomycoses",
-      "skin pruritus",
-      "pyoderma",
+      "hypoglycemia",
+      "Hypoadrenocorticism",
       "B-cell hypoplasia",
       "common variable immune deficiency",
-      "Pneumocystis carinii infection"
+      "Pneumocystis carinii"
     ],
-    "cached_at": "2026-02-19T23:55:57.147691"
+    "cached_at": "2026-02-19T12:50:20.055210"
   },
   "랙돌": {
     "breed_en": "",
     "search_diseases": [
       "dental problems",
       "food allergies",
-      "SCLs (Suspected Chronic Kidney Disease-like lesions)"
+      "heart disease"
     ],
-    "cached_at": "2026-02-19T23:57:38.862921"
+    "cached_at": "2026-02-19T12:51:58.231560"
   },
   "코리안숏헤어": {
-    "breed_en": "",
-    "search_diseases": [
-      "Short anagen syndrome (SAS)",
-      "Dermatophytic pseudomycetoma (DPM)",
-      "alopecia areata",
-      "telogen effluvium",
-      "Linear and annular lupus panniculitis of the scalp",
-      "Non-scarring alopecia",
-      "systemic lupus erythematosus (SLE)",
-      "non-scarring patch alopecia"
-    ],
-    "cached_at": "2026-02-19T23:59:02.021678"
-  },
-  "비숑": {
-    "breed_en": "",
-    "search_diseases": [
-      "dental disease",
-      "obesity",
-      "pancreatitis",
-      "Brachycephalic Airway Syndrome",
-      "Ectropion"
-    ],
-    "cached_at": "2026-02-20T00:06:43.372691"
-  },
-  "푸들": {
     "breed_en": "",
     "search_diseases": [
       "Diseases of the skin and subcutaneous tissue",
@@ -192,359 +183,384 @@
       "dermatomycoses",
       "skin pruritus",
       "pyoderma",
-      "patellar luxation",
-      "dental problems",
+      "Dermatophytic pseudomycetoma (DPM)",
+      "Linear and annular lupus panniculitis of the scalp",
+      "Non-scarring alopecia",
+      "systemic lupus erythematosus (SLE)",
+      "Short anagen syndrome (SAS)",
+      "Alopecia areata"
+    ],
+    "cached_at": "2026-02-19T12:53:00.258128"
+  },
+  "비숑": {
+    "breed_en": "",
+    "search_diseases": [
+      "allergic dermatitis",
+      "diabetes mellitus",
+      "idiopathic epilepsy",
+      "progressive retinal atrophy",
+      "cataracts",
+      "bleeding disorders",
+      "corneal dystrophy",
+      "bladder stones",
+      "dental disease",
+      "patellar luxation"
+    ],
+    "cached_at": "2026-02-19T12:58:32.658040"
+  },
+  "푸들": {
+    "breed_en": "",
+    "search_diseases": [
+      "Patellar luxation",
       "PRA",
       "cataracts",
-      "Legg-Calve-Perthes",
-      "dental disease",
       "gastric dilatation-volvulus",
       "bloat",
-      "acquired myasthenia gravis (MG)",
-      "aspiration pneumonia",
-      "megaesophagus",
-      "respiratory failure"
+      "Legg-Calve-Perthes",
+      "Dental disease"
     ],
-    "cached_at": "2026-02-20T00:08:24.710611"
+    "cached_at": "2026-02-19T12:59:52.043068"
   },
   "아메리칸숏헤어": {
     "breed_en": "",
     "search_diseases": [
-      "hypertrophic cardiomyopathy (HCM)",
-      "heart disease",
-      "respiratory diseases",
-      "interstitial lung diseases",
-      "infectious encephalitis (IFE)",
-      "feline infectious peritonitis virus encephalitis (FIPE)",
-      "otitis media/interna spreading intracranially (OM/OI)",
-      "idiopathic epilepsy (IE)",
-      "forebrain infarction (FI)",
-      "brain stem infarction (BSI)",
-      "cerebral hemorrhage (CH)",
-      "degenerative myelopathy (DM)",
-      "noninfectious meningomyelitis (NMM)",
-      "spinal cord infarction (SCI)",
-      "intervertebral disc herniation (IVDH)",
-      "vertebral malformation (VM)",
-      "infectious meningomyelitis (IMM)",
-      "bacterial meningomyelitis (BMM)",
-      "feline infectious peritonitis virus meningomyelitis (FIPMM)"
+      "Hypertrophic Cardiomyopathy (HCM)",
+      "hip dysplasia",
+      "HCM",
+      "heart disease"
     ],
-    "cached_at": "2026-02-20T00:10:05.582281"
+    "cached_at": "2026-02-19T13:01:33.179820"
   },
   "시츄": {
     "breed_en": "",
     "search_diseases": [
-      "enteropathy",
-      "heart disease",
-      "medial canthal entropion",
-      "trichiasis",
-      "dermoids",
-      "third eyelid gland prolapse",
-      "chronic keratitis",
-      "corneal ulcers",
-      "progressive retinal atrophy",
-      "vitreal syneresis",
-      "retinal detachment",
+      "Periodontal disease",
+      "anal sac impaction",
+      "ear disorders",
+      "serious diseases of the eye",
+      "brachycephalic syndrome",
+      "ear infections",
       "von Willebrand disease (vWD)"
     ],
-    "cached_at": "2026-02-20T00:18:38.285678"
+    "cached_at": "2026-02-19T13:07:37.788450"
   },
   "미니어처 푸들": {
     "breed_en": "",
     "search_diseases": [
+      "Patellar luxation",
+      "Dental problems",
+      "PRA",
+      "Cataracts",
+      "Diseases of the skin and subcutaneous tissue",
+      "Dermatitis or eczema",
+      "Malassezia infection in skin",
+      "Dermatomycoses",
+      "Skin pruritus",
+      "Pyoderma",
+      "Pancreatitis",
       "Brachycephalic Airway Syndrome",
       "Ectropion",
-      "Pancreatitis",
-      "Patellar luxation",
-      "PRA (Progressive Retinal Atrophy)",
-      "Cataracts",
-      "Canine ONH (Optic Nerve Hypoplasia)",
-      "Balanoposthitis",
-      "Benign prostatic hyperplasia",
-      "Bacterial prostatitis",
-      "Prostate cancer"
+      "Legg-Calve-Perthes",
+      "Dental disease"
     ],
-    "cached_at": "2026-02-20T01:34:55.434553"
+    "cached_at": "2026-02-19T13:10:30.484665"
   },
   "비숑프리제": {
     "breed_en": "",
     "search_diseases": [
       "dental disease",
       "obesity",
-      "pancreatitis",
-      "Brachycephalic Airway Syndrome",
-      "Ectropion"
-    ],
-    "cached_at": "2026-02-20T01:39:33.051712"
-  },
-  "말티푸": {
-    "breed_en": "",
-    "search_diseases": [
       "luxating patella",
-      "periodontal disease",
-      "obesity",
-      "shaker syndrome",
-      "liver disease",
-      "kidney disease",
-      "arthritis (OA)",
-      "degenerative atrio-ventricular valve disease",
-      "mitral regurgitation",
-      "tricuspid regurgitation",
-      "intussusception"
+      "heart disease",
+      "mitral valve disease",
+      "dilated cardiomyopathy",
+      "congenital heart disease"
     ],
-    "cached_at": "2026-02-20T01:41:33.608956"
+    "cached_at": "2026-02-19T13:13:27.224771"
   },
   "진돗개": {
     "breed_en": "",
     "search_diseases": [
-      "Ebstein’s anomaly",
-      "right-to-left shunting atrial septal defect",
-      "PAH",
-      "right side heart failure",
-      "conduction disturbances"
+      "cancers",
+      "epilepsy",
+      "cataracts",
+      "diabetes",
+      "blindness",
+      "heart",
+      "Ebstein's anomaly"
     ],
-    "cached_at": "2026-02-20T01:57:59.578174"
+    "cached_at": "2026-02-19T14:08:40.203193"
   },
   "브리티시 숏헤어": {
     "breed_en": "",
     "search_diseases": [
-      "metaphyseal osteopathy",
-      "canine distemper virus",
-      "slipped capital femoral epiphysis",
-      "proximal femoral metaphyseal osteopathy",
-      "osteodystrophy",
-      "PIE (presumably 'Pericardial Inflammatory Effusion' or similar, though exact expansion unclear)",
-      "IE (presumably 'Infective Endocarditis' based on context)",
-      "recurrent epileptic seizures",
-      "epilepsy"
+      "Metaphyseal osteopathy",
+      "hypertrophic osteodystrophy"
     ],
-    "cached_at": "2026-02-20T02:12:54.304688"
+    "cached_at": "2026-02-19T14:12:51.105560"
   },
   "닥스훈트": {
     "breed_en": "",
     "search_diseases": [
+      "epilepsy",
+      "hypothyroidism",
       "luxating patella",
       "cataracts",
       "glaucoma",
       "progressive retinal atrophy (PRA)",
       "blindness",
       "ear infections",
-      "myoclonic jerks",
-      "hypnic myoclonus",
-      "seizures",
-      "ataxia",
-      "poor vision/blindness",
-      "deafness",
-      "dementia",
-      "aggression",
-      "incontinence",
-      "jaw smacking",
-      "fly catching",
-      "back problems",
-      "intervertebral disc disease (implied by 'herniation and rupture' context)",
-      "Addison’s disease",
-      "hypoadrenocorticism",
-      "Addisonian crisis"
+      "intervertebral disc disease (IVDD)"
     ],
-    "cached_at": "2026-02-20T02:29:16.058815"
+    "cached_at": "2026-02-19T14:22:36.928637"
   },
   "코카": {
     "breed_en": "",
     "search_diseases": [
-      "vWD",
-      "skin infections",
-      "Dilated cardiomyopathy (DCM)",
-      "Cushing’s syndrome",
-      "ear infections",
-      "Adult-onset neuropathy"
-    ],
-    "cached_at": "2026-02-20T02:33:51.309689"
-  },
-  "미니어처슈나우저": {
-    "breed_en": "",
-    "search_diseases": [
-      "cranial cruciate ligament disease",
-      "patellar luxation",
-      "appendicular osteoarthritis",
-      "road traffic accidents",
-      "central hypothyroidism",
-      "cataracts",
-      "pancreatitis",
-      "hyperadrenocorticism",
-      "hypertriglyceridemia (HTG)",
-      "hypertriglyceridemia-associated pancreatitis (HTGP)",
-      "glomerular disease",
-      "arterionephrosclerosis"
-    ],
-    "cached_at": "2026-02-20T02:40:19.068060"
-  },
-  "비글": {
-    "breed_en": "",
-    "search_diseases": [
+      "Periodontal disease",
+      "otitis externa",
       "obesity",
-      "foot abnormalities",
-      "ear infections",
-      "upper and lower respiratory tract diseases",
-      "gastrointestinal problems",
-      "urinary tract problems",
-      "reproductive tract problems",
-      "eye health problems",
-      "melanoma",
-      "erysipelas",
-      "neurologic conditions",
-      "atrophic rhinitis",
-      "pneumonia",
-      "intestinal parasites",
-      "hypoglycemia",
-      "cherry eye",
-      "entropion",
-      "distichiasis"
-    ],
-    "cached_at": "2026-02-20T02:50:10.356135"
-  },
-  "터키시앙고라": {
-    "breed_en": "",
-    "search_diseases": [
-      "mediastinal lymphoma",
-      "feline leukemia virus (FeLV)",
-      "T-cell lymphoma",
-      "metastasis to the lung",
-      "cardiomegaly",
-      "hereditary deafness",
-      "polycystic kidney disease (PKD)",
-      "congenital hepatic fibrosis",
-      "feline idiopathic cystitis (FIC)",
-      "urolithiasis",
-      "bacterial urinary tract infection (UTI)",
-      "neoplasia of the bladder wall",
-      "neurological disorders",
-      "urethral obstruction (UO)",
-      "feline lower urinary tract disease (FLUTD)"
-    ],
-    "cached_at": "2026-02-20T03:15:38.525913"
-  },
-  "믹스묘": {
-    "breed_en": "",
-    "search_diseases": [
-      "feline lower urinary tract disease (FLUTD)",
-      "hypertrophic cardiomyopathy",
-      "deafness",
-      "progressive retinal atrophy (PRA)",
-      "feline inflammatory bowel disease (IBD)",
-      "lymphocytic plasmacytic enteritis",
-      "intestinal lymphoma",
-      "restrictive cardiomyopathy (RCM)",
-      "twisted legs",
-      "feline herpesvirus infection (FHV)",
-      "ovarian cysts",
-      "immunodeficiency disease",
-      "B-cell lymphomas",
-      "myeloproliferative disease",
-      "feline infectious peritonitis (FIP)",
-      "chylomicronemia",
-      "polycystic kidney disease (PKD)",
-      "chronic kidney disease (CKD)"
-    ],
-    "cached_at": "2026-02-20T03:30:59.821061"
-  },
-  "러시안블루": {
-    "breed_en": "",
-    "search_diseases": [
-      "cataracts",
-      "posterior nuclear cataract",
-      "interstitial lung diseases"
-    ],
-    "cached_at": "2026-02-20T03:55:52.675610"
-  },
-  "미니슈나우저": {
-    "breed_en": "",
-    "search_diseases": [
-      "cataracts",
-      "pancreatitis",
-      "hyperadrenocorticism",
-      "HTG (Hypertriglyceridemia)",
-      "HTGP (Hypertriglyceridemia-associated Pancreatitis)",
-      "glomerular lipid thromboemboli",
-      "arterionephrosclerosis",
-      "azotemia",
-      "proteinuria",
-      "renal disease",
-      "cranial cruciate ligament disease",
-      "patellar luxation",
-      "appendicular osteoarthritis",
-      "road traffic accidents",
-      "HS (Histiocytic Sarcoma)",
-      "pulmonary HS",
-      "Mycobacterium avium complex infection"
-    ],
-    "cached_at": "2026-02-20T04:16:43.127589"
-  },
-  "진도개": {
-    "breed_en": "",
-    "search_diseases": [
-      "Ebstein’s anomaly",
-      "PAH",
-      "right side heart failure",
-      "conduction disturbances"
-    ],
-    "cached_at": "2026-02-20T04:29:35.240830"
-  },
-  "포메": {
-    "breed_en": "",
-    "search_diseases": [
-      "dental disease",
-      "B-cell hypoplasia",
-      "common variable immune deficiency",
-      "Pneumocystis carinii",
-      "periodontal disease",
-      "epilepsy",
-      "syrinx"
-    ],
-    "cached_at": "2026-02-20T04:34:00.334134"
-  },
-  "스탠다드 푸들 믹스": {
-    "breed_en": "",
-    "search_diseases": [
-      "Diseases of the skin and subcutaneous tissue",
+      "neoplasia",
+      "Eye anomalies",
       "dermatitis",
       "eczema",
       "malassezia infection in skin",
       "dermatomycoses",
       "skin pruritus",
       "pyoderma",
-      "gastric dilatation-volvulus",
-      "bloat",
+      "ear discharge",
+      "keratoconjunctivitis sicca",
+      "dry eye",
+      "ear infections",
+      "Adult-onset neuropathy"
+    ],
+    "cached_at": "2026-02-19T14:25:35.800098"
+  },
+  "미니어처슈나우저": {
+    "breed_en": "",
+    "search_diseases": [
+      "Cataracts",
+      "High Cholesterol (Hyperlipidemia)",
+      "Pancreatitis",
+      "Liver Shunts",
+      "Mycobacterium Avium Complex",
+      "dental disease",
+      "obesity/overweight",
+      "anal sac blockage",
+      "vomiting",
+      "ear",
+      "idiopathic hypertriglyerceridemia",
+      "gallbladder mucocele",
+      "periodontitis",
+      "Hypothyroidism"
+    ],
+    "cached_at": "2026-02-19T14:29:28.122680"
+  },
+  "비글": {
+    "breed_en": "",
+    "search_diseases": [
+      "intervertebral disc disease",
+      "Lafora disease",
+      "ear infections",
+      "obesity",
+      "cherry eye",
+      "periodontal disease",
+      "pemphigus foliaceus",
+      "pemphigus",
+      "bullous pemphigoid",
+      "systemic lupus erythematosus (SLE)",
+      "discoid lupus erythematosus (DLE)"
+    ],
+    "cached_at": "2026-02-19T14:35:55.468510"
+  },
+  "터키시앙고라": {
+    "breed_en": "",
+    "search_diseases": [
+      "hereditary deafness",
+      "FeLV negative lymphoma",
+      "chronic kidney disease",
+      "corneal sequestration",
+      "entropion",
+      "PPM",
+      "cataract",
+      "retinal dysplasia",
+      "ASD"
+    ],
+    "cached_at": "2026-02-19T14:51:54.770916"
+  },
+  "믹스묘": {
+    "breed_en": "",
+    "search_diseases": [
+      "Addison's disease",
+      "liver disease",
+      "kidney disease",
+      "cancer",
+      "liver failure",
+      "blood loss",
+      "intestinal disease",
+      "liver shunts",
+      "pancreatic insufficiency",
+      "intestinal parasites",
+      "feline diseases",
+      "cholangitis",
+      "cholangiohepatitis syndrome (CCHS)",
+      "inflammation of the bile ducts",
+      "gallstones",
+      "pancreatitis",
+      "inflammatory bowel disease (IBD)",
+      "chronic interstitial nephritis",
+      "bacterial infection",
+      "immune-mediated disease",
+      "tumors",
+      "immunodeficiency disease",
+      "B-cell lymphomas",
+      "myeloproliferative disease",
+      "inherited diseases",
+      "Feline Infectious Peritonitis (FIP)",
+      "chylomicronemia"
+    ],
+    "cached_at": "2026-02-19T15:01:52.296816"
+  },
+  "러시안블루": {
+    "breed_en": "",
+    "search_diseases": [
+      "hereditary cataracts",
+      "feline respiratory diseases",
+      "interstitial lung diseases",
+      "epistaxis",
+      "stertor",
+      "snoring",
+      "sneezing",
+      "reverse sneezing",
+      "facial deformity",
+      "dysphagia",
+      "stridor",
+      "trachyphonia",
+      "dysphonia",
+      "gagging",
+      "cough",
+      "degenerative disease",
+      "anomalous disease",
+      "metabolic disease",
+      "neoplastic disease",
+      "inflammatory disease",
+      "idiopathic disease",
+      "traumatic disease",
+      "vascular disease",
+      "lysosomal storage diseases",
+      "cognitive dysfunction syndrome",
+      "hepatic encephalopathy",
+      "intracranial infiltration of intranasal tumor",
+      "pituitary tumor",
+      "infectious encephalitis",
+      "feline infectious peritonitis virus encephalitis",
+      "otitis media/interna spreading intracranially",
+      "idiopathic epilepsy",
+      "forebrain infarction",
+      "brain stem infarction",
+      "cerebral hemorrhage",
+      "degenerative myelopathy",
+      "noninfectious meningomyelitis",
+      "spinal cord infarction",
+      "intervertebral disc herniation",
+      "vertebral malformation",
+      "infectious meningomyelitis",
+      "bacterial meningomyelitis",
+      "feline infectious peritonitis virus meningomyelitis",
+      "nasal cavity disease"
+    ],
+    "cached_at": "2026-02-19T15:12:31.298496"
+  },
+  "미니슈나우저": {
+    "breed_en": "",
+    "search_diseases": [
+      "periodontal disease",
+      "obesity",
+      "idiopathic hypertriglyceridemia (HTGL)",
+      "insulin resistance (IR)",
+      "cataracts",
+      "pancreatitis",
+      "hyperadrenocorticism",
+      "azotemia",
+      "glomerular disease",
+      "gingivitis",
+      "periodontitis"
+    ],
+    "cached_at": "2026-02-19T15:24:34.874469"
+  },
+  "진도개": {
+    "breed_en": "",
+    "search_diseases": [
+      "gastrointestinal diseases"
+    ],
+    "cached_at": "2026-02-19T15:32:19.120809"
+  },
+  "포메": {
+    "breed_en": "",
+    "search_diseases": [
+      "Chiari-like malformation",
+      "syringomyelia",
+      "dental disease",
+      "diseases of the skin and subcutaneous tissue",
+      "dermatitis",
+      "eczema",
+      "malassezia infection in skin",
+      "dermatomycoses",
+      "skin pruritus",
+      "pyoderma",
+      "B-cell hypoplasia",
+      "common variable immune deficiency",
+      "Pneumocystis carinii",
+      "hypoadrenocorticism"
+    ],
+    "cached_at": "2026-02-19T15:34:40.608733"
+  },
+  "스탠다드 푸들 믹스": {
+    "breed_en": "",
+    "search_diseases": [
+      "sebaceous adenitis",
       "patellar luxation",
-      "dental problems",
       "PRA",
       "cataracts",
-      "SA",
-      "AD",
-      "autoimmune diseases"
+      "immune mediated hemolytic anemia",
+      "immune mediated thrombocytopenia",
+      "diseases of the skin and subcutaneous tissue",
+      "dermatitis",
+      "eczema",
+      "malassezia infection in skin",
+      "dermatomycoses",
+      "skin pruritus",
+      "pyoderma"
     ],
-    "cached_at": "2026-02-20T05:08:58.009761"
+    "cached_at": "2026-02-19T15:56:59.721077"
+  },
+  "스탠다드푸들": {
+    "breed_en": "",
+    "search_diseases": [
+      "patellar luxation",
+      "PRA",
+      "cataracts",
+      "gastric dilatation-volvulus",
+      "bloat",
+      "hypoadrenocorticism",
+      "addison's disease",
+      "addisonian crisis"
+    ],
+    "cached_at": "2026-02-19T16:00:11.797606"
   },
   "미니 비숑": {
     "breed_en": "",
     "search_diseases": [
       "dental disease",
-      "diabetes mellitus",
-      "cataracts",
-      "skin allergies",
-      "ear allergies",
-      "patellar luxation",
-      "arthritis",
-      "eye issues",
-      "Legg-Calvé-Perthes disease",
-      "luxating patellas",
-      "pruritus",
-      "portosystemic shunt",
-      "hepatobiliary disease",
+      "obesity",
       "pancreatitis",
       "Brachycephalic Airway Syndrome",
-      "ectropion"
+      "Ectropion",
+      "Urinary Tract Infection",
+      "Urinary Bladder Infection",
+      "Urinary Bladder Stones",
+      "Urinary Bladder Cancer"
     ],
-    "cached_at": "2026-02-20T05:24:03.760582"
+    "cached_at": "2026-02-19T16:05:59.447599"
   }
 }
