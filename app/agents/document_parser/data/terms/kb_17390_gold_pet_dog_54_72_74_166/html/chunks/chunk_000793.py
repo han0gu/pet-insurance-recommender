@@ -1,0 +1,18 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('. 기타 보험수익자가 보험금의 수령에 필요하여 제출하는 서류<br>\uf000 제1항 제4호의 사고증명서는 수의사법 제2조(정의)에서 '
+ "규정한 동물병원에서 수의</p><br><p id='158' data-category='paragraph' "
+ "style='font-size:14px'>사가 발급한 것이어야 합니다.</p><p id='159' "
+ "data-category='paragraph' style='font-size:14px'>102 KB 금쪽같은 "
+ "펫보험(강아지)(무배당)(26.01)</p><br><table id='160'"),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

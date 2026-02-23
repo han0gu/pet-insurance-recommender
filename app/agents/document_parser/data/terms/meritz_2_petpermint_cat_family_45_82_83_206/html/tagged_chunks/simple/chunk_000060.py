@@ -1,0 +1,25 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=("style='font-size:20px'>【외부지표금리】</h1><br><p id='82' data-category='paragraph' "
+ "style='font-size:20px'>국고채, 회사채, 통화안정증권, 양도성예금증서 등을<br>고려하여 산출</p><h1 "
+ "id='83' style='font-size:20px'>제10조(만기환급금의 지급)</h1><br><p id='84' "
+ "data-category='paragraph' style='font-size:20px'>\uf000 회사는 보험기간이 끝난 때에 "
+ '만기환급금(중도인출이 있<br>는'),
+    metadata={'source_doc': {'total_pages': 160},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_2_petpermint_cat_family_45_82_83_206.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '2',
+         'product_name': '무배당 펫퍼민트 Cat&Family보험 다이렉트2601',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['other']},
+ 'indexing': {'chunk_id': 'chunk_000060',
+              'chunk_char_len': 298,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'simple',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

@@ -1,0 +1,21 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('- 2. 보험수익자: 보험금 지급사유가 발생하는 때에 회사에 보험금을 청구하여 받을 수\n'
+ '- 있는 사람을 말합니다.\n'
+ '- 3. 보험증권: 계약의 성립과 그 내용을 증명하기 위하여 회사가 계약자에게 드리는 증\n'
+ '- 서를 말합니다.\n'
+ '- 4. 진단계약: 계약을 체결하기 위하여 피보험자가 건강진단을 받아야 하는 계약을 말\n'
+ '- 합니다.\n'
+ '# 5. 피보험자: 보험사고의 대상이 되는 사람을 말합니다.# ② 지급사유 관련 용어- 1. 상해: 보험기간 중에 발생한 급격하고도 '
+ '우연한 외래의 사고로 신체(의수, 의족, 의'),
+    metadata={'source_doc': {'total_pages': 107},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_4_pet_majestic_dog_33_49_52_139.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '4',
+         'product_name': '(장기)무배당 삼성화재 펫보험 위풍댕댕',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

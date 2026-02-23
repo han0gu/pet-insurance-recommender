@@ -1,0 +1,30 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('- 4. 핵연료물질 또는 핵연료물질에 의하여 오염된 물질의 방사성, 폭발성 또는 그\n'
+ '- 밖의 유해한 특성에 의한 사고\n'
+ '| 부 가 설 명 |\n'
+ '| --- |\n'
+ '# ∙ 핵연료물질 : 사용된 연료를 포함합니다.- 특\n'
+ '- ∙ 핵연료물질에 의하여 오염된 물질 : 원자핵 분열 생성물을 포함합니다.\n'
+ '- 별\n'
+ '- 5. 제4호 이외에 방사선을 쬐는 것 또는 방사능 오염 약\n'
+ '- 6. 반려동물을 범죄행위, 경주, 수색, 폭약탐지, 구조, 투견, 실험 및 이와 유사 관\n'
+ '- 한 목적으로 이용함으로써 발생한 손해'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['digestive']},
+ 'indexing': {'chunk_id': 'chunk_000631',
+              'chunk_char_len': 272,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

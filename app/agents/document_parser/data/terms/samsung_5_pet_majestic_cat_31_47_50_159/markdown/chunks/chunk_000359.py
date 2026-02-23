@@ -1,0 +1,20 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('- 를 직접적인 목적으로 의료기구를 사용하여 생체(生體)에 절단(切断, 특정부위를 잘라\n'
+ '- 내는 것), 절제(切除, 특정부위를 잘라 없애는 것) 등의 조작(操作)을 가하는 것을 말합\n'
+ '- 니다.\n'
+ '- ② 제1항의 수술은 보건복지부 산하 신의료기술평가위원회(향후 제도변경시에는 동 위원\n'
+ '- 회와 동일한 기능을 수행하는 기관)로부터 안전성과 치료효과를 인정받은 최신 수술\n'
+ '- 기법으로 생체에 절단, 절제 등의 조작을 가하는 것을 포함합니다. 또한 레이저\n'
+ '- (Laser)를 이용하여 생체에 절단, 절제 등의 조작을 가하는 것도 포함됩니다.'),
+    metadata={'source_doc': {'total_pages': 129},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_5_pet_majestic_cat_31_47_50_159.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '5',
+         'product_name': '(장기)무배당 삼성화재 펫보험 의기냥냥',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

@@ -1,0 +1,20 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('# 제4조(보험료의 정산)- ① 계약자는 정산기간 종료 후 5일 이내에 정산기간 종료 시점의 피보험자 수를 회사에 통지해야 합\n'
+ '- 니다.\n'
+ '- ② 회사는 제1항의 통지를 받은 때로부터 5일 이내에 정산기간에 해당하는 확정보험료를 산출하여 계\n'
+ '- 약자에게 통지하여야 합니다.\n'
+ '- ③ 확정보험료가 예치보험료보다 작은 경우에 회사는 그 차액을 제2항의 통지일로부터 5일 이내에 계\n'
+ '- 약자에게 돌려 드리며, 반대의 경우에는 계약자는 그 차액을 제2항의 통지를 받은 날로부터 5일\n'
+ '- 이내에 회사에 납입하여야 합니다.'),
+    metadata={'source_doc': {'total_pages': 35},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_2_cat_anypet_3_20_21_37.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '2',
+         'product_name': '(일반)반려묘보험 애니펫',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

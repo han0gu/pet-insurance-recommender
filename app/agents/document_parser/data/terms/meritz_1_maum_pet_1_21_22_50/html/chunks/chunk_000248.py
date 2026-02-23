@@ -1,0 +1,17 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('. 그러나 회사는 피보험자가 그 사고에 관하여 가지<br>는 항변으로써 피해자에게 대항할 수 있습니다.<br>② 회사는 제1항의 청구를 '
+ '받았을 때에는 지체없이 피보험자에게 통지하여야 하며, 회사의<br>요구가 있으면 피보험자 및 계약자는 필요한 서류·증거의 제출, 증언 '
+ '또는 증인 출석에<br>협조하여야 합니다.<br>③ 피보험자가 피해자로부터 손해배상의 청구를 받았을 경우에 회사가 필요하다고 '
+ '인정할<br>때에는 피보험자를 대신하여 회사의 비용으로 이를 해결할 수 있습니다'),
+    metadata={'source_doc': {'total_pages': 50},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_1_maum_pet_1_21_22_50.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '1',
+         'product_name': '메리츠 마음든든 반려동물보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

@@ -1,0 +1,28 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('습니다.\n'
+ '\uf000 부활(효력회복)되는 이 특별약관의 보장개시는「반려동\n'
+ '물 비용손해 관련 특별약관 일반조항」제18조(보험료의 납\n'
+ '입을 연체하여 해지된 계약의 부활(효력회복))를 따릅니다.\n'
+ '이 경우 부활(효력회복)일을 계약일로 하여 제3항 및 제4항\n'
+ '의 보장개시일을 적용합니다.119제2조(보험금을 지급하지 않는 사유)\uf000 회사는 다음 중 어느 한 가지로 보험금 지급사유가 발생\n'
+ '한 때에는 보험금을 지급하지 않습니다.- ① 계약자, 피보험자, 이들의 가족 또는 사용인의 고의\n'
+ '- 또는 중대한 과실'),
+    metadata={'source_doc': {'total_pages': 160},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_2_petpermint_cat_family_45_82_83_206.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '2',
+         'product_name': '무배당 펫퍼민트 Cat&Family보험 다이렉트2601',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'exclusion', 'risk_domains': ['digestive']},
+ 'indexing': {'chunk_id': 'chunk_000278',
+              'chunk_char_len': 271,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.85}},
+)

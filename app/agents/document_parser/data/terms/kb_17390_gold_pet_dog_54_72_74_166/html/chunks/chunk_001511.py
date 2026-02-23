@@ -1,0 +1,17 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('후각기능을 완전히 잃었을 때’라 함은 후각신경의 손상으로 양쪽 코의 후각기능을 완전히 잃은 경우를 말하며, 후각감퇴는 장해의 대상으 로 '
+ '하지 않는다.</td></tr><tr><td>3)</td><td>양쪽 코의 후각기능은 후각인지검사, 후각역치검사 등을 통해 6개월 이 상 '
+ '고정된 후각의 완전손실이 확인되어야 한다.</td></tr><tr><td>4)</td><td>코의 추상(추한 모습)장해를 수반한 때에는 '
+ "기능장해의 지급률과 추상장 해의 지급률을 합산한다.</td></tr></tbody></table><br><p id='206'"),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

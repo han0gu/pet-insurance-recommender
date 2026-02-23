@@ -1,0 +1,17 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('- 2. 반려묘 의료비 확대보장(MRI,CT)(연간1회한)(재가입형)\n'
+ '# 제2조 (보험금 지급에 관한 세부규정)보험수익자와 회사가 제1조(보험금의 지급사유)의 보험금 지급사유에 대해 합의하지 못\n'
+ '할 때는 보험수익자와 회사가 함께 제3자를 정하고 그 제3자의 의견에 따를 수 있습니다.\n'
+ '제3자는 동물병원 소속 수의사 중에 정하며, 보험금 지급사유 판정에 드는 의료비용은 회'),
+    metadata={'source_doc': {'total_pages': 129},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_5_pet_majestic_cat_31_47_50_159.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '5',
+         'product_name': '(장기)무배당 삼성화재 펫보험 의기냥냥',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

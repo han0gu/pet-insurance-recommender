@@ -1,0 +1,25 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('- 가) 척추(등뼈)의 골절 또는 탈구로 35° 이상의 척추전만증(척추가 앞으로 휘\n'
+ '- 어지는 증상), 척추후만증(척추가 뒤로 휘어지는 증상) 또는 20° 이상의\n'
+ '- 척추측만증(척추가 옆으로 휘어지는 증상) 변형이 있을 때\n'
+ '- 나) 척추체(척추뼈 몸통) 한 개의 압박률이 60%이상인 경우 또는 한 운동단위\n'
+ '내에 두 개 이상 척추체(척추뼈 몸통)의 압박골절로 각 척추체(척추뼈 몸'),
+    metadata={'source_doc': {'total_pages': 129},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_5_pet_majestic_cat_31_47_50_159.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '5',
+         'product_name': '(장기)무배당 삼성화재 펫보험 의기냥냥',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['digestive', 'joint']},
+ 'indexing': {'chunk_id': 'chunk_000776',
+              'chunk_char_len': 212,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

@@ -1,0 +1,25 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('계약<br>자가 위반사항을 안 날로부터 1년 이내에 계약해지요구서에<br>증빙서류를 첨부하여 위법계약의 해지를 요구할 수 '
+ '있습니<br>다.<br>\uf000 회사는 해지요구를 받은 날부터 10일 이내 수락여부를<br>계약자에 통지하여야 하며, 거절할 때에는 '
+ '거절 사유를 함<br>께 통지하여야 합니다.<br>\uf000 계약자는 회사가 정당한 사유 없이 제1항의 요구를 따르<br>지 않는 경우 '
+ '해당 계약을 해지할 수 있습니다.<br>\uf000 제1항 및 제3항에 따라 계약이 해지된 경우 회사는 제35<br>조(해약환급금) '
+ '제4항에 따른 해약환급금을'),
+    metadata={'source_doc': {'total_pages': 160},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_2_petpermint_cat_family_45_82_83_206.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '2',
+         'product_name': '무배당 펫퍼민트 Cat&Family보험 다이렉트2601',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['digestive']},
+ 'indexing': {'chunk_id': 'chunk_000216',
+              'chunk_char_len': 294,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'simple',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

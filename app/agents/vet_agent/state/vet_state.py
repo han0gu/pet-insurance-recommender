@@ -13,11 +13,15 @@ class DiseaseInfo(BaseModel):
 # 수의사 에이전트 출력 State
 class VetAgentOutputState(BaseModel):
     diseases: list[DiseaseInfo] = Field(default_factory=list, description="질병 목록")
+    is_validated: bool = Field(default=False, description="검증 통과 여부")
 
 
 # 수의사 에이전트 전체 State (입력 + 출력)
 class VetAgentState(UserInputTemplateState):
     diseases: list[DiseaseInfo] = Field(default_factory=list, description="질병 목록")
+    retry_count: int = Field(default=0, description="재시도 횟수")
+    is_validated: bool = Field(default=False, description="검증 통과 여부")
+    validation_feedback: str = Field(default="", description="검증 실패 시 피드백")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,24 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=("위험에 적용하<br>는 방법으로 위험 정도에 따라 특별보험료를 추가로 부<br>가하는 방법을 말합니다.</p><br><p id='69' "
+ "data-category='paragraph' style='font-size:18px'>\uf000 회사는 계약의 청약을 받고, 제1회 "
+ '보험료를 받은 경우<br>에 건강진단을 받지 않는 계약은 청약일, 진단계약은 진단<br>일(재진단의 경우에는 최종 진단일)부터 30일 '
+ '이내에 승낙<br>또는 거절하여야 하며, 승낙한 때에는 보험증권을 드립니<br>다'),
+    metadata={'source_doc': {'total_pages': 160},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_2_petpermint_cat_family_45_82_83_206.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '2',
+         'product_name': '무배당 펫퍼민트 Cat&Family보험 다이렉트2601',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['digestive']},
+ 'indexing': {'chunk_id': 'chunk_000119',
+              'chunk_char_len': 267,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'simple',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

@@ -1,0 +1,18 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('15만원 한도 1일당</td><td>200만원 한도</td><td>1,000만원 '
+ '해</td></tr><tr><td>통원</td><td>1일당 15만원 한도 1일당</td><td>200만원 한도</td><td>및 '
+ '1,000만원 질</td></tr><tr><td rowspan="2">기본형Ⅱ</td><td>입원</td><td>1일당 15만원 한도 '
+ '1일당</td><td>250만원 한도</td><td>2,000만원 병</td></tr><tr><td>통원</td><td>1일당 15만원 '
+ '한도 1일당</td><td>250만원'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

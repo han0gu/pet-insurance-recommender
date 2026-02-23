@@ -1,0 +1,18 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('부담한 의료비 : 218만원<br>·반려동물의료비보험금 : 15만원<br>·지급금액 = {(218만원 – 15만원 - 3만원) x '
+ "70%, 100만원} 중 적은 금액<br>= 100만원</p><br><p id='209' data-category='paragraph' "
+ 'style=\'font-size:14px\'>\uf000 제1항에서 "치료구분별 대상원인"이란 아래의 상해 또는 질병을 '
+ "말합니다.</p><br><table id='210' "
+ "style='font-size:14px'><thead></thead><tbody><tr><td"),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

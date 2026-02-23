@@ -1,0 +1,22 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('- ② 피보험자가 보험기간 중에 이 특별약관에서 보장하지 않는 사유로 사망하였을 경우에\n'
+ '- 는 "보험료 및 해약환급금 산출방법서"에서 정하는 바에 따라 회사가 적립한 사망당시\n'
+ '- 이 특별약관의 계약자적립액 및 미경과보험료를 계약자에게 지급하고, 이 특별약관은\n'
+ '- 더 이상 효력이 없습니다.\n'
+ '- 92 -및 질병 관련\n'
+ '3.\n'
+ '상해\n'
+ '특별약관3-1. 깁스치료비(부목치료 제외) 특별약관# 제 1관 일반사항① 제2관 개별사항에서 정하지 않은 사항은 특별약관의 일반사항을 '
+ '적용합니다.'),
+    metadata={'source_doc': {'total_pages': 107},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_4_pet_majestic_dog_33_49_52_139.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '4',
+         'product_name': '(장기)무배당 삼성화재 펫보험 위풍댕댕',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

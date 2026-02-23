@@ -1,0 +1,25 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('포함합니다)이 있을 경우 각 계약에 대하여 다른 계약이 없는 것으로 하여 각각 산출한\n'
+ '보상책임액의 합계액이 손해액을 초과할 때에는 아래에 따라 손해를 보상합니다. 이 특\n'
+ '별약관과 다른 계약이 모두 의무보험인 경우에도 같습니다.손해액 ×이 계약의 보상책임액다른 계약이 없는 것으로 하여 각각 계산한 '
+ '보상책임액의 합계액【사례】※ 보상책임액의 합계액이 손해액을 초과하는 경우 :\n'
+ '계약A: 보상책임액 1,000만원 / 계약B: 보상책임액 1,000만원 / 손해액 : 1,000만원'),
+    metadata={'source_doc': {'total_pages': 50},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'meritz_1_maum_pet_1_21_22_50.pdf',
+         'insurer_code': 'meritz',
+         'product_code': '1',
+         'product_name': '메리츠 마음든든 반려동물보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['other']},
+ 'indexing': {'chunk_id': 'chunk_000134',
+              'chunk_char_len': 264,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

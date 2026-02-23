@@ -1,0 +1,26 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('- ⑤ 회사는 자동대출납입이 종료된 날부터 15일 이내에 자동대출납입이 종료되었음을 서\n'
+ '- 면, 전화(음성녹음) 또는 전자문서(SMS 포함) 등으로 계약자에게 안내하여 드립니다.\n'
+ '# 제 29조 (보험료의 납입이 연체되는 경우 납입최고(독촉)와 특별약관의 해지)① 계약자가 제2회 이후의 보험료를 납입기일까지 납입하지 '
+ '않아 보험료 납입이 연체중\n'
+ '인 경우에 회사는 14일(보험기간이 1년 미만인 경우에는 7일) 이상의 기간을 납입최\n'
+ '고(독촉)기간으로 정하여 계약자에게 다음 각 호의 내용을 서면(등기우편 등), 전화(음'),
+    metadata={'source_doc': {'total_pages': 129},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'samsung_5_pet_majestic_cat_31_47_50_159.pdf',
+         'insurer_code': 'samsung',
+         'product_code': '5',
+         'product_name': '(장기)무배당 삼성화재 펫보험 의기냥냥',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown',
+ 'clause': {'clause_type': 'other', 'risk_domains': ['other']},
+ 'indexing': {'chunk_id': 'chunk_000244',
+              'chunk_char_len': 288,
+              'embedding_model': 'solar-embedding-1-large',
+              'tag_type': 'normal',
+              'tag_method': 'rule',
+              'tag_confidence': 0.25}},
+)

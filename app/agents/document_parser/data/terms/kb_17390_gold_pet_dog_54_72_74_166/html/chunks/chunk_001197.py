@@ -1,0 +1,17 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=(". 려동<br>용 어 풀 이 보상책임을 지는 한도</p><br><table id='216' "
+ "style='font-size:14px'><thead></thead><tbody><tr><td>동일한 사고로 이미 "
+ '지급한</td><td>보험금이나 가지급보험금이</td><td></td><td>물 있는 경우에는 그 금액</td></tr><tr><td '
+ 'colspan="4">을 공제한 액수를 말합니다'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)

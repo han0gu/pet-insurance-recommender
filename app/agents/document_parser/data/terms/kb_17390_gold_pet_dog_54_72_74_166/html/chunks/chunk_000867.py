@@ -1,0 +1,15 @@
+from langchain_core.documents import Document
+
+chunk = Document(
+    page_content=('이후 매<br>년 계약 해당일에 나이가 증가하는 것으로 합니다.<br>\uf000 청약서에 기재된 반려동물의 나이 및 품종에 관한 사항이 '
+ '사실과 다른 경우에는<br>정정된 나이 및 품종에 해당하는 보험금 및 보험료로 변경합니다'),
+    metadata={'source_doc': {'total_pages': 113},
+ 'doc': {'doc_type': 'terms',
+         'file_name': 'kb_17390_gold_pet_dog_54_72_74_166.pdf',
+         'insurer_code': 'kb',
+         'product_code': '17390',
+         'product_name': '[일반보험] KB반려행복펫보험',
+         'total_pages': 1,
+         'page': 1},
+ 'term_type': 'unknown'},
+)
