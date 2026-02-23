@@ -165,7 +165,7 @@ def extract_pet_info(body: str) -> dict:
             break
 
     # 체중 추출
-    weight_match = re.search(r"(\d+)\s*키로", body)
+    weight_match = re.search(r"(\d+)\s*(?:키로|킬로|kg)", body, re.IGNORECASE)
     if weight_match:
         pet_info["weight"] = f"{weight_match.group(1)}kg"
 
@@ -305,7 +305,7 @@ def main():
     scenarios_dir = project_root / "data" / "interim" / "scenarios"
 
     # 시나리오 폴더 생성
-    scenarios_dir.mkdir(exist_ok=True)
+    scenarios_dir.mkdir(parents=True, exist_ok=True)
 
     scenarios = []
     skipped = []

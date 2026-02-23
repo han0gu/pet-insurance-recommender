@@ -368,7 +368,7 @@ def validate_and_fix(data: dict, article: dict) -> dict:
         age = pet.get("age")
         if age is not None:
             try:
-                pet["age"] = int(age)
+                pet["age"] = int(float(age))
             except (ValueError, TypeError):
                 pet["age"] = None
 
@@ -376,7 +376,7 @@ def validate_and_fix(data: dict, article: dict) -> dict:
         weight = pet.get("weight")
         if weight is not None:
             try:
-                pet["weight"] = int(weight)
+                pet["weight"] = int(float(weight))
             except (ValueError, TypeError):
                 pet["weight"] = None
 

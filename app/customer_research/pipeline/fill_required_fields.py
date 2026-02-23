@@ -175,7 +175,7 @@ def fill_breed(species: str, current_breed) -> str:
 def fill_age(species: str, current_age) -> int:
     """나이 채우기: null이면 통계 기반 랜덤 생성"""
     if current_age is not None:
-        return int(current_age)
+        return int(float(current_age))
     if species == "강아지":
         return weighted_choice(DOG_AGE_DIST)
     elif species == "고양이":
@@ -215,7 +215,7 @@ def fill_is_neutered(age: int, gender: str, current_neutered) -> bool:
 def fill_weight(species: str, breed: str, age: int, gender: str, current_weight) -> int:
     """체중 추정: species + breed + age + gender 기반"""
     if current_weight is not None:
-        return int(current_weight)
+        return int(float(current_weight))
 
     # 품종별 성체 체중 범위 조회
     if species == "강아지":
