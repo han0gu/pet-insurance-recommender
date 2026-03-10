@@ -1,69 +1,81 @@
-import os
-from typing import List, Dict, Any
-from pypdf import PdfReader
+from pathlib import Path
+from typing import Any, Dict, List
+
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from pypdf import PdfReader
 
 
-PDF_FILENAME_1 = "chubb.pdf" 
-PDF_PATH_1 = f"c:/Users/GS/Documents/workspace/pet-insurance-recommender/app/agents/rag_agent_gs/{PDF_FILENAME_1}"
+BASE_DIR = Path(__file__).resolve().parent
+PDF_FILES = {
+    "chubb": BASE_DIR / "chubb.pdf",
+    "kb": BASE_DIR / "KB.pdf",
+    "meritz": BASE_DIR / "meritz.pdf",
+}
 
-PDF_FILENAME_2 = "KB.pdf" 
-PDF_PATH_2 = f"c:/Users/GS/Documents/workspace/pet-insurance-recommender/app/agents/rag_agent_gs/{PDF_FILENAME_2}"
+DEFAULT_CORPUS = "meritz"
+CHUNK_SIZE = 300
+CHUNK_OVERLAP = 50
 
-PDF_FILENAME_3 = "meritz.pdf" 
-PDF_PATH_3 = f"c:/Users/GS/Documents/workspace/pet-insurance-recommender/app/agents/rag_agent_gs/{PDF_FILENAME_3}"
-
-# 파일 존재 여부 확인
-assert os.path.exists(PDF_PATH_3), f"❌ PDF 파일을 찾을 수 없습니다: {PDF_PATH_3}"
-# print("✅ PDF 파일 확인 완료:", PDF_PATH_3)
-
-def load_pdf_as_pages(pdf_path: str) -> List[Dict[str, Any]]:
-    """PDF를 페이지 단위로 로드하여 각 페이지의 텍스트와 메타데이터(페이지 번호)를 추출합니다."""
-    reader = PdfReader(pdf_path)
-    pages = []
-    for i, page in enumerate(reader.pages):
-        text = page.extract_text()
-        pages.append({
-            "page": i + 1,    # 페이지 번호 (1부터 시작)
-            "text": text      # 페이지 텍스트
-        })
-    return pages
-pages = load_pdf_as_pages(PDF_PATH_3)
-# ================================================================
-CHUNK_SIZE = 300 # 1) 적절한 청크 사이즈 설정하기
-CHUNK_OVERLAP = 50 # 2) 적절한 청크 overlap 사이즈 설정하기
-# ================================================================
 splitter = RecursiveCharacterTextSplitter(
     chunk_size=CHUNK_SIZE,
     chunk_overlap=CHUNK_OVERLAP,
-    separators=["\n\n", "\n", ". ", " ", ""]
+    separators=["\n\n", "\n", ". ", " ", ""],
 )
+
+
+def load_pdf_as_pages(pdf_path: str | Path) -> List[Dict[str, Any]]:
+    """Load a PDF file page by page."""
+    reader = PdfReader(str(pdf_path))
+    pages: List[Dict[str, Any]] = []
+    for i, page in enumerate(reader.pages, start=1):
+        pages.append(
+            {
+                "page": i,
+                "text": page.extract_text() or "",
+            }
+        )
+    return pages
+
+
 def pages_to_chunks(pages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    chunks = []
+    chunks: List[Dict[str, Any]] = []
 
-    for p in pages:
-        if not p["text"].strip(): continue
+    for page in pages:
+        text = page["text"].strip()
+        if not text:
+            continue
 
-        split_texts = splitter.split_text(p["text"])
-
-        for j, t in enumerate(split_texts):
-            chunks.append({
-                "id": f"p{p['page']}_c{j}",
-                "page": p["page"],
-                "text": t
-            })
+        for chunk_index, chunk_text in enumerate(splitter.split_text(text)):
+            chunks.append(
+                {
+                    "id": f"p{page['page']}_c{chunk_index}",
+                    "page": page["page"],
+                    "text": chunk_text,
+                }
+            )
 
     return chunks
-chunks = pages_to_chunks(pages)  
-# (테스트) 업로드한 pdf 파일을 페이지 단위로 로드한 후 텍스트를 추출한 결과 확인하기
-print("pages:", len(pages)) # 총 페이지 수 확인
-print("chunks:", len(chunks)) # 총 청크 수 확인
-# print("sample page 149 text (first 500 chars):\n") # pdf에서 가져온 149 페이지 내용 확인
-# print(pages[148]["text"][:500])
 
-# 특정 페이지 특정 청크 내용 확인
-# target_chunk = next((c for c in chunks if c["id"] == "p55_c3"), None)
-# if target_chunk:
-#     print(f"ID: {target_chunk['id']}")
-#     print(f"Page: {target_chunk['page']}")
-#     print(f"Text:\n{target_chunk['text']}")
+
+def load_chunks(corpus: str = DEFAULT_CORPUS) -> List[Dict[str, Any]]:
+    pdf_path = PDF_FILES[corpus]
+    if not pdf_path.exists():
+        raise FileNotFoundError(f"PDF file not found: {pdf_path}")
+    return pages_to_chunks(load_pdf_as_pages(pdf_path))
+
+
+def _load_default_chunks() -> tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    pdf_path = PDF_FILES[DEFAULT_CORPUS]
+    if not pdf_path.exists():
+        return [], []
+
+    loaded_pages = load_pdf_as_pages(pdf_path)
+    return loaded_pages, pages_to_chunks(loaded_pages)
+
+
+pages, chunks = _load_default_chunks()
+
+
+if __name__ == "__main__":
+    print("pages:", len(pages))
+    print("chunks:", len(chunks))
