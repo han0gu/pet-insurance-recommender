@@ -533,4 +533,5 @@ if ERRORS:
         print(e)
 print(f"{'='*60}")
 
-sys.exit(1 if FAIL > 0 else 0)
+if __name__ == "__main__":
+    sys.exit(1 if FAIL > 0 else 0)
